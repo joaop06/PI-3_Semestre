@@ -16,14 +16,14 @@ class CommonController {
         if (result?.statusCode) {
             res.status(result?.statusCode).json({
                 ...result,
-                message: result?.message ? result?.message : undefined,
+                message: result?.message ? result.message : undefined,
                 success: result?.success
             })
         } else {
             res.status(200).json({
                 rows: result?.rows,
                 count: result?.count,
-                message: result?.message ? result?.message : result.count > 0 ? `Records Found: ${result?.count}` : 'No record found',
+                message: result?.message ? result.message : result.count > 0 ? `Records Found: ${result?.count}` : 'No record found',
                 success: result?.success
             })
         }

@@ -10,8 +10,8 @@ app.use(express.json())
 
 
 // DB Connection
-const conn = require('./app/db/config')
-conn()
+// const conn = require('./app/db/config')
+// conn()
 
 
 // Start Server
