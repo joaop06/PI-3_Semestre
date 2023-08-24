@@ -6,10 +6,6 @@ class UserRoute extends CommonRoute {
         super(UserController, app, 'user')
     }
 
-    setupRoutes() {
-        super.setupRoutes()
-        this.app.get(`/${this.route}/teste`, this.controller.teste.bind(this.controller))
-    }
 }
 
 

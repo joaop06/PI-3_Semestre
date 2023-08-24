@@ -10,15 +10,11 @@ class UserService extends CommonService {
         this.models = models
     }
 
-    async teste(req) {
-        return super.find(req)
-    }
-
     async create(User, req) {
         try {
             const verifyRegister = await super.find(req, { email: User.email })
 
-            if (verifyRegister) {
+            if (verifyRegister.rows.length > 0) {
                 return { statusCode: 409, message: "E-mail já cadastro." }
             }
 

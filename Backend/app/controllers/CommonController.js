@@ -50,7 +50,7 @@ class CommonController {
         } else {
             res.status(200).json({
                 ...result,
-                message: result?.message ? result?.message : result?._id ? "Success when Registering!" : "Error when registering"
+                message: result?.message ? result?.message : result?.result ? "Success when Registering!" : "Error when registering"
             })
         }
     }

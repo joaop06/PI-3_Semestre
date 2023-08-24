@@ -6,45 +6,36 @@ class CommonService {
         this.models = models
     }
 
-    // // Busca todos os documentos
-    // async find(req, options = {}) {
-    //     try {
-    //         const result = await this.models[this.modelName].find(options)
-    //         return { count: result.length, success: true, rows: result }
-
-    //     } catch (error) {
-    //         console.log(error)
-    //         return { statusCode: 500, message: `Erro ao buscar vários documentos em ${this.modelName}` }
-    //     }
-
-    // }
-
     // Busca apenas um documento pelo ID
     async findById(req, options = {
         where: req.query?.id ? { id: req.query.id } : req.body?.id ? { id: req.body.id } : {}
     }) {
         try {
             return await this.models[this.modelName].findById(options)
+
         } catch (error) {
             console.log(error)
             return { statusCode: 500, message: `Erro ao buscar em ${this.modelName}` }
         }
-
     }
 
+    // Validated
     // (Route Default) Busca e Conta todos os documentos (Route Default)
-    async find(req, options = {}) {
+    async find(req, options = {
+        where: req.query?.id ? { id: req.query.id } : {}
+    }) {
         try {
             let result
             if (req.query?.id) {
-                result = await this.models[this.modelName].findById(req.query.id)
-            } else if (req.query) {
+                result = await this.models[this.modelName].find(options)
+
+            } else if (![null, undefined, {}].includes(req.query)) {
                 Object.entries(req.query).map(([key, value]) => {
                     options.where = { [key]: value }
                 })
+                result = await this.models[this.modelName].find(options.where || options)
             }
 
-            result = await this.models[this.modelName].find(options.where)
             return { count: result.length, success: true, rows: result }
 
         } catch (error) {
@@ -53,6 +44,7 @@ class CommonService {
         }
     }
 
+    // Validated
     // (Route Default) Insere apenas um único documento (Route Default)
     async create(object, req) {
         try {
@@ -83,7 +75,7 @@ class CommonService {
     }) {
         try {
             const result = await this.models[this.modelName].updateOne(options.where || options, object)
-            return { success: true, result: result?._doc }
+            return { success: true, result: result }
 
         } catch (error) {
             console.log(error)
