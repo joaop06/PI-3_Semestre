@@ -2,29 +2,25 @@
 const modelsFn = require('../models')
 
 class CommonController {
-    constructor(ServiceClass, modelName, optFn = () => { }) {
+    constructor(ServiceClass, modelName) {
         this.models = modelsFn()
         this.modelName = modelName
         if (ServiceClass && modelName) {
-            this.service = new ServiceClass(modelName, this.models, optFn(this.models))
+            this.service = new ServiceClass(modelName, this.models)
         }
     }
 
     async findAndCountAll(req, res) {
-        const result = await this.service.findAndCountAll(req)
+        const result = await this.service.find(req)
 
         if (result?.statusCode) {
             res.status(result?.statusCode).json({
-                ...result,
-                message: result?.message ? result.message : undefined,
-                success: result?.success
+                ...result
             })
         } else {
             res.status(200).json({
-                rows: result?.rows,
-                count: result?.count,
+                ...result,
                 message: result?.message ? result.message : result.count > 0 ? `Records Found: ${result?.count}` : 'No record found',
-                success: result?.success
             })
         }
     }
@@ -33,27 +29,46 @@ class CommonController {
         const result = await this.service.create(req.body, req)
 
         if (result?.statusCode) {
-            res.status(result.statusCode).json({
-                ...result,
-                message: result?.message ? result?.message : undefined
+            res.status(result?.statusCode).json({
+                ...result
             })
         } else {
             res.status(200).json({
-                rows: result?.rows,
-                count: result?.count,
-                message: result?.message ? result?.message : result?.success ? "Success when Registering!" : "Error when registering"
+                ...result,
+                message: result?.message ? result?.message : result?.id ? "Success when Registering!" : "Error when registering"
             })
         }
     }
 
     async update(req, res) {
+        const result = await this.service.update(req.body, req)
 
-        res.status(200).json({ message: "TESTE PUT" })
+        if (result?.statusCode) {
+            res.status(result?.statusCode).json({
+                ...result
+            })
+        } else {
+            res.status(200).json({
+                result: result,
+                message: result?.message ? result?.message : result?.id ? "Success when Editing!" : "Error when editing"
+            })
+        }
     }
 
     async destroy(req, res) {
+        const result = await this.service.destroy(req.query.id, req)
 
-        res.status(200).json({ message: "TESTE DELETE" })
+        if (result?.statusCode) {
+            res.status(result?.statusCode).json({
+                ...result
+            })
+
+        } else {
+            res.status(200).json({
+                result: result,
+                message: result?.message ? result?.message : result?.id ? "Success when Deleting!" : "Error when deleting"
+            })
+        }
     }
 }
 

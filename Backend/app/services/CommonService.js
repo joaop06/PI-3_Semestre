@@ -6,48 +6,54 @@ class CommonService {
         this.models = models
     }
 
-    async findAndCountAll(req, options = {
-        id: req.query.id ? req.query.id : undefined
+    async findOne(req, options = {
+        where: req.query?.id ? { id: req.query.id } : {}
     }) {
-        console.log(this.modelName)
-        console.log(this.models)
-        console.log(User)
-        let result = {}
-
         try {
-            if (req.query.page && req.query.perPage) {
-                const skip = { $skip: (req.query.page - 1) * req.query.perPage }
-            } else if (req.query.id == 1) {
-                result.rows = [
-                    {
-                        "name": "<NAME>",
-                        "email": '<EMAIL>'
-                    }
-                ]
-            } else {
-                return { statusCode: 404, message: 'Nenhum registro encontrado', success: true }
-            }
+            return await this.models[this.modelName].findOne(options)
         } catch (error) {
             console.log(error)
-            return { statusCode: 500, Error: `${error}`, success: false }
+            return { statusCode: 500, message: `Erro na busca única em ${this.modelName}` }
         }
 
-        // const result = await this.modelName.
-
-        return { rows: result.rows, count: result.rows.length, success: true }
     }
 
-    async create(req, res) {
+    async findAndCountAll(req, options = {
+        where: req.query?.id ? { id: req.query.id } : {}
+    }) {
+        try {
+            if (req.query) {
+                Object.entries(req.query).map(([key, value]) => {
+                    options.where[key] = value
+                })
+            }
+
+            const result = await this.models[this.modelName].find(options.where)
+            return { count: result.length, success: true, rows: result }
+
+        } catch (error) {
+            console.log(error)
+            return { statusCode: 500, message: `Erro na busca em ${this.modelName}` }
+        }
+    }
+
+    async create(object, req) {
+        try {
+            const result = await this.models[this.modelName].create(object)
+            return { success: true, result: result }
+
+        } catch (error) {
+            console.log(error)
+            return { statusCode: 500, message: `Erro ao cadastrar em ${this.modelName}` }
+        }
+    }
+
+    async update(object, req, options) {
 
         return
     }
 
-    async update(req, res) {
-
-        return
-    }
-
-    async destroy(req, res) {
+    async destroy(id, req, options) {
 
         return
     }

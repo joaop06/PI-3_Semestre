@@ -1,53 +1,30 @@
-require('dotenv').config()
-
 const fs = require('fs')
 const path = require('path')
-const basename = path.basename(__filename)
-console.log(`Database: ${process.env.DB_NAME}   //   User: ${process.env.DB_USER}`)
+const basename = path.basename(__filename)  // Nome do arquivo atual (index.js)
 
-var db = {}
+var db = {} // Armazenará as informações das Models
 
+
+// Função para ler os atributos das Models
 function readModelsAttrs() {
-    db.modelAttrs = []
 
-    // Lê todos os arquivos
-    fs.readdirSync(__dirname)
+    // Lê todos os arquivos no diretório atual
+    const allFilesDir = fs.readdirSync(__dirname)
 
-        // Filtra pelo Nome do Arquivo e Extensão
-        .filter(file => (file.indexOf('.') !== 0) && (file == basename) && (file.slice(-3) === '.js'))
 
-        // Itera sobre os arquivos extraindo os Atributos
-        .forEach(file => {
-            db.modelAttrs.push(file)
-            console.log(db.modelAttrs)
+    // Filtra os arquivos pelo nome e extensão
+    allFilesDir.filter(file => file.indexOf('.') !== 0 && file !== basename)
+
+        .forEach(file => {  // Itera sobre os arquivos e carrega os modelos
+            const model = require(path.join(__dirname, file))   // Carrega o modelo usando require
+            db[file.slice(0, -3)] = model[file.slice(0, -3)]   // Armazena o modelo no objeto db com o nome do arquivo (sem extensão) como chave
         })
 
 
-    // fs
-    //     .readdirSync(__dirname)
-    //     .filter(file => (
-    //         !file.includes('Attr') &&
-    //         file.indexOf('.') !== 0) &&
-    //         (file !== basename) &&
-    //         (file !== 'Revision') &&
-    //         (file.slice(-3) === '.js')
-    //     )
-    //     .forEach(file => {
-    //         const model = require(path.join(__dirname, file));
-    //         db[model.name] = model;
-
-    //     })
-
-    // Object.keys(db).forEach(modelName => {
-    //     if (db[modelName].associate) {
-    //         db[modelName].associate(db)
-    //     }
-    // })
-
-    // console.log(db)
+    return db
 }
 
-
+// Função para obter uma instância do objeto db como promessa
 function getInstance() {
     return new Promise((resolve, reject) => {
         readModelsAttrs()
@@ -56,6 +33,7 @@ function getInstance() {
 }
 
 
+// Exporta a instância do objeto db
 module.exports = () => {
-    return getInstance()
+    return readModelsAttrs()
 }
