@@ -9,6 +9,9 @@ class CommonController {
     }
   }
 
+  // #################################### BUSCAR DOCUMENTOS #################################### \\
+
+  // (Route Default) Busca e Conta todos os documentos
   async find(req, res) {
     const result = await this.service.find(req);
 
@@ -22,14 +25,15 @@ class CommonController {
         message: result?.message
           ? result.message
           : result.count > 0
-          ? `Records Found: ${result?.count}`
+          ? `Records Found: ${result.count}`
           : "No record found",
       });
     }
   }
 
-  async findAndCountAll(req, res) {
-    const result = await this.service.find(req);
+  // Busca apenas um documento pelo ID
+  async findById(req, res) {
+    const result = await this.service.findById(req.query.id);
 
     if (result?.statusCode) {
       res.status(result?.statusCode).json({
@@ -47,8 +51,31 @@ class CommonController {
     }
   }
 
+  // #################################### INSERIR DOCUMENTOS #################################### \\
+
+  // (Route Default) Insere apenas um único documento por vez
   async create(req, res) {
     const result = await this.service.create(req.body, req);
+
+    if (result?.statusCode) {
+      res.status(result?.statusCode).json({
+        ...result,
+      });
+    } else {
+      res.status(200).json({
+        ...result,
+        message: result?.message
+          ? result.message
+          : result.success
+          ? "Success when Registering!"
+          : "Error when registering",
+      });
+    }
+  }
+
+  // Insere vários documentos de uma vez
+  async insertMany(req, res) {
+    const result = await this.service.insertMany(req.body);
 
     if (result?.statusCode) {
       res.status(result?.statusCode).json({
@@ -66,8 +93,11 @@ class CommonController {
     }
   }
 
+  // #################################### ATUALIZAR DOCUMENTOS #################################### \\
+
+  // (Route Default) Atualiza um único documento
   async update(req, res) {
-    const result = await this.service.update(req.body, req);
+    const result = await this.service.update(req, req.body);
 
     if (result?.statusCode) {
       res.status(result?.statusCode).json({
@@ -75,18 +105,21 @@ class CommonController {
       });
     } else {
       res.status(200).json({
-        result: result,
+        ...result,
         message: result?.message
-          ? result?.message
-          : result?.id
+          ? result.message
+          : result?.acknowledged
           ? "Success when Editing!"
           : "Error when editing",
       });
     }
   }
 
-  async destroy(req, res) {
-    const result = await this.service.destroy(req.query.id);
+  // #################################### DELETAR DOCUMENTOS #################################### \\
+
+  // (Route Default) Deleta apenas um documento
+  async delete(req, res) {
+    const result = await this.service.delete(req.query.id);
 
     if (result?.statusCode) {
       res.status(result?.statusCode).json({

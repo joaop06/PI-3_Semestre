@@ -1,5 +1,6 @@
 const { resolve } = require("path");
 const User = require("../models/User");
+const { rejects } = require("assert");
 
 class CommonService {
   constructor(modelName, models, repositoryName) {
@@ -7,114 +8,161 @@ class CommonService {
     this.models = models;
   }
 
-  // Busca apenas um documento pelo ID
-  async findById(
-    req,
-    options = {
-      where: req.query?.id
-        ? { id: req.query.id }
-        : req.body?.id
-        ? { id: req.body.id }
-        : {},
-    }
-  ) {
-    try {
-      return await this.models[this.modelName].findById(options);
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
+  // #################################### BUSCAR DOCUMENTOS #################################### \\
 
   // Validated
-  // (Route Default) Busca e Conta todos os documentos (Route Default)
-  async find(req, options) {
-    return new Promise(async () => {
+  // (Route Default) Busca e Conta todos os documentos
+  async find(req, where = {}) {
+    return new Promise(async (resolve, reject) => {
       try {
+        const page = parseInt(req.query?.page) || 1;
+        const perPage = parseInt(req.query?.perPage) || 10;
+
+        // Mapeia todos os atributos da req.query como parâmetro de busca
         Object.entries(req.query).map(([key, value]) => {
-          options.where = { [key]: value };
+          if (!["page", "perPage"].includes(key)) {
+            if (key == "id") key = "_id";
+            where[key] = value;
+          }
         });
-        const result = await this.models[this.modelName].find(
-          options.where || options
-        );
-        resolve(result);
+
+        // Realiza a consulta na tabela
+        let result = await this.models[this.modelName]
+          .find(where)
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+        resolve({ count: result.length, success: true, rows: result });
       } catch (error) {
-        throw new Error(error);
+        reject(error);
+      }
+    });
+  }
+
+  // Busca apenas um documento pelo ID
+  async findById(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await this.models[this.modelName].findById(id);
+        resolve({ success: true, result: result });
+      } catch (error) {
+        reject(error);
       }
     });
   }
 
   // Validated
-  // (Route Default) Insere apenas um único documento (Route Default)
-  async create(object, req) {
-    return new Promise(async () => {});
-    try {
-      const result = await this.models[this.modelName].create(object);
-      return { success: true, result: result?._doc };
-    } catch (error) {
-      throw new Error(error);
-    }
+  // Busca apenas o primeiro Documento encontrado
+  async findOne(where) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await this.models[this.modelName].findOne(where);
+        if (result) resolve({ success: true, found: true, result: result });
+        else resolve({ success: true, found: false, result: result });
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  // #################################### INSERIR DOCUMENTOS #################################### \\
+
+  // Validated
+  // (Route Default) Insere apenas um único documento por vez
+  async create(object) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await this.models[this.modelName].create(object);
+        resolve({ success: true, document: result?._doc });
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   // Insere vários documentos de uma vez
-  async insertMany(object, req) {
-    try {
-      const result = await this.models[this.modelName].insertMany(object);
-      return { success: true, result: result?._doc };
-    } catch (error) {
-      throw new Error(error);
-    }
+  async insertMany(objects) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await this.models[this.modelName].insertMany(objects);
+        resolve({ success: true, result: result });
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
-  // (Route Default) Atualiza um único documento (Route Default)
+  // #################################### ATUALIZAR DOCUMENTOS #################################### \\
+
+  // Validated
+  // (Route Default) Atualiza um único documento
   async update(
-    object,
     req,
-    options = {
-      where: object?.id ? { _id: object.id } : undefined,
+    object,
+    where = {
+      _id: req.query?.id
+        ? req.query.id
+        : req.body?.id
+        ? req.body?.id
+        : undefined,
     }
   ) {
-    try {
-      const result = await this.models[this.modelName].updateOne(
-        options.where ?? options,
-        object
-      );
-      return { success: true, result: result };
-    } catch (error) {
-      throw new Error(error);
-    }
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await this.models[this.modelName].updateOne(
+          where,
+          object
+        );
+        resolve({ success: true, result: result });
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
   // Atualiza vários documentos
-  async updateMany(req) {
-    try {
-      const result = await this.models[this.modelName].updateMany();
-      return { success: true, result: result?._doc };
-    } catch (error) {
-      throw new Error(error);
-    }
+  async updateMany(where, objects) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await this.models[this.modelName].updateMany(where, {
+          $set: objects,
+        });
+        resolve({ success: true, result: result?._doc });
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
 
-  // (Route Default) Deleta apenas um documento (Route Default)
+  // #################################### DELETAR DOCUMENTOS #################################### \\
+
+  // Validated
+  // (Route Default) Deleta apenas um documento
   async delete(id) {
-    return new Promise(async () => {
+    return new Promise(async (resolve, reject) => {
       try {
-        const result = await this.models[this.modelName].deleteOne(id);
+        const result = await this.models[this.modelName].findByIdAndDelete({
+          _id: id,
+        });
         resolve(result);
       } catch (error) {
-        throw new Error(`Erro ao excluir o documento: ${error.message}`);
+        reject(error);
       }
     });
   }
 
   // Deleta vários documentos
-  // async delete(id, req, options) {
-  //   try {
-  //     const result = await this.models[this.modelName].deleteMany();
-  //     return { success: true, result: result?._doc };
-  //   } catch (error) {
-  //     throw new Error(error);
-  //   }
-  // }
+  async deleteMany(where) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await this.models[this.modelName].deleteMany(where);
+        resolve({ success: true, result: result });
+      } catch (error) {
+        reject(error);
+      }
+    });
+
+    // returns {deletedCount: x} where x is the number of documents deleted.
+  }
 }
 
 module.exports = CommonService;

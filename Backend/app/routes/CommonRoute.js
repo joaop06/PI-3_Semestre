@@ -20,7 +20,7 @@ class CommonRoute {
     );
     this.app.delete(
       `/${this.route}`,
-      this.controller.destroy.bind(this.controller)
+      this.controller.delete.bind(this.controller)
     );
   }
 }

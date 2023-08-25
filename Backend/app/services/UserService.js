@@ -10,18 +10,13 @@ class UserService extends CommonService {
     this.models = models;
   }
 
-  async create(User, req) {
-    try {
-      const verifyRegister = await super.find(req, { email: User.email });
+  async create(User) {
+    const verifyRegister = await super.findOne({ email: User.email });
 
-      if (verifyRegister.rows.length > 0)
-        return { statusCode: 409, message: "E-mail já cadastro." };
+    if (verifyRegister.found)
+      return { statusCode: 409, message: "E-mail já cadastro." };
 
-      return await super.create(User);
-    } catch (error) {
-      console.error(error);
-      return { statusCode: 500, message: "Erro ao cadastrar usuário" };
-    }
+    return await super.create(User);
   }
 }
 
