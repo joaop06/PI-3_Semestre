@@ -1,10 +1,10 @@
-const UserService = require("../services/UserService");
-const CommonController = require("./CommonController");
+const UserService = require("../services/UserService")
+const CommonController = require("./CommonController")
 
 class UserController extends CommonController {
   constructor() {
-    super(UserService, "User");
+    super(UserService, "User")
   }
 }
 
-module.exports = UserController;
+module.exports = UserController

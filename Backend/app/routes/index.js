@@ -1,7 +1,7 @@
-const fs = require("fs");
+const fs = require("fs")
 
 const routes = async (app) => {
-  const basename = "CommonRoute.js";
+  const basename = "CommonRoute.js"
   const result = fs
     .readdirSync(__dirname)
     .filter((file) => {
@@ -10,13 +10,13 @@ const routes = async (app) => {
         file !== basename &&
         file !== "index.js" &&
         file.slice(-3) === ".js"
-      );
+      )
     })
     .map((file) => {
       const Router = require(`./${file}`);
       return Router(app);
-    });
+    })
   await Promise.all(result);
-};
+}
 
 module.exports = routes;
