@@ -8,21 +8,21 @@ class CommonService {
   // #################################### BUSCAR DOCUMENTOS #################################### \\
 
   // (Route Default) Busca e Conta todos os documentos
-  async find(req, where = {}) {
+  async find(req, options = {}) {
     return new Promise(async (resolve, reject) => {
       try {
-        // const page = parseInt(req.query?.page) || 1
-        // const perPage = parseInt(req.query?.perPage) || 10
 
         // Mapeia todos os atributos da req.query como parâmetro de busca
-        Object.entries(req.query).map(([key, value]) => {
-          if (!["page", "perPage"].includes(key)) { // Exclui os parâmetros page e perPage da consulta
-            if (key == "id") key = "_id"
-            where[key] = value
-          }
-        })
+        if (req.query) {
+          Object.entries(req.query).map(([key, value]) => {
+            if (!["page", "perPage"].includes(key)) { // Exclui os parâmetros page e perPage da consulta
+              if (key == "id") key = "_id"
+              options.where[key] = value
+            }
+          })
+        }
 
-        let result = await prisma[this.modelName].find(where).skip((page - 1) * perPage).limit(perPage)
+        let result = await prisma[this.modelName].findMany(options)
         resolve({ count: result.length, success: true, rows: result })
 
       } catch (error) {
@@ -64,7 +64,7 @@ class CommonService {
   async create(object) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await prisma[this.modelName].create(object)
+        const result = await prisma[this.modelName].create({ data: object })
         resolve({ success: true, document: result?._doc })
 
       } catch (error) {
