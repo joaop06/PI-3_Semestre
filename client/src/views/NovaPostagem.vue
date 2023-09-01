@@ -1,23 +1,5 @@
 <template>
-    <v-layout class="rounded rounded-md">
-  
-      <!-- <v-app-bar color="red pa-2" :elevation="4" scroll-behavior="elevate">
-        <v-row no-gutters justify="center" align="center">
-          <v-col cols="12">
-            <v-toolbar-title class="text-button text-white" id="titulo">
-              <v-icon @click="toggleDrawer">mdi-menu</v-icon>
-            </v-toolbar-title>
-          </v-col>
-        </v-row>
-      </v-app-bar>
-  
-      <v-navigation-drawer v-model="drawerOpen" temporary>
-        <v-list-item v-for="item in menuItems" :key="item.title" :to="item.route">
-          <br>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item>
-      </v-navigation-drawer> -->
-  
+    <v-layout class="rounded rounded-md">  
       <v-main>
         <v-layout class="editor d-flex align-center justify-center" row wrap>
           <v-flex class="quilleditor">
@@ -37,16 +19,15 @@
   
   .quilleditor {
     background-color: white;
-    height: 90%;
-    width: 60%;
-    padding: 0;
-    /* Remove padding to eliminate unnecessary space */
+    height: 70%;
+    width: 80%;
     margin-right: 0;
+    margin-top: -100px !important;
   }
   
   .quilleditor_text {
     background-color: white;
-    height: 90%;
+    height: 100%;
     width: 100%;
   }
   </style>
@@ -65,7 +46,7 @@
           { title: 'Postagens', route: '/postagens' },
           { title: 'Conta', route: '/dashboard' },
           { title: 'Home', route: '/inicio' }
-        ]
+        ],
       };
     },
     methods: {
