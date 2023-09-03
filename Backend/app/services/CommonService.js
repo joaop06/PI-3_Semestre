@@ -7,18 +7,17 @@ class CommonService {
 
   // #################################### BUSCAR DOCUMENTOS #################################### \\
   // (Route Default) Busca e Conta todos os documentos
-  async findMany(req, options = {}) {
+  async findMany(req, options = { where: {} }) {
     return new Promise(async (resolve, reject) => {
       try {
-        console.log(prisma)
-        // prisma._runtimeDataModel.models.User.fields --> Objeto dos Atributos da Collection
 
-
-        // Mapeia todos os atributos da req.query como parâmetro de busca
-        if (req.query) {
+        // Verifica se a req.query não é vazia
+        if (Object.keys(req.query).length !== 0) {
+          // Mapeia todos os atributos da req.query como parâmetro de busca
           Object.entries(req.query).map(([key, value]) => {
-            if (!["page", "perPage"].includes(key)) { // Exclui os parâmetros page e perPage da consulta
-              options.where = { [key]: value }
+            // Cria ou Insere o atributo da query no obj options.where
+            if (!['page', 'perPage'].includes(key) && !options.where[key]) {
+              options.where[key] = value
             }
           })
         }
@@ -74,7 +73,7 @@ class CommonService {
   async delete(id, req) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await prisma[this.modelName].delete({ id: id })
+        const result = await prisma[this.modelName].delete({ where: { id: id } })
         resolve(result)
 
       } catch (error) {

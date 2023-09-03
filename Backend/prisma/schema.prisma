@@ -17,3 +17,14 @@ model User {
   email     String
   password  String
 }
+
+model NewPost {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  likes       Int @default(0)
+  active      Boolean @default(false)
+  createAt    DateTime
+  updateAt    DateTime
+  deleteAt    DateTime?
+}
