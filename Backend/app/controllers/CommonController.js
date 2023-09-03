@@ -18,10 +18,10 @@ class CommonController {
       })
 
     } catch (error) {
-      res.status(500).json(
-        error.meta?.cause ? { errorMeta: error.meta.cause } :
-          error.name ? { errorName: error.name } : { error: "Internal Error when record found" }
-      )
+      res.status(500).json({
+        error: error.meta?.cause ? { errorMeta: error.meta.cause } :
+          error.name ? { errorName: error.name } : { message: "Internal Error when record found" }
+      })
     }
   }
 
@@ -36,10 +36,10 @@ class CommonController {
       })
 
     } catch (error) {
-      res.status(500).json(
-        error.meta?.cause ? { errorMeta: error.meta.cause } :
-          error.name ? { errorName: error.name } : { error: "Internal Error when registering" }
-      )
+      res.status(500).json({
+        error: error.meta?.cause ? { errorMeta: error.meta.cause } :
+          error.name ? { errorName: error.name } : { message: "Internal Error when registering" }
+      })
     }
   }
 
@@ -54,10 +54,10 @@ class CommonController {
       })
 
     } catch (error) {
-      res.status(500).json(
-        error.meta?.cause ? { errorMeta: error.meta.cause } :
-          error.name ? { errorName: error.name } : { error: "Internal Error when editing" }
-      )
+      res.status(500).json({
+        error: error.meta?.cause ? { errorMeta: error.meta.cause } :
+          error.name ? { errorName: error.name } : { message: "Internal Error when editing" }
+      })
     }
   }
 
@@ -72,10 +72,10 @@ class CommonController {
       })
 
     } catch (error) {
-      res.status(500).json(
-        error.meta?.cause ? { errorMeta: error.meta.cause } :
-          error.name ? { errorName: error.name } : { error: "Internal Error when deleting" }
-      )
+      res.status(500).json({
+        error: error.meta?.cause ? { errorMeta: error.meta.cause } :
+          error.name ? { errorName: error.name } : { message: "Internal Error when deleting" }
+      })
     }
   }
 }
