@@ -1,36 +1,77 @@
 <template>
-  <v-layout class="rounded rounded-md">
-    <h1 class="ma-4 ml-0">seja bem vindo</h1>
-  </v-layout>
+  <v-app id="inspire">
+    <v-app-bar
+      class="px-3"
+      flat
+      density="compact"
+    >
+      <v-avatar
+        color="grey-darken-1"
+        class="hidden-md-and-up"
+        size="32"
+      ></v-avatar>
+
+      <v-spacer></v-spacer>
+
+      <v-tabs
+        centered
+        color="grey-darken-2"
+      >
+        <v-tab
+          v-for="link in links"
+          :key="link"
+          :text="link"
+        ></v-tab>
+      </v-tabs>
+      <v-spacer></v-spacer>
+
+      <v-avatar
+        class="hidden-sm-and-down"
+        color="grey-darken-1"
+        size="32"
+      ></v-avatar>
+    </v-app-bar>
+
+    <v-main class="bg-grey-lighten-3">
+      <v-container>
+        <v-row>
+          <v-col
+            cols="12"
+            md="8"
+          >
+            <v-sheet
+              min-height="70vh"
+              min-width="100vw"
+              rounded="lg"
+            >
+              <!--  -->
+              <p>vaitomanocu</p>
+            </v-sheet>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-body{
-  background-color: aquamarine;
-}
-</style>
+<script setup>
+  const links = [
+    'Dashboard',
+    'Messages',
+    'Profile',
+    'Updates',
+  ]
+</script>
 
 <script>
-export default {
-  components: {
-
-  },
-  data() {
-    return {
-      drawerOpen: false,
-      content: '',
-      menuItems: [
-        { title: 'Nova postagem', route: '/newpost' },
-        { title: 'Postagens', route: '/postagens' },
-        { title: 'Conta', route: '/dashboard' },
-        { title: 'Home', route: '/inicio' }
-      ]
-    };
-  },
-  methods: {
-    toggleDrawer() {
-      this.drawerOpen = !this.drawerOpen;
-    }
+  export default {
+    data: () => ({
+      links: [
+        'Dashboard',
+        'Messages',
+        'Profile',
+        'Updates',
+      ],
+    }),
   }
-};
 </script>
