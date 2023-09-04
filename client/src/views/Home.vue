@@ -4,7 +4,15 @@
     <v-main class=" bg-primary">
       <v-container fluid class="container">
         <v-row class="linha" wrap>
-          <v-col v-for="post in posts" :key="post.id" cols="12" sm="6" md="4" lg="3" class="conteudoColuna">
+          <v-col
+          v-for="(post) in posts"
+          :key="post.id"
+          cols="12"
+          sm="6"
+          md="4"
+          lg="3"
+          class="conteudoColuna"
+        >
             <v-card class="cards">
               <v-img class="align-end text-white" height="200" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
                 cover>
@@ -35,11 +43,11 @@
 }
 
 .linha {
+  display: flex;
   background-color: pink;
-  height: 90vh;
   margin: auto;
   border-radius: 10px;
-  justify-content: center;
+  justify-content: baseline;
 }
 
 .coluna {
