@@ -1,20 +1,16 @@
 <template>
-  <v-app-bar color="red pa-2" :elevation="4" scroll-behavior="elevate">
-    <v-row no-gutters justify="center" align="center">
-      <v-col cols="12">
-        <v-toolbar-title class="text-button text-white" id="titulo">
-          <v-icon @click="toggleDrawer">mdi-menu</v-icon>
-        </v-toolbar-title>
-      </v-col>
-    </v-row>
-  </v-app-bar>
+  <v-app-bar class="px-3" flat density="compact" scroll-behavior="hide">
+    <v-avatar color="grey-darken-1" class="hidden-md-and-up" size="32"></v-avatar>
 
-  <v-navigation-drawer class="mt-2" v-model="drawerOpen" temporary>
-      <v-list-item v-for="item in menuItems" :key="item.title" :to="item.route">
-        <br>
-        <v-list-item-title>{{ item.title }}</v-list-item-title>
-      </v-list-item>
-  </v-navigation-drawer>
+    <v-spacer></v-spacer>
+
+    <v-tabs centered color="grey-darken-2">
+      <v-tab v-for="menu in menuItems" :key="menu" :text="menu.title"></v-tab>
+    </v-tabs>
+    <v-spacer></v-spacer>
+
+    <v-avatar class="hidden-sm-and-down" color="grey-darken-1" size="32"></v-avatar>
+  </v-app-bar>
 </template>
 <script>
 export default {
