@@ -1,4 +1,5 @@
-const prisma = require('../db/config')
+const prisma = require('../config/prisma')
+const uploadFile = require('../config/multer')
 
 class CommonService {
   constructor(modelName) {

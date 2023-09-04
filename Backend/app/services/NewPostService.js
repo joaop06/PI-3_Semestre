@@ -1,4 +1,3 @@
-const prisma = require('../db/config')
 const CommonService = require('./CommonService')
 const moment = require('moment')
 
@@ -6,6 +5,9 @@ class NewPostService extends CommonService {
     constructor(modelName) {
         super(modelName)
         this.modelName = modelName
+
+        // const picturesPostService = new PicturesPost('PicturesPost')
+        // this.picturesPostService = picturesPostService
     }
 
     async create(NewPost, req) {
@@ -13,19 +15,33 @@ class NewPostService extends CommonService {
         // Define data de criação e atualização padrão
         NewPost.createAt = moment()
         NewPost.updateAt = moment()
-        NewPost.deleteAt = null
 
-        return super.create(NewPost, req)
+        const result = super.create(NewPost, req)
+
+
+        // const objPicture = {
+        //     idPost: 4,
+        //     name: 4,
+        //     src: req.file.path,
+        //     extension: 3
+        // }
+
+        // // Salva imagem na pasta e cria registo no banco
+        // await this.picturesPostService.create(objPicture, req)
+
+
+
+        return result
     }
 
     async update(NewPost, req) {
 
         // Atualização de Curtidas no Post
-        if (NewPost.likes) {
+        if ([true, false].includes(NewPost.likes)) {
             let quantityLikes = await this.findMany(req, { where: { id: req.query.id } })
             quantityLikes = quantityLikes.rows[0].likes
 
-            if (NewPost.likes == 'more') NewPost.likes = quantityLikes + 1
+            if (NewPost.likes) NewPost.likes = quantityLikes + 1
             else NewPost.likes = quantityLikes - 1
         }
 

@@ -28,3 +28,11 @@ model NewPost {
   updateAt    DateTime
   deleteAt    DateTime?
 }
+
+model PicturesPost {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  idPost      String @db.ObjectId
+  name        String
+  src         String
+  extension   String
+}
