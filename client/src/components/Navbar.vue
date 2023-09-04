@@ -5,7 +5,7 @@
     <v-spacer></v-spacer>
 
     <v-tabs centered color="grey-darken-2">
-      <v-tab v-for="menu in menuItems" :key="menu" :text="menu.title"></v-tab>
+      <v-tab v-for="menu in menuItems" :key="menu" :text="menu.title" :to="menu.route"></v-tab>
     </v-tabs>
     <v-spacer></v-spacer>
 

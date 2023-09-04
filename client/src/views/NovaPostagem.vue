@@ -4,10 +4,13 @@
       <v-layout class="editor d-flex align-center justify-center" row wrap>
         <v-form class="quilleditor">
           <v-flex>
-            <QuillEditor class="quilleditor_text" v-model="content" theme="snow" />
+            <QuillEditor class="quilleditor_text" v-model="content" theme="snow" toolbar="full" />
           </v-flex>
           <v-flex>
-            <v-btn type="button" onclick="Salvar()">Salvar</v-btn>
+            <v-btn type="button" @click="Salvar">Salvar</v-btn>
+          </v-flex>
+          <v-flex>
+            {{naPag}}
           </v-flex>
         </v-form>
       </v-layout>
@@ -38,6 +41,9 @@
 </style>
   
 <script>
+
+import gb from '@/controller/globalVariables';
+
 export default {
   components: {
 
@@ -46,6 +52,7 @@ export default {
     return {
       drawerOpen: false,
       content: '',
+      naPag: 'testando',
       menuItems: [
         { title: 'Nova postagem', route: '/newpost' },
         { title: 'Postagens', route: '/postagens' },
@@ -59,9 +66,10 @@ export default {
       this.drawerOpen = !this.drawerOpen;
     },
     Salvar(){
-      localStorage.setItem('conteudo', content);
-      alert(localStorage.getItem('conteudo'));
-      console.log('Conteudo salvo: ', localStorage.getItem('conteudo'));
+      gb.post = this.content;
+      this.naPag = gb.post;
+      alert('deu certo, amigo')
+      console.log('conteudo salvo: ', gb.post)
     }
   }
 };
