@@ -1,14 +1,14 @@
 <template>
   <v-app id="inspire">
 
-    <v-main class="bg-primary">
+    <v-main class=" bg-primary">
       <v-container fluid class="container">
-        <v-row class="linha">
-          <v-col v-for="post in posts" :key="post.id" cols="12" md="8" class="conteudoColuna">
+        <v-row class="linha" wrap>
+          <v-col v-for="post in posts" :key="post.id" cols="12" sm="6" md="4" lg="3" class="conteudoColuna">
             <v-card class="cards">
               <v-img class="align-end text-white" height="200" src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
                 cover>
-                <v-card-title>Top 10 Australian beaches</v-card-title>
+                <v-card-title>{{post.titulo}}</v-card-title>
               </v-img>
 
               <v-card-text>
@@ -30,7 +30,7 @@
 
 <style>
 .container {
-  background-color: blue;
+  background-color: yellow;
   height: 100%;
 }
 
@@ -39,6 +39,7 @@
   height: 90vh;
   margin: auto;
   border-radius: 10px;
+  justify-content: center;
 }
 
 .coluna {
@@ -47,20 +48,21 @@
 }
 
 .cards {
-  max-width: 400px;
+  max-width: 100%;
   max-height: 400px;
 }
 </style>
 
 <script>
 
-import bd from '@/'
+import bd from '@/tests/banco.json';
 
 export default {
   data() {
     return {
       textocompleto: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur recusandae maxime repellat quas quaerat necessitatibus ea commodi. Minus totam nobis repellendus laboriosam ullam autem debitis, pariatur perspiciatis, atque ipsam quo.', //variavel para pegar o texto futuramente
-      limiteCaracteres: 150 //limitador dos caracteres
+      limiteCaracteres: 150, //limitador dos caracteres
+      posts: bd
     };
   },
   computed: {
