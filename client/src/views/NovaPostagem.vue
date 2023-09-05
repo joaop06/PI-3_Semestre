@@ -4,13 +4,13 @@
       <v-layout class="editor d-flex align-center justify-center" row wrap>
         <v-form class="quilleditor">
           <v-flex>
-            <QuillEditor class="quilleditor_text" v-model="content" theme="snow" toolbar="full" />
+            <QuillEditor v-model:content="contentDelta" toolbar="full" contentType="delta" />
           </v-flex>
           <v-flex>
             <v-btn type="button" @click="Salvar">Salvar</v-btn>
           </v-flex>
           <v-flex>
-            {{naPag}}
+            {{ html }}
           </v-flex>
         </v-form>
       </v-layout>
@@ -39,39 +39,82 @@
   width: 100%;
 }
 </style>
-  
-<script>
 
+<script setup>
 import gb from '@/controller/globalVariables';
+import { ref } from 'vue'
+import { Delta, Quill } from '@vueup/vue-quill'
 
-export default {
-  components: {
+const drawerOpen = ref(false);
+const content = ref('');
+const naPag = ref('testando');
+const editor = ref(null);
 
-  },
-  data() {
-    return {
-      drawerOpen: false,
-      content: '',
-      naPag: 'testando',
-      menuItems: [
-        { title: 'Nova postagem', route: '/newpost' },
-        { title: 'Postagens', route: '/postagens' },
-        { title: 'Conta', route: '/dashboard' },
-        { title: 'Home', route: '/inicio' }
-      ],
-    };
-  },
-  methods: {
-    toggleDrawer() {
-      this.drawerOpen = !this.drawerOpen;
-    },
-    Salvar(){
-      gb.post = this.content;
-      this.naPag = gb.post;
-      alert('deu certo, amigo')
-      console.log('conteudo salvo: ', gb.post)
+const menuItems = [
+  { title: 'Nova postagem', route: '/newpost' },
+  { title: 'Postagens', route: '/postagens' },
+  { title: 'Conta', route: '/dashboard' },
+  { title: 'Home', route: '/inicio' }
+];
+
+const contentDelta = ref(
+  new Delta([
+    { insert: 'Gandalf', attributes: { bold: true } },
+    { insert: ' the ' },
+    { insert: 'Grey', attributes: { color: '#ccc' } },
+  ])
+)
+
+const toggleDrawer = () => {
+  drawerOpen.value = !drawerOpen.value;
+};
+
+const Salvar = () => {
+
+  var toolbarOptions = ['bold', 'italic', 'underline', 'strike'];
+
+  var quill = new Quill('editor', {
+    modules: {
+      toolbar: toolbarOptions
     }
-  }
+  });
+
+  const delta = contentDelta.value;
+  console.log(delta);
+  // gb.post = deltaJSON;
+  const deltaJSON = JSON.stringify(delta);
+  console.log('aquivo já jsonado', deltaJSON);
+
+  // console.log(content.value);
+  // gb.post = content.value;
+  // alert('deu certo, amigo')
+  // console.log('conteudo salvo: ', gb.post)
 };
 </script>
+
+<!-- <script setup>
+import { ref } from 'vue'
+import { Delta } from '@vueup/vue-quill'
+const contentDelta = ref(
+  new Delta([
+    { insert: 'Gandalf', attributes: { bold: true } },
+    { insert: ' the ' },
+    { insert: 'Grey', attributes: { color: '#ccc' } },
+  ])
+)
+const contentHTML = ref('<h1>This is html header</h1>')
+const contentText = ref('This is just plain text')
+</script>
+
+<template>
+  <div>
+    <h2>Delta</h2>
+    <QuillEditor v-model:content="contentDelta" toolbar="full" contentType="delta" />
+    <pre v-highlightjs><code class="json">{{ contentDelta }}</code></pre>
+    <br />
+  </div>
+</template>
+
+<style scoped></style> -->
+
   
