@@ -10,7 +10,7 @@
             <v-btn type="button" @click="Salvar">Salvar</v-btn>
           </v-flex>
           <v-flex>
-            {{ html }}
+            {{ naPag }}
           </v-flex>
         </v-form>
       </v-layout>
@@ -46,9 +46,7 @@ import { ref } from 'vue'
 import { Delta, Quill } from '@vueup/vue-quill'
 
 const drawerOpen = ref(false);
-const content = ref('');
 const naPag = ref('testando');
-const editor = ref(null);
 
 const menuItems = [
   { title: 'Nova postagem', route: '/newpost' },
@@ -70,14 +68,6 @@ const toggleDrawer = () => {
 };
 
 const Salvar = () => {
-
-  var toolbarOptions = ['bold', 'italic', 'underline', 'strike'];
-
-  var quill = new Quill('editor', {
-    modules: {
-      toolbar: toolbarOptions
-    }
-  });
 
   const delta = contentDelta.value;
   console.log(delta);
