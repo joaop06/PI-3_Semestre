@@ -36,6 +36,7 @@ class CommonController {
       })
 
     } catch (error) {
+      console.log(error)
       res.status(500).json({
         error: error.meta?.cause ? { errorMeta: error.meta.cause } :
           error.name ? { errorName: error.name } : { message: "Internal Error when registering" }

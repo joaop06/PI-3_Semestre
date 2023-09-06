@@ -12,20 +12,23 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   email     String
   password  String
+  postIDs   String[] @db.ObjectId
+  posts     Post[] @relation(fields: [postIDs], references: [id])
 }
 
-model NewPost {
+model Post {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
-  likes       Int @default(0)
-  active      Boolean @default(false)
-  createAt    DateTime
-  updateAt    DateTime
+  active      Boolean @default(true)
+  usersIDs    String[] @db.ObjectId
+  users       User[] @relation(fields: [usersIDs], references: [id])
+  createAt    DateTime @default(now())
+  updateAt    DateTime @default(now())
   deleteAt    DateTime?
 }
 
