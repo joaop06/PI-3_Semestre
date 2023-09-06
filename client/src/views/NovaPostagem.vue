@@ -47,7 +47,7 @@ const toggleDrawer = () => {
 
 const Salvar = () => {
   const delta = contentDelta.value;
-  naPag.value = new Delta(delta.ops.values);
+  naPag.value = new Delta(delta.ops.filter((op) => op.insert));
   console.log('na pag agr: ', naPag)
   // gb.post = deltaJSON;
   // const deltaJSON = JSON.stringify(delta);
