@@ -4,13 +4,15 @@
       <v-layout class="editor d-flex align-center justify-center" row wrap>
         <v-form class="quilleditor">
           <v-flex>
-            <QuillEditor v-model:content="contentDelta" toolbar="full" contentType="delta" />
+            <Tiptap v-model="content"/>
+            <br><br>
+            <pre><code>{{ content }}</code></pre>
           </v-flex>
           <v-flex>
-            <v-btn type="button" @click="Salvar">Salvar</v-btn>
+            <!-- <v-btn type="button" @click="Salvar">Salvar</v-btn> -->
           </v-flex>
           <v-flex>
-            <p v-html="convertedContent | filterText"></p>
+            <p></p>
           </v-flex>
         </v-form>
       </v-layout>
@@ -19,11 +21,14 @@
 </template>
 
 <script setup>
+import Tiptap from '@/components/Tiptap.vue';
+
 import { ref } from 'vue'
-import { Delta, Quill } from '@vueup/vue-quill'
+// import { Delta, Quill } from '@vueup/vue-quill'
 
 const drawerOpen = ref(false);
 const editorRef = ref(null)
+const content = ref('Olá, meus amigos')
 let naPag = ref('testando');
 
 const menuItems = [
@@ -33,22 +38,22 @@ const menuItems = [
   { title: 'Home', route: '/inicio' }
 ];
 
-const contentDelta = ref(
-  new Delta([
-    { insert: 'Gandalf', attributes: { bold: true } },
-    { insert: ' the ' },
-    { insert: 'Grey', attributes: { color: '#ccc' } },
-  ])
-)
+// const contentDelta = ref(
+//   new Delta([
+//     { insert: 'Gandalf', attributes: { bold: true } },
+//     { insert: ' the ' },
+//     { insert: 'Grey', attributes: { color: '#ccc' } },
+//   ])
+// )
 
 const toggleDrawer = () => {
   drawerOpen.value = !drawerOpen.value;
 };
 
 const Salvar = () => {
-  const delta = contentDelta.value;
-  naPag.value = new Delta(delta.ops.filter((op) => op.insert));
-  console.log('na pag agr: ', naPag)
+  // const delta = contentDelta.value;
+  // naPag.value = new Delta(delta.ops.filter((op) => op.insert));
+  // console.log('na pag agr: ', naPag)
   // gb.post = deltaJSON;
   // const deltaJSON = JSON.stringify(delta);
   // console.log('aquivo já jsonado', deltaJSON);
@@ -59,16 +64,16 @@ const Salvar = () => {
   // console.log('conteudo salvo: ', gb.post)
 };
 
-const convertedContent = () => {
-  let convertido = editorRef.value.quill.clipboard.convert(contentDelta.value)
-  console.log('converte', convertido);
-}
+// const convertedContent = () => {
+//   let convertido = editorRef.value.quill.clipboard.convert(contentDelta.value)
+//   console.log('converte', convertido);
+// }
 
 
-const filterText = (content) => {
-  let filtrado = content.filter((op) => op.insert);
-  console.log(filtrado);
-}
+// const filterText = (content) => {
+//   let filtrado = content.filter((op) => op.insert);
+//   console.log(filtrado);
+// }
 
 </script>
 
