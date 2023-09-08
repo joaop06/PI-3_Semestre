@@ -4,15 +4,14 @@
       <v-layout class="editor d-flex align-center justify-center" row wrap>
         <v-form class="quilleditor">
           <v-flex>
-            <Tiptap v-model="content"/>
-            <br><br>
-            <pre><code>{{ content }}</code></pre>
+            <Editor></Editor>
+            <!-- <QuillEditor v-model:content="contentDelta" toolbar="full" contentType="delta" /> -->
           </v-flex>
           <v-flex>
-            <!-- <v-btn type="button" @click="Salvar">Salvar</v-btn> -->
+            <v-btn type="button" @click="Salvar">Salvar</v-btn>
           </v-flex>
           <v-flex>
-            <p></p>
+            <!-- <p v-html="convertedContent"></p> -->
           </v-flex>
         </v-form>
       </v-layout>
@@ -21,15 +20,14 @@
 </template>
 
 <script setup>
-import Tiptap from '@/components/Tiptap.vue';
-
 import { ref } from 'vue'
-// import { Delta, Quill } from '@vueup/vue-quill'
+import gb from '@/controller/globalVariables'
+// import { Delta, Quill, QuillEditor } from '@vueup/vue-quill'
 
 const drawerOpen = ref(false);
-const editorRef = ref(null)
-const content = ref('Olá, meus amigos')
-let naPag = ref('testando');
+// const editorRef = ref(null)
+// let naPag = ref('testando');
+// let deltaJSON = ref(null);
 
 const menuItems = [
   { title: 'Nova postagem', route: '/newpost' },
@@ -52,28 +50,18 @@ const toggleDrawer = () => {
 
 const Salvar = () => {
   // const delta = contentDelta.value;
-  // naPag.value = new Delta(delta.ops.filter((op) => op.insert));
+  // naPag.value = new Delta(delta.ops.values);
   // console.log('na pag agr: ', naPag)
+
+  // deltaJSON = JSON.stringify(delta);
   // gb.post = deltaJSON;
-  // const deltaJSON = JSON.stringify(delta);
+
   // console.log('aquivo já jsonado', deltaJSON);
-  
-  // console.log(content.value);
-  // gb.post = content.value;
-  // alert('deu certo, amigo')
-  // console.log('conteudo salvo: ', gb.post)
 };
 
-// const convertedContent = () => {
-//   let convertido = editorRef.value.quill.clipboard.convert(contentDelta.value)
-//   console.log('converte', convertido);
-// }
+const convertedContent = () => {
 
-
-// const filterText = (content) => {
-//   let filtrado = content.filter((op) => op.insert);
-//   console.log(filtrado);
-// }
+}
 
 </script>
 
