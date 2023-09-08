@@ -4,8 +4,7 @@
       <v-layout class="editor d-flex align-center justify-center" row wrap>
         <v-form class="quilleditor">
           <v-flex>
-            <Editor></Editor>
-            <!-- <QuillEditor v-model:content="contentDelta" toolbar="full" contentType="delta" /> -->
+            <QuillEditor v-model:content="contentDelta" toolbar="full" contentType="delta"/>
           </v-flex>
           <v-flex>
             <v-btn type="button" @click="Salvar">Salvar</v-btn>
@@ -22,10 +21,9 @@
 <script setup>
 import { ref } from 'vue'
 import gb from '@/controller/globalVariables'
-// import { Delta, Quill, QuillEditor } from '@vueup/vue-quill'
+import { Delta, Quill, QuillEditor } from '@vueup/vue-quill'
 
 const drawerOpen = ref(false);
-// const editorRef = ref(null)
 // let naPag = ref('testando');
 // let deltaJSON = ref(null);
 
@@ -36,19 +34,34 @@ const menuItems = [
   { title: 'Home', route: '/inicio' }
 ];
 
-// const contentDelta = ref(
-//   new Delta([
-//     { insert: 'Gandalf', attributes: { bold: true } },
-//     { insert: ' the ' },
-//     { insert: 'Grey', attributes: { color: '#ccc' } },
-//   ])
-// )
+const contentDelta = ref(
+  new Delta([
+    { insert: 'Gandalf', attributes: { bold: true } },
+    { insert: ' the ' },
+    { insert: 'Grey', attributes: { color: '#ccc' } },
+  ])
+)
+
+const globalOptions = {
+    debug: 'info',
+    modules: {
+      
+    },
+    placeholder: 'Compose an epic...',
+    readOnly: false,
+    theme: 'snow'
+  }
 
 const toggleDrawer = () => {
   drawerOpen.value = !drawerOpen.value;
 };
 
 const Salvar = () => {
+
+  const delta = contentDelta.value.ops;
+  console.log('valor do delta',delta)
+
+
   // const delta = contentDelta.value;
   // naPag.value = new Delta(delta.ops.values);
   // console.log('na pag agr: ', naPag)

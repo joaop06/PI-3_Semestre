@@ -6,7 +6,6 @@
 
 // Components
 import App from './App.vue'
-import Vue from 'vue'
 
 
 // Composables
@@ -15,17 +14,25 @@ import { createApp } from 'vue'
 
 // Plugins
 import { QuillEditor } from '@vueup/vue-quill'
-import Editor from 'vue-editor-js';
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 import { registerPlugins } from '@/plugins';
 
 const app = createApp(App)
-
-
-
-
 registerPlugins(app)
+
+const globalOptions = {
+    debug: 'info',
+    modules: {
+      
+    },
+    placeholder: 'Compose an epic...',
+    readOnly: false,
+    theme: 'snow'
+  }
+  // set default globalOptions prop
+QuillEditor.props.globalOptions.default = () => globalOptions
+
 
 
 app.mount('#app')
