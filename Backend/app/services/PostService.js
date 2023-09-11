@@ -8,24 +8,18 @@ class PostService extends CommonService {
     }
 
     async findMany(req) {
-        return await prisma[this.modelName].findMany({
-            include: {
-                users_likes: true
-            }
-        })
+        // return await prisma[this.modelName].findMany({
+        //     include: {
+        //         users_likes: true
+        //     }
+        // })
+
+        return await super.findMany(req)
     }
 
     async create(Post, req) {
 
-        const bodyPost = {
-            title: "Título Bom",
-            description: "Descrição Legal!",
-            usersIDs: {
-                create: ["64f119a6b776830fdb79ca56"]
-            }
-        }
-
-        return await super.create(bodyPost, req)
+        return await super.create(Post, req)
     }
 
     async update(Post, req) {
@@ -38,6 +32,7 @@ class PostService extends CommonService {
             if (Post.likes) Post.likes = quantityLikes + 1
             else Post.likes = quantityLikes - 1
         }
+
 
         return super.update(Post, req)
     }

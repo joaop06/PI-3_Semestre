@@ -3,7 +3,6 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["mongodb"]
 }
 
 datasource db {
@@ -12,30 +11,23 @@ datasource db {
 }
 
 model User {
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String
-  password  String
-  postIDs   String[] @db.ObjectId
-  posts     Post[] @relation(fields: [postIDs], references: [id])
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  email      String
+  password   String
+  postsIDs   String[] @db.ObjectId
+  postsLiked Post[]   @relation(fields: [postsIDs], references: [id])
+  createAt   DateTime @default(now())
+  updateAt   DateTime @default(now())
 }
 
 model Post {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
-  active      Boolean @default(true)
+  active      Boolean  @default(true)
   usersIDs    String[] @db.ObjectId
-  users       User[] @relation(fields: [usersIDs], references: [id])
+  usersLikeds User[]   @relation(fields: [usersIDs], references: [id])
   createAt    DateTime @default(now())
   updateAt    DateTime @default(now())
-  deleteAt    DateTime?
-}
-
-model PicturesPost {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  idPost      String @db.ObjectId
-  name        String
-  src         String
-  extension   String
 }
