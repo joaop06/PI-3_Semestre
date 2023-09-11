@@ -21,19 +21,6 @@ import { registerPlugins } from '@/plugins';
 const app = createApp(App)
 registerPlugins(app)
 
-const globalOptions = {
-    debug: 'info',
-    modules: {
-      
-    },
-    placeholder: 'Compose an epic...',
-    readOnly: false,
-    theme: 'snow'
-  }
-  // set default globalOptions prop
-QuillEditor.props.globalOptions.default = () => globalOptions
-
 
 
 app.mount('#app')
-app.component('QuillEditor', QuillEditor)
