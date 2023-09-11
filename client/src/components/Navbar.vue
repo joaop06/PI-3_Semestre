@@ -22,10 +22,10 @@ export default {
       drawerOpen: false,
       content: '',
       menuItems: [
-        { title: 'Nova postagem', route: '/newpost' },
+        { title: 'Home', route: '/' },
         { title: 'Postagens', route: '/postagens' },
         { title: 'Conta', route: '/dashboard' },
-        { title: 'Home', route: '/inicio' }
+        { title: 'Nova Postagem', route: '/newpost' }
       ]
     };
   },

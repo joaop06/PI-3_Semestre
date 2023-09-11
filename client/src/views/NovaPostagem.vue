@@ -1,10 +1,10 @@
 <template>
   <v-layout class="rounded rounded-md">
     <v-main>
-      <v-layout class="editor d-flex align-center justify-center" row wrap>
+      <v-layout class="editor align-center justify-center" row wrap>
         <v-form class="quilleditor">
           <v-flex>
-            <QuilEditor class="quilleditor_text "></QuilEditor>
+            <QuilEditor class="quilleditor_text"></QuilEditor>
           </v-flex>
         </v-form>
       </v-layout>
@@ -39,7 +39,6 @@ const toggleDrawer = () => {
 }
 
 .quilleditor {
-  background-color: white;
   height: 70%;
   width: 80%;
   margin-right: 0;
@@ -47,6 +46,7 @@ const toggleDrawer = () => {
 }
 
 .quilleditor_text {
+  background-color: white;
   height: 90%;
   width: 100%;
 }

@@ -1,9 +1,7 @@
 <template>
     <div>
-        <div ref="editor" />
-        <button @click.prevent="getEditorContent">Obter Conteúdo</button><br>
-        <button @click.prevent="clearContent">Limpar Conteúdo</button><br>
-        <button @click.prevent="setEditorCOntent">Mostrar Conteúdo</button>
+        <div class="quilleditor_text" ref="editor" /><br>
+        <button class="buttonPost" @click.prevent="getEditorContent">POSTAR</button><br>
     </div>
 </template>
   
@@ -15,18 +13,22 @@ import gb from '@/controller/globalVariables';
 export default {
     mounted() {
         const quillOptions = {
-            theme: 'snow', // Escolha um tema
+            theme: 'snow',
             modules: {
                 toolbar: [
-                    [{ header: '1' }, { header: '2' }, { font: [] }],
-                    ['bold', 'italic', 'underline', 'strike'],
-                    [{ list: 'ordered' }, { list: 'bullet' }],
-                    ['link', 'image'],
-                    [{ align: [] }],
-                    ['clean'],
+                    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                    [{ 'size': ['small', false, 'large', 'huge'] }], 
+                    [{ 'font': [] }],
+                    [{ 'align': [] }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                    ['blockquote'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                    [{ 'indent': '-1' }, { 'indent': '+1' }],                       
+                    ['image', 'link'] 
                 ],
             },
-            placeholder: 'Digite aqui...',
+            placeholder: 'Faça sua postagem...',
             readOnly: false,
             bounds: document.body,
             scrollingContainer: null,
@@ -59,7 +61,7 @@ export default {
             console.log('conteudo nas global: ', gb.varteste);
             console.log('texto: ', texto);
         },
-        async clearContent(){
+        async clearContent() {
             this.quill.setText('');
             console.log('limpo');
         },
@@ -74,3 +76,19 @@ export default {
     },
 };
 </script>
+
+<style>
+
+.quilleditor_text {
+    background-color: white;
+    height: 90%;
+    width: 100%;
+}
+
+.buttonPost{
+    background-color: rgb(0, 241, 221);
+    width: 150px;
+    height: 30px;
+    border-radius: 10px;
+}
+</style>
