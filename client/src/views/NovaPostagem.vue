@@ -4,13 +4,7 @@
       <v-layout class="editor d-flex align-center justify-center" row wrap>
         <v-form class="quilleditor">
           <v-flex>
-            <QuillEditor v-model:content="contentDelta" toolbar="full" contentType="delta"/>
-          </v-flex>
-          <v-flex>
-            <v-btn type="button" @click="Salvar">Salvar</v-btn>
-          </v-flex>
-          <v-flex>
-            <!-- <p v-html="convertedContent"></p> -->
+            <QuilEditor class="quilleditor_text "></QuilEditor>
           </v-flex>
         </v-form>
       </v-layout>
@@ -20,12 +14,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import gb from '@/controller/globalVariables'
-import { Delta, Quill, QuillEditor } from '@vueup/vue-quill'
+import QuilEditor from '@/components/Editor.vue'
 
 const drawerOpen = ref(false);
-// let naPag = ref('testando');
-// let deltaJSON = ref(null);
 
 const menuItems = [
   { title: 'Nova postagem', route: '/newpost' },
@@ -34,47 +25,9 @@ const menuItems = [
   { title: 'Home', route: '/inicio' }
 ];
 
-const contentDelta = ref(
-  new Delta([
-    { insert: 'Gandalf', attributes: { bold: true } },
-    { insert: ' the ' },
-    { insert: 'Grey', attributes: { color: '#ccc' } },
-  ])
-)
-
-const globalOptions = {
-    debug: 'info',
-    modules: {
-      
-    },
-    placeholder: 'Compose an epic...',
-    readOnly: false,
-    theme: 'snow'
-  }
-
 const toggleDrawer = () => {
   drawerOpen.value = !drawerOpen.value;
 };
-
-const Salvar = () => {
-
-  const delta = contentDelta.value.ops;
-  console.log('valor do delta',delta)
-
-
-  // const delta = contentDelta.value;
-  // naPag.value = new Delta(delta.ops.values);
-  // console.log('na pag agr: ', naPag)
-
-  // deltaJSON = JSON.stringify(delta);
-  // gb.post = deltaJSON;
-
-  // console.log('aquivo já jsonado', deltaJSON);
-};
-
-const convertedContent = () => {
-
-}
 
 </script>
 
@@ -94,8 +47,7 @@ const convertedContent = () => {
 }
 
 .quilleditor_text {
-  background-color: white;
-  height: 100%;
+  height: 90%;
   width: 100%;
 }
 </style>
