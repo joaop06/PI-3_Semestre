@@ -1,10 +1,10 @@
 <template>
   <v-layout class="rounded rounded-md">
     <v-main>
-      <v-layout class="editor align-center justify-center" row wrap>
+      <v-layout class="editor align-center justify-center h1--" row wrap>
         <v-form class="quilleditor">
           <v-flex>
-            <QuilEditor class="quilleditor_text"></QuilEditor>
+            <QuillEditor class="quilleditor_text"></QuillEditor>
           </v-flex>
         </v-form>
       </v-layout>
@@ -14,7 +14,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import QuilEditor from '@/components/Editor.vue'
+import QuillEditor from '@/components/Editor.vue'
 
 const drawerOpen = ref(false);
 
@@ -33,7 +33,6 @@ const toggleDrawer = () => {
 
 <style>
 .editor {
-  background-color: rgb(8, 255, 82) !important;
   height: 39rem;
   width: 100%;
 }

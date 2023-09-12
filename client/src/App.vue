@@ -3,6 +3,7 @@
     <v-main>
       <Navbar/>
       <router-view />
+      <Footer/>
     </v-main>
   </v-app>
 </template>
@@ -10,10 +11,12 @@
 <script>
 // Importe os componentes que você deseja usar
 import Navbar from '@/components/Navbar.vue'
+import Footer from '@/components/Rodape.vue'
 
 export default {
   components: {
     Navbar,
+    Footer
   },
   data() {
     return {
