@@ -7,16 +7,15 @@
         </v-row>
 
         <v-row>
-            <v-col cols="3">
-                <v-avatar size="200">
-                    <img :src="user.avatar" alt="Imagem do Usuário" />
-                </v-avatar>
-            </v-col>
-            <v-col  class="bg-warning" cols="9">
-                <br>
-                <h2>{{ user.name }}</h2>
-                <p>{{ user.email }}</p>
-                <v-btn color="primary" @click="showPasswordDialog = true">Alterar Senha</v-btn>
+            <v-col class="bg-warning d-flex justify-center" cols="12">
+                <v-card class="card">
+                    <br>
+                    <h2 class="d-flex justify-center">Olá, {{ user.name }}!</h2>
+                    <v-divider></v-divider>
+                    <p class="d-flex justify-center">Email: {{ user.email }}</p>
+                    <v-divider></v-divider><br>
+                    <v-btn color="primary" @click="showPasswordDialog = true">Alterar Senha</v-btn>
+                </v-card>
             </v-col>
         </v-row>
 
@@ -68,6 +67,13 @@ export default {
 </script>
   
 <style scoped>
-/* Seu estilo personalizado aqui */
+.card {
+    width: 40vw;
+    height: 40vh;
+}
+
+.botao {
+    
+}
 </style>
   

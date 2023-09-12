@@ -92,6 +92,7 @@ export default {
                 gb.varteste = content;
                 await this.$nextTick();
                 this.successDialog = true;
+                console.log('delta: ', gb.varteste);
                 this.clearContent();
             } catch (error) {
                 console.log(error)
