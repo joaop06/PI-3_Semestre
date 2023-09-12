@@ -49,5 +49,6 @@ const toggleDrawer = () => {
   background-color: white;
   height: 90%;
   width: 100%;
+  border-radius: 10px;
 }
 </style>

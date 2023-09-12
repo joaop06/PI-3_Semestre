@@ -23,7 +23,7 @@ export default {
       content: '',
       menuItems: [
         { title: 'Home', route: '/' },
-        { title: 'Postagens', route: '/postagens' },
+        { title: 'Postagens', route: '/posts' },
         { title: 'Conta', route: '/dashboard' },
         { title: 'Nova Postagem', route: '/newpost' }
       ]

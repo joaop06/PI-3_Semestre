@@ -1,7 +1,9 @@
 <template>
     <div>
         <div class="quilleditor_text" ref="editor" /><br>
-        <button class="buttonPost" @click.prevent="getEditorContent">POSTAR</button><br>
+        <v-btn class="buttonPost" @click.prevent="getEditorContent" append-icon="mdi-post" variant="tonal" rounded="10px">
+            POST
+          </v-btn><br>
     </div>
 </template>
   
@@ -83,12 +85,12 @@ export default {
     background-color: white;
     height: 90%;
     width: 100%;
+    border-radius: 10px;
 }
 
 .buttonPost{
     background-color: rgb(0, 241, 221);
     width: 150px;
     height: 30px;
-    border-radius: 10px;
 }
 </style>
