@@ -25,16 +25,17 @@ class PostService extends CommonService {
     async update(Post, req) {
 
         // Atualização de Curtidas no Post
-        if ([true, false].includes(Post.likes)) {
-            let quantityLikes = await this.findMany(req, { where: { id: req.query.id } })
-            quantityLikes = quantityLikes.rows[0].likes
+        // if ([true, false].includes(Post.likes)) {
+        //     let quantityLikes = await this.findMany(req, { where: { id: req.query.id } })
+        //     quantityLikes = quantityLikes.rows[0].likes
 
-            if (Post.likes) Post.likes = quantityLikes + 1
-            else Post.likes = quantityLikes - 1
-        }
+        //     if (Post.likes) Post.likes = quantityLikes + 1
+        //     else Post.likes = quantityLikes - 1
+        // }
 
 
-        return super.update(Post, req)
+
+        return super.update(body, req)
     }
 }
 

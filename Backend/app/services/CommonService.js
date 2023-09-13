@@ -60,7 +60,7 @@ class CommonService {
   ) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await prisma[this.modelName].update({ data: object, ...options })
+        const result = await prisma[this.modelName].update({ where: { object }, data: { options } })
         resolve({ success: true, result: result })
 
       } catch (error) {
