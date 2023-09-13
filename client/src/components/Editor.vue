@@ -32,6 +32,7 @@
   
 <script>
 import { ref } from 'vue';
+import axios from 'axios'
 import Quill from 'quill';
 import gb from '@/controller/globalVariables';
 
@@ -90,6 +91,23 @@ export default {
             try {
                 const content = this.quill.getContents();
                 gb.varteste = content;
+                const titulo = 'titulo';
+                const description = 'descricao';
+
+                const jsonado = JSON.stringify(content);
+
+                const form = new FormData();
+
+                form.append('title', titulo);
+                form.append('description', description);
+
+                console.log(form);
+
+                await axios.post('http://localhost:7000/post',form )
+                .then(response => {
+                    console.log('deu certo')
+                })
+
                 await this.$nextTick();
                 this.successDialog = true;
                 console.log('delta: ', gb.varteste);
