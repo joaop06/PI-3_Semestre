@@ -71,9 +71,5 @@ export default {
     width: 40vw;
     height: 40vh;
 }
-
-.botao {
-    
-}
 </style>
   
