@@ -4,6 +4,22 @@
         <v-btn class="buttonPost" @click.prevent="getEditorContent" append-icon="mdi-post" variant="tonal" rounded="10px">
             POST
         </v-btn><br>
+        <!-- <v-btn class="buttonPost" @click.prevent="setEditorCOntent" append-icon="mdi-post" variant="tonal" rounded="10px">
+            POST
+        </v-btn><br> -->
+        <v-dialog v-model="inputDialog" class="w-50">
+            <v-card>
+                <br>
+                <v-card-title>Informações do POST</v-card-title>
+                <v-text-field class="mx-2" clearable label="Titulo:" variant="outlined" v-model="titulo"></v-text-field>
+                <v-text-field class="mx-2" clearable label="Descrição:" variant="outlined"
+                    v-model="description"></v-text-field>
+                <v-card-actions>
+                    <v-btn color="primary" @click="inputDialog = false, successDialog = true">Fechar</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+
 
         <v-dialog v-model="successDialog" class="w-50">
             <v-card>
@@ -34,13 +50,18 @@
 import { ref } from 'vue';
 import axios from 'axios'
 import Quill from 'quill';
+import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
+import { initCustomFormatter } from 'vue';
 
 export default {
     data() {
         return {
             successDialog: false,
-            errorDialog: false
+            errorDialog: false,
+            inputDialog: false,
+            titulo: '',
+            description: ''
         }
     },
     mounted() {
@@ -56,8 +77,8 @@ export default {
                     [{ 'font': [] }],
                     [{ 'align': [] }],
                     [{ 'color': [] }, { 'background': [] }],
-                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
                     ['blockquote'],
+                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                     [{ 'indent': '-1' }, { 'indent': '+1' }],
                     ['image', 'link']
@@ -70,6 +91,9 @@ export default {
             strict: true,
             formats: [
                 'header',
+                'color',
+                'size',
+                'background',
                 'font',
                 'bold',
                 'italic',
@@ -78,7 +102,9 @@ export default {
                 'list',
                 'link',
                 'image',
+                'indent',
                 'align',
+                'blockquote'
             ],
         };
 
@@ -88,33 +114,36 @@ export default {
     methods: {
         async getEditorContent() {
             // Use o método getContents para obter o conteúdo do editor
-            try {
-                const content = this.quill.getContents();
-                gb.varteste = content;
-                const titulo = 'titulo';
-                const description = 'descricao';
+            //melhorar essa logica para adicionar o titulo e descrição
+            this.inputDialog = true;
+            if (!this.inputDialog) {
+                try {
+                    const content = this.quill.getContents();
+                    const jsonado = JSON.stringify(content);
+                    const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
+                    gb.varteste = other;
 
-                const jsonado = JSON.stringify(content);
 
-                const form = new FormData();
+                    const form = {
+                        title: titulo,
+                        description: description,
+                        contentPost: jsonado
+                    }
 
-                form.append('title', titulo);
-                form.append('description', description);
+                    console.log(form);
 
-                console.log(form);
+                    await axios.post('http://localhost:7000/post', form)
+                        .then(response => {
+                            console.log('deu certo')
+                        })
 
-                await axios.post('http://localhost:7000/post',form )
-                .then(response => {
-                    console.log('deu certo')
-                })
-
-                await this.$nextTick();
-                this.successDialog = true;
-                console.log('delta: ', gb.varteste);
-                this.clearContent();
-            } catch (error) {
-                console.log(error)
-                this.errorDialog = true;
+                    await this.$nextTick();
+                    console.log('delta: ', gb.varteste);
+                    this.clearContent();
+                } catch (error) {
+                    console.log(error)
+                    this.errorDialog = true;
+                }
             }
 
         },
