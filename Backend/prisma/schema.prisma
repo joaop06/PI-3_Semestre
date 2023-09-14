@@ -12,14 +12,15 @@ datasource db {
 
 // Collection de Usuários
 model User {
-  id           String         @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  email        String
-  password     String
-  likedBy      LikesPosts[]
-  isAdmin       Boolean?
-  createAt     DateTime       @default(now())
-  updateAt     DateTime       @default(now())
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String
+  password       String
+  likedBy        LikesPosts[]
+  isAdmin        Boolean?
+  createAt       DateTime         @default(now())
+  updateAt       DateTime         @default(now())
+  FavoritesBooks FavoritesBooks[]
 
   @@map("users") // Mapear para a coleção "users" no MongoDB
 }
@@ -27,14 +28,15 @@ model User {
 // ********************************************************************************* \\
 // Postagens Diversas ('Aleatoridades')
 model Post {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  description   String
-  contentPost Json
-  typePost     String
-  likedBy     LikesPosts[]
-  createAt    DateTime     @default(now())
-  updateAt    DateTime     @default(now())
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String
+  contentPost    Json
+  typePost       String
+  likedBy        LikesPosts[]
+  createAt       DateTime         @default(now())
+  updateAt       DateTime         @default(now())
+  FavoritesBooks FavoritesBooks[]
 
   @@map("posts") // Mapear para a coleção "posts" no MongoDB
 }
@@ -50,19 +52,19 @@ model LikesPosts {
   updateAt DateTime @default(now())
 
   @@unique([userId, postId])
-  @@map("likes") // Mapear para a coleção "likes" no MongoDB
+  @@map("LikesPosts") // Mapear para a coleção "likes" no MongoDB
 }
 
 // Lista de Livros Favoritos
 model FavoritesBooks {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  wantRead     Boolean @default(true)
-  alreadyRead   Boolean @default(false)
-  user     User     @relation(fields: [userId], references: [id])
-  userId   String
-  post     Post     @relation(fields: [postId], references: [id])
-  postId   String
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  wantRead    Boolean @default(true)
+  alreadyRead Boolean @default(false)
+  user        User    @relation(fields: [userId], references: [id])
+  userId      String
+  post        Post    @relation(fields: [postId], references: [id])
+  postId      String
 
-    @@unique([userId, postId])
-  @@map("likes") // Mapear para a coleção "likes" no MongoDB
+  @@unique([userId, postId])
+  @@map("FavoritesBooks") // Mapear para a coleção "likes" no MongoDB
 }

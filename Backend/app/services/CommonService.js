@@ -1,5 +1,4 @@
 const prisma = require('../config/prisma')
-const uploadFile = require('../config/multer')
 
 class CommonService {
   constructor(modelName) {
@@ -9,46 +8,40 @@ class CommonService {
   // #################################### BUSCAR DOCUMENTOS #################################### \\
   // (Route Default) Busca e Conta todos os documentos
   async findMany(req, options = { where: {} }) {
-    return new Promise(async (resolve, reject) => {
-      try {
+    try {
 
-        // Verifica se a req.query não é vazia
-        if (Object.keys(req.query).length !== 0) {
-          // Mapeia todos os atributos da req.query como parâmetro de busca
-          Object.entries(req.query).map(([key, value]) => {
-            // Cria ou Insere o atributo da query no obj options.where
-            if (!['page', 'perPage'].includes(key) && !options.where[key]) {
-              options.where[key] = value
-            }
-          })
-        }
-
-        // Paginação
-        options.take = req.query?.perPage ? parseInt(req.query.perPage) : undefined
-        options.skip = req.query?.page ? parseInt(options.take * (req.query.page - 1)) : undefined
-
-        // Consulta na Collection
-        let result = await prisma[this.modelName].findMany(options)
-        resolve({ count: result.length, success: true, rows: result })
-
-      } catch (error) {
-        reject(error)
+      // Verifica se a req.query não é vazia
+      // Mapeia todos os atributos da req.query como parâmetro de busca
+      if (Object.keys(req.query).length !== 0) {
+        Object.entries(req.query).map(([key, value]) => {
+          // Cria ou Insere o atributo da query no obj options.where
+          if (!['page', 'perPage'].includes(key) && !options.where[key]) options.where[key] = value
+        })
       }
-    })
+
+      // Paginação
+      options.take = req.query?.perPage ? parseInt(req.query.perPage) : 10
+      options.skip = req.query?.page ? parseInt(options.take * (req.query.page - 1)) : 1
+
+      // Consulta na Collection
+      let result = await prisma[this.modelName].findMany(options)
+      return { count: result.length, success: true, rows: result }
+
+    } catch (error) {
+      return { error: error }
+    }
   }
 
   // #################################### INSERIR DOCUMENTOS #################################### \\
   // (Route Default) Insere apenas um único documento por vez
   async create(object, req) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const result = await prisma[this.modelName].create({ data: object })
-        resolve({ success: true, document: result })
+    try {
+      const result = await prisma[this.modelName].create({ data: object })
+      return { success: true, document: result }
 
-      } catch (error) {
-        reject(error)
-      }
-    })
+    } catch (error) {
+      return { error: error }
+    }
   }
 
   // #################################### ATUALIZAR DOCUMENTOS #################################### \\
@@ -58,29 +51,25 @@ class CommonService {
       req.body?.id ? { id: req.body?.id } : undefined // Senão verifica no body
   }
   ) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const result = await prisma[this.modelName].update({ where: { object }, data: { options } })
-        resolve({ success: true, result: result })
+    try {
+      const result = await prisma[this.modelName].update({ ...options, data: { object } })
+      return { success: true, result: result }
 
-      } catch (error) {
-        reject(error)
-      }
-    })
+    } catch (error) {
+      return { error: error }
+    }
   }
 
   // #################################### DELETAR DOCUMENTOS #################################### \\
   // (Route Default) Deleta apenas um documento
   async delete(id, req) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const result = await prisma[this.modelName].delete({ where: { id: id } })
-        resolve(result)
+    try {
+      const result = await prisma[this.modelName].delete({ where: { id: id } })
+      return result
 
-      } catch (error) {
-        reject(error)
-      }
-    })
+    } catch (error) {
+      return { error: error }
+    }
   }
 }
 
