@@ -9,12 +9,30 @@
         <v-row>
             <v-col class="bg-warning d-flex justify-center" cols="12">
                 <v-card class="card">
+                    <div class="mt-3 d-flex justify-center">
+                        <v-avatar size="100">
+                            <v-img :src="user.avatar" />
+                        </v-avatar>
+                    </div>
                     <br>
-                    <h2 class="d-flex justify-center">Olá, {{ user.name }}!</h2>
+                    <h2 class="d-flex justify-center">{{ user.name }}</h2>
                     <v-divider></v-divider>
                     <p class="d-flex justify-center">Email: {{ user.email }}</p>
                     <v-divider></v-divider><br>
-                    <v-btn color="primary" @click="showPasswordDialog = true">Alterar Senha</v-btn>
+                    <div class="d-flex justify-center">
+                        <v-btn class="mx-3" color="primary" @click="showPasswordDialog = true" icon>
+                            <v-icon>mdi-lock</v-icon>
+                        </v-btn>
+                        <v-btn class="mx-3" color="error" @click="deleteAccount" icon>
+                            <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                        <v-btn class="mx-3" color="primary" @click="editProfile" icon>
+                            <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+                        <v-btn class="mx-3" color="primary" @click="logout" icon>
+                            <v-icon>mdi-logout</v-icon>
+                        </v-btn>
+                    </div>
                 </v-card>
             </v-col>
         </v-row>
@@ -62,6 +80,15 @@ export default {
                 // Senhas não coincidem, trate o erro aqui
             }
         },
+        deleteAccount() {
+            // Lógica para deletar a conta aqui
+        },
+        editProfile() {
+            // Lógica para editar o perfil aqui
+        },
+        logout() {
+            // Lógica para fazer logout aqui
+        },
     },
 };
 </script>
@@ -69,7 +96,6 @@ export default {
 <style scoped>
 .card {
     width: 40vw;
-    height: 40vh;
+    height: 60vh;
 }
 </style>
-  

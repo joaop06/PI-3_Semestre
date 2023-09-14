@@ -1,10 +1,10 @@
 <template>
-  <v-layout class="rounded rounded-md">
+  <v-layout class="rounded rounded-md bg-primary h-100">
     <v-main>
       <v-layout class="editor align-center justify-center h1--" row wrap>
         <v-form class="quilleditor">
           <v-flex>
-            <QuillEditor class="quilleditor_text"></QuillEditor>
+            <QuillEditor class="quilleditor_text rounded"></QuillEditor>
           </v-flex>
         </v-form>
       </v-layout>

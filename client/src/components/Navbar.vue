@@ -1,5 +1,6 @@
 <template>
   <v-app-bar class="px-3" flat density="compact" scroll-behavior="hide">
+    <!-- atributo image poem uma imagem na navbar image="https://picsum.photos/1920/1080?random" -->
     <v-avatar color="grey-darken-1" class="hidden-md-and-up" size="32"></v-avatar>
 
     <v-spacer></v-spacer>
