@@ -15,7 +15,7 @@
                 <v-text-field class="mx-2" clearable label="Descrição:" variant="outlined"
                     v-model="description"></v-text-field>
                 <v-card-actions>
-                    <v-btn color="primary" @click="inputDialog = false, successDialog = true">Fechar</v-btn>
+                    <v-btn color="primary" @click="successDialog = true">Fechar</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -60,8 +60,8 @@ export default {
             successDialog: false,
             errorDialog: false,
             inputDialog: false,
-            titulo: '',
-            description: ''
+            titulo: 'titulo',
+            description: 'descricao'
         }
     },
     mounted() {
@@ -115,24 +115,25 @@ export default {
         async getEditorContent() {
             // Use o método getContents para obter o conteúdo do editor
             //melhorar essa logica para adicionar o titulo e descrição
-            this.inputDialog = true;
-            if (!this.inputDialog) {
+            // this.inputDialog = true;
+            // if (!this.inputDialog) {
                 try {
                     const content = this.quill.getContents();
                     const jsonado = JSON.stringify(content);
+                    console.log(content)
                     const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
                     gb.varteste = other;
-
+                    this.successDialog = true;
 
                     const form = {
-                        title: titulo,
-                        description: description,
+                        title: this.titulo,
+                        description: this.description,
                         contentPost: jsonado
                     }
 
                     console.log(form);
 
-                    await axios.post('http://localhost:7000/post', form)
+                    await axios.post('http://192.168.152.49:7000/post', form)
                         .then(response => {
                             console.log('deu certo')
                         })
@@ -144,7 +145,7 @@ export default {
                     console.log(error)
                     this.errorDialog = true;
                 }
-            }
+            // }
 
         },
         async clearContent() {
