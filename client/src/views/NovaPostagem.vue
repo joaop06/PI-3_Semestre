@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="rounded rounded-md bg-primary h-100">
+  <v-layout class="layout rounded rounded-md h-100">
     <v-main>
       <v-layout class="editor align-center justify-center h1--" row wrap>
         <v-form class="quilleditor">
@@ -32,6 +32,9 @@ const toggleDrawer = () => {
 </script>
 
 <style>
+.layout{
+  background-color: blue;
+}
 .editor {
   height: 39rem;
   width: 100%;

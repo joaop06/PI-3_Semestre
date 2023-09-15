@@ -9,7 +9,7 @@
         <v-row>
             <v-col class="bg-warning d-flex justify-center" cols="12">
                 <v-card class="card">
-                    <div class="mt-3 d-flex justify-center">
+                    <div class="mt-10 d-flex justify-center">
                         <v-avatar size="100">
                             <v-img :src="user.avatar" />
                         </v-avatar>

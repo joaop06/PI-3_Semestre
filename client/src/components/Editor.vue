@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="quilleditor_text" ref="editor" /><br>
-        <v-btn class="buttonPost" @click.prevent="getEditorContent" append-icon="mdi-post" variant="tonal" rounded="10px">
+        <v-btn class="buttonPost" @click.prevent="getDialog" append-icon="mdi-post" variant="tonal" rounded="10px">
             POST
         </v-btn><br>
         <!-- <v-btn class="buttonPost" @click.prevent="setEditorCOntent" append-icon="mdi-post" variant="tonal" rounded="10px">
@@ -12,10 +12,10 @@
                 <br>
                 <v-card-title>Informações do POST</v-card-title>
                 <v-text-field class="mx-2" clearable label="Titulo:" variant="outlined" v-model="titulo"></v-text-field>
-                <v-text-field class="mx-2" clearable label="Descrição:" variant="outlined"
-                    v-model="description"></v-text-field>
+                <v-select chips label="Select" :items="['Aleatorios', 'Livros', 'Audiovisuais', 'Musicas', 'Comidas']"
+                    variant="outlined" v-model="assunto"></v-select>
                 <v-card-actions>
-                    <v-btn color="primary" @click="successDialog = true">Fechar</v-btn>
+                    <v-btn color="primary" @click="getEditorContent">Finalizar</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -60,13 +60,16 @@ export default {
             successDialog: false,
             errorDialog: false,
             inputDialog: false,
-            titulo: 'titulo',
-            description: 'descricao'
+            titulo: '',
+            assunto: ''
         }
     },
     mounted() {
-
-        //consertar funcionalidades de cor, fundo de cor, tamanho da fonte, citação e recuo
+        var FontAttributor = Quill.import('attributors/class/font');
+        FontAttributor.whitelist = [
+            'roboto'
+        ];
+        Quill.register(FontAttributor, true);
 
         const quillOptions = {
             theme: 'snow',
@@ -104,7 +107,7 @@ export default {
                 'image',
                 'indent',
                 'align',
-                'blockquote'
+                'blockquote',
             ],
         };
 
@@ -112,44 +115,46 @@ export default {
         this.quill = new Quill(this.$refs.editor, quillOptions);
     },
     methods: {
+        getDialog() {
+            this.inputDialog = true;
+        },
         async getEditorContent() {
-            // Use o método getContents para obter o conteúdo do editor
-            //melhorar essa logica para adicionar o titulo e descrição
-            // this.inputDialog = true;
-            // if (!this.inputDialog) {
-                try {
-                    const content = this.quill.getContents();
-                    const jsonado = JSON.stringify(content);
-                    console.log(content)
-                    const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
-                    gb.varteste = other;
-                    this.successDialog = true;
+            this.inputDialog = false;
+            try {
+                const content = this.quill.getContents();
+                const jsonado = JSON.stringify(content);
 
-                    const form = {
-                        title: this.titulo,
-                        description: this.description,
-                        contentPost: jsonado
-                    }
+                // const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
+                // gb.varteste = other;
+                this.successDialog = true;
 
-                    console.log(form);
-
-                    await axios.post('http://192.168.152.49:7000/post', form)
-                        .then(response => {
-                            console.log('deu certo')
-                        })
-
-                    await this.$nextTick();
-                    console.log('delta: ', gb.varteste);
-                    this.clearContent();
-                } catch (error) {
-                    console.log(error)
-                    this.errorDialog = true;
+                const form = {
+                    title: this.titulo,
+                    typePost: this.assunto.toLowerCase(),
+                    contentPost: jsonado
                 }
+
+                console.log(form);
+
+                // await axios.post('http://192.168.152.49:7000/post', form)
+                //     .then(response => {
+                //         console.log('deu certo')
+                //     })
+
+                await this.$nextTick();
+
+                this.clearContent();
+            } catch (error) {
+                console.log(error)
+                this.errorDialog = true;
+            }
             // }
 
         },
         async clearContent() {
             this.quill.setText('');
+            this.titulo = '';
+            this.assunto = '';
             console.log('limpo');
         },
         // async setEditorCOntent() { 
@@ -178,4 +183,8 @@ export default {
     width: 150px;
     height: 30px;
 }
+
+.ql-font-roboto {
+    font-family: 'Roboto', sans-serif;
+  }
 </style>
