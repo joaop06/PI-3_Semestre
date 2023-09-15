@@ -1,9 +1,12 @@
 <template>
     <div class="body">
         <br>
-        <div class="bg-warning ma-6 h-100">
+        <div class="bg-warning mx-10 h-100">
             <br>
             <v-card v-for="(post) in posts" :key="post.id" class="ma-6" variant="outlined">
+                <v-card-title class="text-h4">
+                    {{ post.titulo }}
+                </v-card-title>
                 <template v-slot:prepend>
                     <v-icon size="x-large"></v-icon>
                 </template>
@@ -13,13 +16,15 @@
                 </v-card-text>
 
                 <v-card-actions>
-                    <v-list-item class="w-100">
+                    <v-btn class="bg-primary">LER MAIS</v-btn>
+                    <v-list-item>
 
                         <template v-slot:append>
                             <div class="justify-self-end">
                                 <v-icon class="me-1" icon="mdi-heart"></v-icon>
                                 <span class="subheading me-2">256</span>
-                            </div>
+                            </div> 
+                            <!-- depois nós poem um count pra saber as curtidas -->
                         </template>
                     </v-list-item>
                 </v-card-actions>
