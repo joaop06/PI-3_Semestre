@@ -15,16 +15,20 @@ class CommonService {
       if (Object.keys(req.query).length !== 0) {
         Object.entries(req.query).map(([key, value]) => {
           // Cria ou Insere o atributo da query no obj options.where
-          if (!['page', 'perPage'].includes(key) && !options.where[key]) options.where[key] = value
+          if (this.modelName in prisma && key in prisma[this.modelName].fields) {
+            options.where[key] = value
+          }
+
         })
       }
 
       // Paginação
-      options.take = req.query?.perPage ? parseInt(req.query.perPage) : 10
-      options.skip = req.query?.page ? parseInt(options.take * (req.query.page - 1)) : 1
+      options.take = req.query?.perPage ? parseInt(req.query.perPage) : 10 // Documentos exibidos por página
+      options.skip = req.query?.page ? parseInt(options.perPage * (req.query.page - 1)) : 0 // Quantos documentos irá pular para buscar somente os da página indicada
 
       // Consulta na Collection
-      let result = await prisma[this.modelName].findMany(options)
+      console.log(options)
+      const result = await prisma[this.modelName].findMany(options)
       return { count: result.length, success: true, rows: result }
 
     } catch (error) {
