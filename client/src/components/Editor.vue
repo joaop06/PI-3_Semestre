@@ -61,6 +61,7 @@ export default {
             errorDialog: false,
             inputDialog: false,
             titulo: '',
+            titulo: '',
             assunto: ''
         }
     },
