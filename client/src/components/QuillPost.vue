@@ -1,5 +1,7 @@
 <template>
     <div>
+        <h3 class="d-flex">{{ clock }}</h3>
+        <h2 class="d-flex justify-center">{{ titulo }}</h2><br>
         <div class="quilleditor_text" ref="editor" /><br>
     </div>
 </template>
@@ -11,13 +13,16 @@ import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
 import { initCustomFormatter } from 'vue';
+import { format } from 'date-fns';
 
 export default {
     data() {
         return {
             titulo: '',
             assunto: '',
-            post: ''
+            post: '',
+            updateAt: '',
+            clock: ''
         }
     },
     mounted() {
@@ -25,7 +30,6 @@ export default {
             theme: 'bubble',
             modules: {
             },
-            placeholder: ' ',
             readOnly: true,
             bounds: document.body,
             scrollingContainer: null,
@@ -51,37 +55,37 @@ export default {
 
         // Inicialize o Quill Editor no elemento com a referência 'editor'
         this.quill = new Quill(this.$refs.editor, quillOptions);
+
+        try {
+
+            // const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
+
+
+            axios.get('http://localhost:7000/post?id=650611b630c36605276a4355')
+                .then(response => {
+                    const jstring = JSON.stringify(...response.data.rows);
+                    const jsonado = JSON.parse(jstring)
+                    this.titulo = jsonado.title
+                    this.updateAt = jsonado.updateAt;
+                    this.formatDate(this.updateAt)
+                    const ops = JSON.parse(jsonado.contentPost).ops;
+                    const delta = new Delta(ops);
+                    // console.log('post desconstruido', other);
+                    this.quill.setContents(delta);
+                })
+
+        } catch (error) {
+            console.log(error)
+        }
     },
     methods: {
-        async getEditorContent() {
-            try {
-
-                // const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
-
-                console.log(form);
-
-                await axios.get('http://localhost:7000/post')
-                    .then(response => {
-                        this.titulo = response.title;
-                        this.post = response.contentPost;
-                        this.assunto = response.typePost;
-
-                        console.log(this.titulo);
-                        console.log(this.post);
-                        console.log(this.assunto);
-                    })
-                    const other = new Delta(JSON.parse(this.post));
-                    this.setEditorCOntent(other);
-
-            } catch (error) {
-                console.log(error)
-            }
-            // }
-
+        formatDate(isoDate) {
+            // Função para formatar a data no padrão brasileiro (dd/mm/yyyy)
+            this.clock = format(new Date(isoDate), 'dd/MM/yyyy');
         },
-        async setEditorCOntent(content) { 
+        async setEditorCOntent(content) {
             try {
-                console.log(content);
+                console.log('conteudo', content);
                 this.quill.setContents(content);
             } catch (error) {
                 console.error(error)
@@ -98,15 +102,6 @@ export default {
     height: 90%;
     width: 100%;
     border-radius: 10px;
+    border: 4px solid black;
 }
-
-.buttonPost {
-    background-color: rgb(0, 241, 221);
-    width: 150px;
-    height: 30px;
-}
-
-.ql-font-roboto {
-    font-family: 'Roboto', sans-serif;
-  }
 </style>

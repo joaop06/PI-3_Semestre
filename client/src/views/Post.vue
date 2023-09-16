@@ -1,8 +1,6 @@
 <template>
-    <div class="bg-primary h-100"><br>
-        <div class="mx-15 bg-warning h-100">
-            <h1>data:</h1><br>
-            <h2 class="d-flex justify-center">titulo</h2>
+    <div class=" h-100"><br>
+        <div class="mx-15 h-100">
             <QuillEditor></QuillEditor>
         </div>
         <!-- estilizar o post agora, fazer a lógica da rota para os botões e também para mostrar o conteudo -->

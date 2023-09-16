@@ -131,8 +131,9 @@ export default {
 
                 const form = {
                     title: this.titulo,
+                    description: 'oi',
+                    contentPost: jsonado,
                     typePost: this.assunto.toLowerCase(),
-                    contentPost: jsonado
                 }
 
                 console.log(form);
@@ -141,6 +142,12 @@ export default {
                 //     .then(response => {
                 //         console.log('deu certo')
                 //     })
+                await axios.post('http://localhost:7000/post', form)
+                    .then(response => {
+                        console.log('deu certo')
+                        console.log(response);
+                        console.log(response.data);
+                    })
 
                 await this.$nextTick();
 
@@ -187,5 +194,5 @@ export default {
 
 .ql-font-roboto {
     font-family: 'Roboto', sans-serif;
-  }
+}
 </style>
