@@ -21,8 +21,6 @@ model User {
   createAt       DateTime         @default(now())
   updateAt       DateTime         @default(now())
   FavoritesBooks FavoritesBooks[]
-
-  @@map("users") // Mapear para a coleção "users" no MongoDB
 }
 
 // ********************************************************************************* \\
@@ -31,14 +29,12 @@ model Post {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
   title          String
   description    String
-  contentPost    Json
+  contentPost    Json?
   typePost       String
   likedBy        LikesPosts[]
   createAt       DateTime         @default(now())
   updateAt       DateTime         @default(now())
   FavoritesBooks FavoritesBooks[]
-
-  @@map("posts") // Mapear para a coleção "posts" no MongoDB
 }
 
 // Curtidas nas Postagens Diversas
