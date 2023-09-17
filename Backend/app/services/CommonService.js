@@ -27,7 +27,6 @@ class CommonService {
       options.skip = req.query?.page ? parseInt(options.perPage * (req.query.page - 1)) : 0 // Quantos documentos irá pular para buscar somente os da página indicada
 
       // Consulta na Collection
-      console.log(options)
       const result = await prisma[this.modelName].findMany(options)
       return { count: result.length, success: true, rows: result }
 
@@ -56,7 +55,7 @@ class CommonService {
   }
   ) {
     try {
-      const result = await prisma[this.modelName].update({ ...options, data: { object } })
+      const result = await prisma[this.modelName].update({ where: options.where, data: object })
       return { success: true, result: result }
 
     } catch (error) {

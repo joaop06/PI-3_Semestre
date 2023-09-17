@@ -8,34 +8,33 @@ class PostService extends CommonService {
     }
 
     async findMany(req) {
-        // return await prisma[this.modelName].findMany({
-        //     include: {
-        //         users_likes: true
-        //     }
-        // })
 
-        return await super.findMany(req)
-    }
+        // Mapeia as opções de busca incluindo o relacionamento
+        let options = {
+            where: {},
+            include: {
+                users: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                        isAdmin: true
+                    }
+                }
+            }
+        }
 
-    async create(Post, req) {
+        // Busca Parcial para o campo `title`
+        if (Object.keys(req.query).length !== 0 && req.query?.title) {
+            options.where = { title: { contains: req.query.name } }
+        }
 
-        return await super.create(Post, req)
-    }
+        // Caso seja passado full=false, será desconsiderado as informações do relacionamento
+        if (req.query.full === 'false') {
+            options.include = {}
+        }
 
-    async update(Post, req) {
-
-        // Atualização de Curtidas no Post
-        // if ([true, false].includes(Post.likes)) {
-        //     let quantityLikes = await this.findMany(req, { where: { id: req.query.id } })
-        //     quantityLikes = quantityLikes.rows[0].likes
-
-        //     if (Post.likes) Post.likes = quantityLikes + 1
-        //     else Post.likes = quantityLikes - 1
-        // }
-
-
-
-        return super.update(body, req)
+        return await super.findMany(req, options)
     }
 }
 
