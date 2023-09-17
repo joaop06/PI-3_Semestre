@@ -5,26 +5,24 @@
             <br>
             <v-card v-for="(post) in posts" :key="post.id" class="ma-6" variant="outlined">
                 <v-card-title class="text-h4">
-                    {{ post.titulo }}
+                    {{ post.title }}
                 </v-card-title>
                 <template v-slot:prepend>
                     <v-icon size="x-large"></v-icon>
                 </template>
 
                 <v-card-text class="text-truncate py-2">
-                    {{ post.descricao }}
+                    {{ post.description }}
                 </v-card-text>
 
                 <v-card-actions>
-                    <v-btn class="bg-primary">LER MAIS</v-btn>
+                    <v-btn class="bg-primary" @click="verDetalhes(post.id)">LER MAIS</v-btn>
                     <v-list-item>
-
                         <template v-slot:append>
                             <div class="justify-self-end">
                                 <v-icon class="me-1" icon="mdi-heart"></v-icon>
-                                <span class="subheading me-2">256</span>
-                            </div> 
-                            <!-- depois nós poem um count pra saber as curtidas -->
+                                <span class="subheading me-2">{{ post.likes }}</span>
+                            </div>
                         </template>
                     </v-list-item>
                 </v-card-actions>
@@ -32,6 +30,7 @@
         </div>
     </div>
 </template>
+  
 <script>
 import bd from '@/tests/banco.json';
 import axios from 'axios'
@@ -42,7 +41,7 @@ import gb from '@/controller/globalVariables';
 export default {
     data() {
         return {
-            posts: bd,
+            posts: [],
             limiteCaracteres: 50
         };
     },
@@ -53,6 +52,18 @@ export default {
 
     //     }
     // },
+    mounted() {
+        // Use axios.get para buscar as postagens
+        const id = this.$route.params.id;
+        axios.get(`http://localhost:7000/post?id=${id}`) //melhorar essa lógica para que busque todos os post
+            .then(response => {
+                console.log(response);
+                this.posts = response.data; // Atualize a matriz de postagens com os dados da resposta
+            })
+            .catch(error => {
+                console.error('Erro ao buscar as postagens:', error);
+            });
+    },
     computed: {
         //com esta função, posso resumir o texto apresentado no v-card
         textoLimitado() {
