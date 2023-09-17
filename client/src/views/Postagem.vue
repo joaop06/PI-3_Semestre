@@ -1,7 +1,7 @@
 <template>
     <div class="body">
         <br>
-        <div class="bg-warning mx-10 h-100">
+        <div v-if="posts.length > 0" class="bg-warning mx-10 h-100">
             <br>
             <v-card v-for="(post) in posts" :key="post.id" class="ma-6" variant="outlined">
                 <v-card-title class="text-h4">
@@ -12,7 +12,7 @@
                 </template>
 
                 <v-card-text class="text-truncate py-2">
-                    {{ post.description }}
+                    {{ post.contentPost }}
                 </v-card-text>
 
                 <v-card-actions>
@@ -28,6 +28,9 @@
                 </v-card-actions>
             </v-card>
         </div>
+        <div v-else class="bg-warning mx-10 h-100">
+            <p>Carregando postagens...</p>
+        </div>
     </div>
 </template>
   
@@ -42,7 +45,12 @@ export default {
     data() {
         return {
             posts: [],
-            limiteCaracteres: 50
+            titulo: '',
+            description: '',
+            limiteCaracteres: 50,
+            jstring: [],
+            jsonado: [],
+            ops: []
         };
     },
     // async mounted() {
@@ -54,11 +62,17 @@ export default {
     // },
     mounted() {
         // Use axios.get para buscar as postagens
-        const id = this.$route.params.id;
-        axios.get(`http://localhost:7000/post?id=${id}`) //melhorar essa lógica para que busque todos os post
+        axios.get("http://localhost:7000/post") //melhorar  essa lógica para que busque todos os post
             .then(response => {
-                console.log(response);
-                this.posts = response.data; // Atualize a matriz de postagens com os dados da resposta
+                // console.log(...response.data.rows);
+                // for (let post in response) {
+
+                // }
+                if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
+                    this.posts = response.data.rows;
+                } else {
+                    console.warn('Nenhuma postagem encontrada na resposta da API.');
+                }
             })
             .catch(error => {
                 console.error('Erro ao buscar as postagens:', error);

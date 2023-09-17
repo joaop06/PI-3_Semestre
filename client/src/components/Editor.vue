@@ -13,7 +13,7 @@
                 <v-card-title>Informações do POST</v-card-title>
                 <v-text-field class="mx-2" clearable label="Titulo:" variant="outlined" v-model="titulo"></v-text-field>
                 <v-select chips label="Select" :items="['Aleatorios', 'Livros', 'Audiovisuais', 'Musicas', 'Comidas']"
-                    variant="outlined" v-model="assunto"></v-select>
+                    variant="outlined" v-model="assunto" class="mx-2"></v-select>
                 <v-card-actions>
                     <v-btn color="primary" @click="getEditorContent">Finalizar</v-btn>
                 </v-card-actions>
@@ -131,7 +131,6 @@ export default {
 
                 const form = {
                     title: this.titulo,
-                    description: 'oi',
                     contentPost: jsonado,
                     typePost: this.assunto.toLowerCase(),
                 }
