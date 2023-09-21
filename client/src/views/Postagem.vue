@@ -44,9 +44,10 @@ import gb from '@/controller/globalVariables';
 export default {
     data() {
         return {
-            posts: [],
             titulo: '',
             description: '',
+            posts: [],
+            contentPost: [],
             limiteCaracteres: 50,
             jstring: [],
             jsonado: [],
@@ -62,7 +63,7 @@ export default {
     // },
     mounted() {
         // Use axios.get para buscar as postagens
-        axios.get("http://localhost:7000/post") //melhorar  essa lógica para que busque todos os post
+        axios.get("http://localhost:7000/post")
             .then(response => {
                 // console.log(...response.data.rows);
                 // for (let post in response) {
@@ -70,6 +71,41 @@ export default {
                 // }
                 if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
                     this.posts = response.data.rows;
+
+                    const stringado = JSON.stringify(this.posts);
+                    const jsonado = JSON.parse(stringado);
+                    let other = [];
+                    let otherstringado = [];
+                    let otherjsonado = [];
+                    let deltado = [];
+                    // console.log(jsonado);
+                    for (let i = 0; i < this.posts.length; i++) {
+                        //converter todos os textos para texto simples, mas o delta não está
+                        // sendo transformado com as informações do json 
+                        console.log('teste: ',jsonado[i].contentPost);
+                        other[i] = jsonado[i].contentPost;
+                        otherstringado[i] = JSON.stringify(other[i]);
+                        otherjsonado[i] = JSON.parse(otherstringado[i]);
+                        deltado[i] = new Delta(JSON.parse(otherstringado[2]));
+                        console.log('other: ', other[i]);
+                        console.log('other Stringado: ', otherstringado[i]);
+                        console.log('other jsonado: ', otherjsonado[i]);
+                        console.log('deltado: ', deltado[i]);
+
+                        // console.log('TENTANDO PARSEAR', JSON.parse(other[1]));
+                    }
+
+                    //teste para transformar o json de resposta para delta e depois em texto
+                    // const stringado = JSON.stringify(this.posts); transformar todo o json em string  
+                    // const jsonado = JSON.parse(stringado); após estar em string, converte para json
+                    // const other = new Delta(JSON.parse(jsonespecifico)); do json converte para delta
+                    // console.log('texto: ',this.converterTexto(other)); essa funcao pega o delta e transforma em texto
+                    // const jsonespecifico = jsonado[4]?.contentPost;
+                    // console.log("json especifico", jsonespecifico)
+                    // console.log('deltado', other);
+                    // console.log('normal: ', this.posts);
+                    // console.log('jsonado: ', jsonado);
+                    // console.log('tentativa de pegar a informação\n', jsonado[4]?.contentPost)
                 } else {
                     console.warn('Nenhuma postagem encontrada na resposta da API.');
                 }
@@ -88,6 +124,17 @@ export default {
             }
         },
     },
+    methods: {
+        converterTexto(delta) {
+            let text = '';
+            delta.ops.forEach(op => {
+                if (op.insert) {
+                    text += op.insert;
+                }
+            });
+            return text;
+        }
+    }
 }
 </script>
 <style>
