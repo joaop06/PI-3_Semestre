@@ -3,7 +3,7 @@
         <br>
         <div v-if="posts.length > 0" class="bg-warning mx-10 h-100">
             <br>
-            <v-card v-for="(post) in posts" :key="post.id" class="ma-6" variant="outlined">
+            <v-card v-for="(post, index) in posts" :key="post.id" class="ma-6" variant="outlined">
                 <v-card-title class="text-h4">
                     {{ post.title }}
                 </v-card-title>
@@ -12,7 +12,7 @@
                 </template>
 
                 <v-card-text class="text-truncate py-2">
-                    {{ post.contentPost }}
+                    {{ teste1[index] }}
                 </v-card-text>
 
                 <v-card-actions>
@@ -47,20 +47,13 @@ export default {
             titulo: '',
             description: '',
             posts: [],
-            contentPost: [],
+            teste1: [],
             limiteCaracteres: 50,
             jstring: [],
             jsonado: [],
             ops: []
         };
     },
-    // async mounted() {
-    //     try {
-    //         await axios.get('http://localhost:7000/post')
-    //     } catch (error) {
-
-    //     }
-    // },
     mounted() {
         // Use axios.get para buscar as postagens
         axios.get("http://localhost:7000/post")
@@ -72,27 +65,32 @@ export default {
                 if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
                     this.posts = response.data.rows;
 
+                    console.log(this.posts);
+
                     const stringado = JSON.stringify(this.posts);
                     const jsonado = JSON.parse(stringado);
                     let other = [];
-                    let otherstringado = [];
-                    let otherjsonado = [];
-                    let deltado = [];
+                    let otherstringado = '';
+                    let otherjsonado = '';
+                    let deltado = null;
                     // console.log(jsonado);
                     for (let i = 0; i < this.posts.length; i++) {
                         //converter todos os textos para texto simples, mas o delta não está
                         // sendo transformado com as informações do json 
-                        console.log('teste: ',jsonado[i].contentPost);
-                        other[i] = jsonado[i].contentPost;
-                        otherstringado[i] = JSON.stringify(other[i]);
-                        otherjsonado[i] = JSON.parse(otherstringado[i]);
-                        deltado[i] = new Delta(JSON.parse(otherstringado[2]));
-                        console.log('other: ', other[i]);
-                        console.log('other Stringado: ', otherstringado[i]);
-                        console.log('other jsonado: ', otherjsonado[i]);
-                        console.log('deltado: ', deltado[i]);
 
-                        // console.log('TENTANDO PARSEAR', JSON.parse(other[1]));
+                        const jsonespecifico = jsonado[i]?.contentPost;
+                        const other = new Delta(JSON.parse(jsonespecifico));
+
+                        // console.log('tentativa de pegar a informação\n',);
+                        // console.log("json especifico", jsonespecifico)
+                        // console.log('normal: ', this.posts);
+                        // console.log('jsonado: ', jsonado[i]);
+                        // console.log('deltado', other);
+                        // console.log('texto: ', this.converterTexto(other));
+                        this.posts.contentPost = this.converterTexto(other);
+                        this.teste(this.converterTexto(other))
+                        //console.log('post', this.posts.contentPost)
+
                     }
 
                     //teste para transformar o json de resposta para delta e depois em texto
@@ -133,6 +131,12 @@ export default {
                 }
             });
             return text;
+        },
+
+        teste(texto) {
+            console.log("chamou" + texto);
+            this.teste1.push(texto);
+            console.log(this.teste1);
         }
     }
 }
