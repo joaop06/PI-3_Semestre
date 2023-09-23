@@ -12,7 +12,7 @@
                 </template>
 
                 <v-card-text class="text-truncate py-2">
-                    {{ teste1[index] }}
+                    {{ conteudoPost[index] }}
                 </v-card-text>
 
                 <v-card-actions>
@@ -35,11 +35,11 @@
 </template>
   
 <script>
-import bd from '@/tests/banco.json';
+import http from '@/http';
 import axios from 'axios'
 import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
-import gb from '@/controller/globalVariables';
+import ids from '@/controller/globalVariables';
 
 export default {
     data() {
@@ -47,21 +47,15 @@ export default {
             titulo: '',
             description: '',
             posts: [],
-            teste1: [],
+            conteudoPost: [],
             limiteCaracteres: 50,
-            jstring: [],
-            jsonado: [],
-            ops: []
         };
     },
     mounted() {
         // Use axios.get para buscar as postagens
-        axios.get("http://localhost:7000/post")
+        http.get("/post")
             .then(response => {
-                // console.log(...response.data.rows);
-                // for (let post in response) {
 
-                // }
                 if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
                     this.posts = response.data.rows;
 
@@ -69,41 +63,16 @@ export default {
 
                     const stringado = JSON.stringify(this.posts);
                     const jsonado = JSON.parse(stringado);
-                    let other = [];
-                    let otherstringado = '';
-                    let otherjsonado = '';
-                    let deltado = null;
-                    // console.log(jsonado);
+
                     for (let i = 0; i < this.posts.length; i++) {
-                        //converter todos os textos para texto simples, mas o delta não está
-                        // sendo transformado com as informações do json 
 
                         const jsonespecifico = jsonado[i]?.contentPost;
                         const other = new Delta(JSON.parse(jsonespecifico));
 
-                        // console.log('tentativa de pegar a informação\n',);
-                        // console.log("json especifico", jsonespecifico)
-                        // console.log('normal: ', this.posts);
-                        // console.log('jsonado: ', jsonado[i]);
-                        // console.log('deltado', other);
-                        // console.log('texto: ', this.converterTexto(other));
-                        this.posts.contentPost = this.converterTexto(other);
-                        this.teste(this.converterTexto(other))
-                        //console.log('post', this.posts.contentPost)
+                        this.conteudo(this.converterTexto(other))
 
                     }
 
-                    //teste para transformar o json de resposta para delta e depois em texto
-                    // const stringado = JSON.stringify(this.posts); transformar todo o json em string  
-                    // const jsonado = JSON.parse(stringado); após estar em string, converte para json
-                    // const other = new Delta(JSON.parse(jsonespecifico)); do json converte para delta
-                    // console.log('texto: ',this.converterTexto(other)); essa funcao pega o delta e transforma em texto
-                    // const jsonespecifico = jsonado[4]?.contentPost;
-                    // console.log("json especifico", jsonespecifico)
-                    // console.log('deltado', other);
-                    // console.log('normal: ', this.posts);
-                    // console.log('jsonado: ', jsonado);
-                    // console.log('tentativa de pegar a informação\n', jsonado[4]?.contentPost)
                 } else {
                     console.warn('Nenhuma postagem encontrada na resposta da API.');
                 }
@@ -113,7 +82,6 @@ export default {
             });
     },
     computed: {
-        //com esta função, posso resumir o texto apresentado no v-card
         textoLimitado() {
             if (this.textocompleto.length > this.limiteCaracteres) {
                 return this.textocompleto.slice(0, this.limiteCaracteres) + '...';
@@ -133,10 +101,8 @@ export default {
             return text;
         },
 
-        teste(texto) {
-            console.log("chamou" + texto);
-            this.teste1.push(texto);
-            console.log(this.teste1);
+        conteudo(texto) {
+            this.conteudoPost.push(texto);
         }
     }
 }

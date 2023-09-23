@@ -1,5 +1,5 @@
 const globalVariables = {
-    post: '',
+    ids: null,
 }
 
 export default globalVariables
