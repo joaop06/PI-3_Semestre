@@ -49,7 +49,7 @@ class CommonService {
 
   // #################################### ATUALIZAR DOCUMENTOS #################################### \\
   // (Route Default) Atualiza um único documento
-  async update(object, req, options = {
+  async update(object, req, next, options = {
     where: req.query?.id ? { id: req.query.id } : // Caso tenha ID na query
       req.body?.id ? { id: req.body?.id } : undefined // Senão verifica no body
   }
@@ -59,7 +59,8 @@ class CommonService {
       return { success: true, result: result }
 
     } catch (error) {
-      return { error: error }
+      error.statusCode = 201
+      return next(error)
     }
   }
 

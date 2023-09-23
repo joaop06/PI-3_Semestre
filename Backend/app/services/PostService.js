@@ -42,39 +42,31 @@ class PostService extends CommonService {
         return await super.findMany(req, options)
     }
 
-    async update(Post, req, options) {
-        const liked = req.query?.liked
+    async update(Post, req, next) {
+        const { liked } = req.query
+
+        // Curtidas da Postagem
         if (liked) {
-            let dataUser = {}
-            if (liked == 'false') {
-                dataUser = {
-                    where: { id: Post.user_id },
-                    data: {
-                        postsLikedID: {
-                            disconnect: { id: Post.id }
-                        }
-                    }
-
-                }
+            let dataUser = { postsLikedID: {} }
+            let options = {
+                where: { id: Post.usersLikeID }
             }
 
-            // Adiciona
-            if (liked == 'true') {
-                dataUser = {
-                    where: { id: Post.user_id },
-                    data: {
-                        postsLikedID: {
-                            connect: { id: Post.id }
-                        }
-                    }
+            // Remove Curtida
+            if (liked == 'false') dataUser.postsLikedID = { disconnect: { id: Post.id } }
 
-                }
+            // Adiciona Curtida
+            if (liked == 'true') dataUser.postsLikedID = { connect: { id: Post.id } }
+
+            try {
+                await this.userService.update(dataUser, req, next, options)
+            } catch (error) {
+                error.statusCode = 400
+                return next(error)
             }
-
-            await this.userService.update(dataUser)
         }
 
-        return await super.update(Post, req, options)
+        return await super.update(Post, req, next, options)
     }
 }
 

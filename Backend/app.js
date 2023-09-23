@@ -14,3 +14,12 @@ app.listen(process.env.SERVER_PORT ?? 7000, () => {
 
 // Routes
 require("./app/routes")(app)
+
+// Middleware de Erro
+app.use(function onError(err, req, res, next) {
+  const statusCode = err.statusCode || 500
+  res.status(statusCode).send({ error: err.message })
+})
+
+
+
