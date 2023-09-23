@@ -16,7 +16,7 @@ model User {
   name         String
   email        String
   password     String
-  isAdmin      Boolean?
+  isAdmin      Boolean  @default(false)
   postsLikedID String[] @db.ObjectId
   posts        Post[]   @relation(fields: [postsLikedID], references: [id])
   createAt     DateTime @default(now())
@@ -27,6 +27,7 @@ model User {
 // Postagens Diversas ('Aleatoridades')
 model Post {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  user_id     String   @db.ObjectId
   title       String
   contentPost Json
   typePost    String
@@ -35,3 +36,14 @@ model Post {
   createAt    DateTime @default(now())
   updateAt    DateTime @default(now())
 }
+
+// model ListFavoritesPosts {
+//   id      String @id @default(auto()) @map("_id") @db.ObjectId
+//   user_id String @db.ObjectId
+
+//   postsFavoritesId String[] @db.ObjectId
+//   posts        Post[]   @relation(fields: [postsFavoritesId], references: [id])
+
+//     createAt             DateTime            @default(now())
+//   updateAt             DateTime            @default(now())
+// }

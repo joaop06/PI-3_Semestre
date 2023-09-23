@@ -1,10 +1,15 @@
 const CommonService = require('./CommonService')
+const UserService = require('./UserService')
 const moment = require('moment')
+const prisma = require('../config/prisma')
 
 class PostService extends CommonService {
     constructor(modelName) {
         super(modelName)
         this.modelName = modelName
+
+        const userService = new UserService('User')
+        this.userService = userService
     }
 
     async findMany(req) {
@@ -35,6 +40,41 @@ class PostService extends CommonService {
         }
 
         return await super.findMany(req, options)
+    }
+
+    async update(Post, req, options) {
+        const liked = req.query?.liked
+        if (liked) {
+            let dataUser = {}
+            if (liked == 'false') {
+                dataUser = {
+                    where: { id: Post.user_id },
+                    data: {
+                        postsLikedID: {
+                            disconnect: { id: Post.id }
+                        }
+                    }
+
+                }
+            }
+
+            // Adiciona
+            if (liked == 'true') {
+                dataUser = {
+                    where: { id: Post.user_id },
+                    data: {
+                        postsLikedID: {
+                            connect: { id: Post.id }
+                        }
+                    }
+
+                }
+            }
+
+            await this.userService.update(dataUser)
+        }
+
+        return await super.update(Post, req, options)
     }
 }
 
