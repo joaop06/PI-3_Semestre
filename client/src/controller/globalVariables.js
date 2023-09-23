@@ -1,5 +1,5 @@
-const globalVariables = {
-    ids: null,
+let globalVariables = {
+    id: null,
 }
 
 export default globalVariables

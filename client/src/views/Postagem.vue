@@ -39,7 +39,8 @@ import http from '@/http';
 import axios from 'axios'
 import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
-import ids from '@/controller/globalVariables';
+import sergio from '@/controller/globalVariables';
+import router from '@/router';
 
 export default {
     data() {
@@ -103,6 +104,13 @@ export default {
 
         conteudo(texto) {
             this.conteudoPost.push(texto);
+        },
+        verDetalhes(idPost){
+            console.log('id aqui: ',idPost);
+            sergio = idPost;
+            console.log('id aqui na global: ',sergio);
+
+            router.push({path: '/post'})
         }
     }
 }
