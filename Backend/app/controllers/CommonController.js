@@ -77,10 +77,7 @@ class CommonController {
       })
 
     } catch (error) {
-      res.status(500).send({
-        error: error.meta?.cause ? { errorMeta: error.meta.cause } :
-          error.name ? { errorName: error.name } : { message: "Internal Error when deleting" }
-      })
+      return next(error)
     }
   }
 }

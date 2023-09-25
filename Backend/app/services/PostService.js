@@ -29,6 +29,7 @@ class PostService extends CommonService {
             }
         }
 
+
         // Busca Parcial para o campo `title`
         if (Object.keys(req.query).length !== 0 && req.query?.title) {
             options.where = { title: { contains: req.query.name } }
@@ -43,30 +44,76 @@ class PostService extends CommonService {
     }
 
     async update(Post, req, next) {
-        const { liked } = req.query
+        const { id: postId, liked } = req.query // 
 
-        // Curtidas da Postagem
-        if (liked) {
-            let dataUser = { postsLikedID: {} }
-            let options = {
-                where: { id: Post.usersLikeID }
-            }
-
-            // Remove Curtida
-            if (liked == 'false') dataUser.postsLikedID = { disconnect: { id: Post.id } }
-
-            // Adiciona Curtida
-            if (liked == 'true') dataUser.postsLikedID = { connect: { id: Post.id } }
-
-            try {
-                await this.userService.update(dataUser, req, next, options)
-            } catch (error) {
-                error.statusCode = 400
-                return next(error)
-            }
+        // Verifica se o ID da postagem é válido (você pode adicionar validações adicionais)
+        if (!postId) {
+            const error = new Error('ID de postagem não informado')
+            error.statusCode = 400
+            return next(error)
         }
 
-        return await super.update(Post, req, next, options)
+
+        // Atualização de Curtidas da Publicação
+        if (liked) {
+            // Encontra a Publicação a ser Atualizada
+            const findUser = await this.userService.findUnique(next, { where: { id: Post.usersLikeID[0] } })
+            const findPost = await super.findUnique(next, { where: { id: postId } })
+
+
+            // Tratativa caso não encontre
+            if (!findPost) {
+                const error = new Error('Postagem não encontrada')
+                error.statusCode = 404
+                return next(error)
+            }
+
+            // Objeto com parâmetros para update (Adicionar ou remover curtida)
+            const userUpdate = {}
+            const postUpdate = {}
+
+            if (liked === 'true') {
+                /*
+                    Adiciona os IDs correspondentes as listagens de like, tanto da Publicação
+                    quanto do Usuário, adicionando uma nova curtida
+                */
+                userUpdate.push = [postId] // Add ID da Publicação
+                postUpdate.push = Post.usersLikeID[0] // Add ID do Usuário
+            }
+
+            if (liked === 'false') {
+                /*
+                    O filter serve para deixar na lista de like somente os IDs que são diferentes do ID informado,
+                    ou seja, remove o ID informado, tanto da publicação, quanto do usuário, removendo a curtida.
+                */
+                userUpdate.set = findUser[0].postsLikedID.filter(id => id !== postId) // Remove ID da Publicação
+                postUpdate.set = findPost[0].usersLikeID.filter(id => id !== Post.usersLikeID[0]) // Remove ID do Usuário
+            }
+
+            // Atualiza no registro do usuário, removendo a curtida
+            await this.userService.update({
+                where: { id: Post.usersLikeID[0] },
+                data: {
+                    postsLikedID: {
+                        ...userUpdate
+                    }
+                }
+            })
+
+            // Atualiza a postagem com a nova quantidade de curtidas
+            return await super.update({
+                where: { id: postId },
+                data: {
+                    usersLikeID: {
+                        ...postUpdate // Adicione aqui o ID do usuário a ser adicionado à matriz
+                    }
+                }
+            })
+        }
+
+
+
+        return await super.update(Post, req, next)
     }
 }
 
