@@ -107,7 +107,7 @@ export default {
         },
         verDetalhes(idPost){
             console.log('id aqui: ',idPost);
-            sergio = idPost;
+            sergio.id = idPost;
             console.log('id aqui na global: ',sergio);
 
             router.push({path: '/post'})
