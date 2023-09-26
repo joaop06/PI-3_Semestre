@@ -49,6 +49,7 @@
 <script>
 import { ref } from 'vue';
 import axios from 'axios'
+import http from '@/http'
 import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
@@ -141,7 +142,7 @@ export default {
                 //     .then(response => {
                 //         console.log('deu certo')
                 //     })
-                await axios.post('http://localhost:7000/post', form)
+                await http.post('/post', form)
                     .then(response => {
                         console.log('deu certo')
                         console.log(response);
