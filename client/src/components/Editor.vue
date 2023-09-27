@@ -49,6 +49,7 @@
 <script>
 import { ref } from 'vue';
 import axios from 'axios'
+import http from '@/http'
 import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
@@ -125,15 +126,23 @@ export default {
                 const content = this.quill.getContents();
                 const jsonado = JSON.stringify(content);
 
+                
                 // const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
                 // gb.varteste = other;
                 this.successDialog = true;
-
+                
                 const form = {
+                    user_id: '65135ded2650f9dbde3466a3',
                     title: this.titulo,
                     contentPost: jsonado,
                     typePost: this.assunto.toLowerCase(),
                 }
+                
+                const formjson = JSON.stringify(form);
+                
+                const tamanhoEmBytes = new Blob([formjson]).size;
+
+                console.log('tamanho',tamanhoEmBytes / (1024 * 1024), 'mb');
 
                 console.log(form);
 
@@ -141,7 +150,7 @@ export default {
                 //     .then(response => {
                 //         console.log('deu certo')
                 //     })
-                await axios.post('http://localhost:7000/post', form)
+                await http.post('/post', form)
                     .then(response => {
                         console.log('deu certo')
                         console.log(response);
