@@ -40,6 +40,8 @@ class CommonService {
       return { count: result.length, success: true, rows: result }
 
     } catch (error) {
+      const errorLines = error.message.split('\n')
+      error.message = errorLines[errorLines.length - 1].trim()
       return next(error)
     }
   }
@@ -48,6 +50,8 @@ class CommonService {
     try {
       return await prisma[this.modelName].findMany(options)
     } catch (error) {
+      const errorLines = error.message.split('\n')
+      error.message = errorLines[errorLines.length - 1].trim()
       return next(error)
     }
   }
@@ -60,6 +64,8 @@ class CommonService {
       return { success: true, document: result }
 
     } catch (error) {
+      const errorLines = error.message.split('\n')
+      error.message = errorLines[errorLines.length - 1].trim()
       return next(error)
     }
   }
@@ -82,6 +88,8 @@ class CommonService {
 
     } catch (error) {
       error.statusCode = 400
+      const errorLines = error.message.split('\n')
+      error.message = errorLines[errorLines.length - 1].trim()
       return next(error)
     }
   }
@@ -96,6 +104,8 @@ class CommonService {
       return result
 
     } catch (error) {
+      const errorLines = error.message.split('\n')
+      error.message = errorLines[errorLines.length - 1].trim()
       return next(error)
     }
   }

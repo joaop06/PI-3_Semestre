@@ -34,10 +34,7 @@ class CommonController {
       const result = await this.service.create(req.body, req, next)
       if (!result) return new Error()
 
-      res.status(200).send({
-        ...result,
-        message: result?.message ? result.message : result?.success ? "Success when Registering!" : "Error when registering"
-      })
+      res.status(201).send("Success when Registering!")
 
     } catch (error) {
       res.status(500).send({

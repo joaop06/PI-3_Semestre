@@ -111,8 +111,6 @@ class PostService extends CommonService {
             })
         }
 
-
-
         return await super.update(Post, req, next)
     }
 }
