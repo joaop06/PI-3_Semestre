@@ -138,11 +138,13 @@ export default {
                     typePost: this.assunto.toLowerCase(),
                 }
                 
-                const formjson = JSON.stringify(form);
-                
-                const tamanhoEmBytes = new Blob([formjson]).size;
+                //criar o usuario por meio do get, olha a rota post
 
-                console.log('tamanho',tamanhoEmBytes / (1024 * 1024), 'mb');
+                // const formjson = JSON.stringify(form);
+                
+                // const tamanhoEmBytes = new Blob([formjson]).size;
+
+                // console.log('tamanho',tamanhoEmBytes / (1024 * 1024), 'mb');
 
                 console.log(form);
 
