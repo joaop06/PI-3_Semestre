@@ -50,6 +50,8 @@
 import { ref } from 'vue';
 import axios from 'axios'
 import http from '@/http'
+import { ImageResize } from 'quill-image-resize';
+import quillImageResize from '@/imageresize';
 import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
@@ -115,6 +117,8 @@ export default {
 
         // Inicialize o Quill Editor no elemento com a referência 'editor'
         this.quill = new Quill(this.$refs.editor, quillOptions);
+
+        quillImageResize(this.quill); //tentei fazer um redimensionamento da pag, mas não deu certo
     },
     methods: {
         getDialog() {
@@ -132,13 +136,13 @@ export default {
                 this.successDialog = true;
                 
                 const form = {
-                    user_id: '65135ded2650f9dbde3466a3',
+                    user_id: gb.userId,
                     title: this.titulo,
                     contentPost: jsonado,
                     typePost: this.assunto.toLowerCase(),
                 }
                 
-                //criar o usuario por meio do get, olha a rota post
+                //criar o usuario por meio do get, olha a rota user
 
                 // const formjson = JSON.stringify(form);
                 
@@ -148,10 +152,6 @@ export default {
 
                 console.log(form);
 
-                // await axios.post('http://192.168.152.49:7000/post', form)
-                //     .then(response => {
-                //         console.log('deu certo')
-                //     })
                 await http.post('/post', form)
                     .then(response => {
                         console.log('deu certo')
