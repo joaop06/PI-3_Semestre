@@ -4,9 +4,6 @@
         <v-btn class="buttonPost" @click.prevent="getDialog" append-icon="mdi-post" variant="tonal" rounded="10px">
             POST
         </v-btn><br>
-        <!-- <v-btn class="buttonPost" @click.prevent="setEditorCOntent" append-icon="mdi-post" variant="tonal" rounded="10px">
-            POST
-        </v-btn><br> -->
         <v-dialog v-model="inputDialog" class="w-50">
             <v-card>
                 <br>
@@ -50,12 +47,11 @@
 import { ref } from 'vue';
 import axios from 'axios'
 import http from '@/http'
-import { ImageResize } from 'quill-image-resize';
-import quillImageResize from '@/imageresize';
 import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
-import { initCustomFormatter } from 'vue';
+import { initCustomFormatter } from 'vue'; 
+
 
 export default {
     data() {
@@ -69,12 +65,8 @@ export default {
         }
     },
     mounted() {
-        var FontAttributor = Quill.import('attributors/class/font');
-        FontAttributor.whitelist = [
-            'roboto'
-        ];
-        Quill.register(FontAttributor, true);
 
+        
         const quillOptions = {
             theme: 'snow',
             modules: {
@@ -118,7 +110,6 @@ export default {
         // Inicialize o Quill Editor no elemento com a referência 'editor'
         this.quill = new Quill(this.$refs.editor, quillOptions);
 
-        quillImageResize(this.quill); //tentei fazer um redimensionamento da pag, mas não deu certo
     },
     methods: {
         getDialog() {
@@ -130,22 +121,22 @@ export default {
                 const content = this.quill.getContents();
                 const jsonado = JSON.stringify(content);
 
-                
+
                 // const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
                 // gb.varteste = other;
                 this.successDialog = true;
-                
+
                 const form = {
                     user_id: gb.userId,
                     title: this.titulo,
                     contentPost: jsonado,
                     typePost: this.assunto.toLowerCase(),
                 }
-                
+
                 //criar o usuario por meio do get, olha a rota user
 
                 // const formjson = JSON.stringify(form);
-                
+
                 // const tamanhoEmBytes = new Blob([formjson]).size;
 
                 // console.log('tamanho',tamanhoEmBytes / (1024 * 1024), 'mb');
