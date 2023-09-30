@@ -19,7 +19,7 @@
                 <v-card-title>{{post.titulo}}</v-card-title>
               </v-img>
 
-              <v-card-text>
+              <v-card-text class="content">
                 {{ textoLimitado }}
               </v-card-text>
 
@@ -58,6 +58,10 @@
 .cards {
   max-width: 100%;
   max-height: 400px;
+}
+
+.content{
+  font-family: 'Open Sans';
 }
 </style>
 
