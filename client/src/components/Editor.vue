@@ -81,19 +81,19 @@ export default {
                     [{ 'align': [] }],
                     [{ 'color': [] }, { 'background': [] }],
                     ['blockquote'],
-                    ['bold', 'italic', 'underline', 'strike'],        
+                    ['bold', 'italic', 'underline', 'strike'],
                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                     [{ 'indent': '-1' }, { 'indent': '+1' }],
                     ['image', 'link']
                 ],
                 blotFormatter: {},
                 imageCompress: {
-                    quality: 0.9, 
-                    maxWidth: 300, 
-                    maxHeight: 300, 
+                    quality: 0.9,
+                    maxWidth: 300,
+                    maxHeight: 300,
                     imageType: 'image/jpeg',
-                    suppressErrorLogging: false, 
-                    insertIntoEditor: undefined, 
+                    suppressErrorLogging: false,
+                    insertIntoEditor: undefined,
                 }
             },
             placeholder: 'Faça sua postagem...',
@@ -122,9 +122,43 @@ export default {
 
         // Inicialize o Quill Editor no elemento com a referência 'editor'
         this.quill = new Quill(this.$refs.editor, quillOptions);
+        this.quill.on('text-change', this.handleTextChange);
 
     },
     methods: {
+        handleTextChange(delta, oldDelta, source) {
+            const maxLength = 10; // Change this to the desired limit
+            const text = this.quill.getText();
+            if (text.length > maxLength) {
+                this.quill.deleteText(maxLength, text.length);
+            }
+        },
+        // handleTextChange(delta, oldDelta, source) { tentando limitar os caracteres mas não as imagens
+        //     const maxLength = 10; // Change this to the desired limit
+        //     const text = this.quill.getText();
+        //     if (text.length > maxLength) {
+        //         console.log('passou caraio')
+        //         let diff = text.length - maxLength;
+        //         const ops = [];
+        //         let index = 0;
+        //         delta.ops.forEach(op => {
+        //             if (op.insert && typeof op.insert === 'string') {
+        //                 if (op.insert.length <= diff) {
+        //                     diff -= op.insert.length;
+        //                     index += op.insert.length;
+        //                 } else {
+        //                     ops.push({ insert: op.insert.slice(0, op.insert.length - diff) });
+        //                     index += op.insert.length - diff;
+        //                     diff = 0;
+        //                 }
+        //             } else {
+        //                 ops.push(op);
+        //             }
+        //         });
+        //         this.quill.updateContents({ ops });
+        //         this.quill.setSelection(index);
+        //     }
+        // },
         getDialog() {
             this.inputDialog = true;
         },
