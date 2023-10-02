@@ -15,6 +15,9 @@ import { Delta } from '@vueup/vue-quill';
 import sergio from '@/controller/globalVariables';
 import { initCustomFormatter } from 'vue';
 import { format } from 'date-fns';
+import BlotFormatter from "quill-blot-formatter";
+import ImageCompress from 'quill-image-compress';
+
 
 export default {
     data() {
@@ -27,9 +30,13 @@ export default {
         }
     },
     mounted() {
+        Quill.register('modules/blotFormatter', BlotFormatter);
+
+
         const quillOptions = {
             theme: 'bubble',
             modules: {
+                blotFormatter: {}
             },
             readOnly: true,
             bounds: document.body,

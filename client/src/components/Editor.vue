@@ -45,12 +45,14 @@
   
 <script>
 import { ref } from 'vue';
-import axios from 'axios'
 import http from '@/http'
 import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
-import { initCustomFormatter } from 'vue'; 
+import { initCustomFormatter } from 'vue';
+
+import BlotFormatter from "quill-blot-formatter";
+import ImageCompress from 'quill-image-compress';
 
 
 export default {
@@ -66,7 +68,9 @@ export default {
     },
     mounted() {
 
-        
+        Quill.register('modules/blotFormatter', BlotFormatter);
+        Quill.register('modules/imageCompress', ImageCompress);
+
         const quillOptions = {
             theme: 'snow',
             modules: {
@@ -77,11 +81,20 @@ export default {
                     [{ 'align': [] }],
                     [{ 'color': [] }, { 'background': [] }],
                     ['blockquote'],
-                    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+                    ['bold', 'italic', 'underline', 'strike'],        
                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                     [{ 'indent': '-1' }, { 'indent': '+1' }],
                     ['image', 'link']
                 ],
+                blotFormatter: {},
+                imageCompress: {
+                    quality: 0.9, 
+                    maxWidth: 300, 
+                    maxHeight: 300, 
+                    imageType: 'image/jpeg',
+                    suppressErrorLogging: false, 
+                    insertIntoEditor: undefined, 
+                }
             },
             placeholder: 'Faça sua postagem...',
             readOnly: false,
