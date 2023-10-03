@@ -73,19 +73,15 @@ class PostService extends CommonService {
             const postUpdate = {}
 
             if (liked === 'true') {
-                /*
-                    Adiciona os IDs correspondentes as listagens de like, tanto da Publicação
-                    quanto do Usuário, adicionando uma nova curtida
-                */
+                /* Adiciona os IDs correspondentes as listagens de like, tanto da Publicação
+                    quanto do Usuário, adicionando uma nova curtida */
                 userUpdate.push = [postId] // Add ID da Publicação
                 postUpdate.push = Post.usersLikeID[0] // Add ID do Usuário
             }
 
             if (liked === 'false') {
-                /*
-                    O filter serve para deixar na lista de like somente os IDs que são diferentes do ID informado,
-                    ou seja, remove o ID informado, tanto da publicação, quanto do usuário, removendo a curtida.
-                */
+                /* O filter serve para deixar na lista de like somente os IDs que são diferentes do ID informado,
+                    ou seja, remove o ID informado, tanto da publicação, quanto do usuário, removendo a curtida. */
                 userUpdate.set = findUser[0].postsLikedID.filter(id => id !== postId) // Remove ID da Publicação
                 postUpdate.set = findPost[0].usersLikeID.filter(id => id !== Post.usersLikeID[0]) // Remove ID do Usuário
             }
