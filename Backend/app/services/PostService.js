@@ -43,8 +43,8 @@ class PostService extends CommonService {
         return await super.findMany(req, options)
     }
 
-    async update(Post, req, next) {
-        const { id: postId, liked } = req.query // 
+    async update(post, req, next) {
+        const { id: postId, liked } = req.query
 
         // Verifica se o ID da postagem é válido (você pode adicionar validações adicionais)
         if (!postId) {
@@ -57,7 +57,7 @@ class PostService extends CommonService {
         // Atualização de Curtidas da Publicação
         if (liked) {
             // Encontra a Publicação a ser Atualizada
-            const findUser = await this.userService.findUnique(next, { where: { id: Post.usersLikeID[0] } })
+            const findUser = await this.userService.findUnique(next, { where: { id: post.usersLikeID[0] } })
             const findPost = await super.findUnique(next, { where: { id: postId } })
 
 
@@ -107,7 +107,7 @@ class PostService extends CommonService {
             })
         }
 
-        return await super.update(Post, req, next)
+        return await super.update(post, req, next)
     }
 }
 
