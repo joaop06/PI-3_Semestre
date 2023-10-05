@@ -20,7 +20,8 @@
                     <v-list-item>
                         <template v-slot:append>
                             <div class="justify-self-end">
-                                <v-icon class="me-1" icon="mdi-heart"></v-icon>
+                                <v-btn icon="mdi-heart" variant="plain"></v-btn>
+                                <v-btn icon="mdi-star" variant="plain"></v-btn>
                                 <span class="subheading me-2">{{ post.likes }}</span>
                             </div>
                         </template>
@@ -70,7 +71,8 @@ export default {
                         const jsonespecifico = jsonado[i]?.contentPost;
                         const other = new Delta(JSON.parse(jsonespecifico));
 
-                        this.conteudo(this.converterTexto(other))
+                        this.conteudo(this.converterTexto(other));
+                        //preciso fazer com que a descrição mostre apenas o texto, não [Object Object]
 
                     }
 
@@ -83,13 +85,7 @@ export default {
             });
     },
     computed: {
-        textoLimitado() {
-            if (this.textocompleto.length > this.limiteCaracteres) {
-                return this.textocompleto.slice(0, this.limiteCaracteres) + '...';
-            } else {
-                return this.textocompleto;
-            }
-        },
+
     },
     methods: {
         converterTexto(delta) {
@@ -101,7 +97,6 @@ export default {
             });
             return text;
         },
-
         conteudo(texto) {
             this.conteudoPost.push(texto);
         },
@@ -111,6 +106,12 @@ export default {
             console.log('id aqui na global: ',sergio);
 
             router.push({path: '/post'})
+        },
+        Like(){
+            // método para mandar as informações do usuario e adicionar um like
+        },
+        Fav(){
+            // método para mandar as informações do usuario e adicionar aos favs
         }
     }
 }

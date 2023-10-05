@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="quilleditor_text" ref="editor" /><br>
+        <div class="quilleditor_text" ref="editor" />
+        <div>{{caracter}}/{{tamanho}}</div><br>
         <v-btn class="buttonPost" @click.prevent="getDialog" append-icon="mdi-post" variant="tonal" rounded="10px">
             POST
         </v-btn><br>
@@ -62,7 +63,8 @@ export default {
             errorDialog: false,
             inputDialog: false,
             titulo: '',
-            titulo: '',
+            caracter: 0,
+            tamanho: 400,
             assunto: ''
         }
     },
@@ -127,38 +129,14 @@ export default {
     },
     methods: {
         handleTextChange(delta, oldDelta, source) {
-            const maxLength = 10; // Change this to the desired limit
+            const maxLength = this.tamanho;
             const text = this.quill.getText();
+            this.caracter = text.length;
+            
             if (text.length > maxLength) {
-                this.quill.deleteText(maxLength, text.length);
+                this.quill.deleteText(maxLength - 1, text.length);
             }
         },
-        // handleTextChange(delta, oldDelta, source) { tentando limitar os caracteres mas não as imagens
-        //     const maxLength = 10; // Change this to the desired limit
-        //     const text = this.quill.getText();
-        //     if (text.length > maxLength) {
-        //         console.log('passou caraio')
-        //         let diff = text.length - maxLength;
-        //         const ops = [];
-        //         let index = 0;
-        //         delta.ops.forEach(op => {
-        //             if (op.insert && typeof op.insert === 'string') {
-        //                 if (op.insert.length <= diff) {
-        //                     diff -= op.insert.length;
-        //                     index += op.insert.length;
-        //                 } else {
-        //                     ops.push({ insert: op.insert.slice(0, op.insert.length - diff) });
-        //                     index += op.insert.length - diff;
-        //                     diff = 0;
-        //                 }
-        //             } else {
-        //                 ops.push(op);
-        //             }
-        //         });
-        //         this.quill.updateContents({ ops });
-        //         this.quill.setSelection(index);
-        //     }
-        // },
         getDialog() {
             this.inputDialog = true;
         },
