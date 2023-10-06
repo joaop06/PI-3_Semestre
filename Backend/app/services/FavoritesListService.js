@@ -1,10 +1,14 @@
 const prisma = require('prisma')
 const CommonService = require("./CommonService")
+const PostService = require('./PostService')
 
 class FavoritesListService extends CommonService {
   constructor(modelName) {
     super(modelName)
     this.modelName = modelName
+
+    const postService = new PostService('Post')
+    this.postService = postService
   }
 
   async findMany(req) {
@@ -34,43 +38,52 @@ class FavoritesListService extends CommonService {
   }
 
   async update(favoritesList, req, next) {
+    const { id: listId, favorite } = req.query
 
-    // Encontra a Publicação a ser Atualizada
-    const findUser = await this.userService.findUnique(next, { where: { id: Post.usersLikeID[0] } })
-    const findPost = await super.findUnique(next, { where: { id: postId } })
+    if (!listId) {
+      const error = new Error('ID de Lista de Favoritos não informado')
+      error.statusCode = 400
+      return next(error)
+    }
 
+    if (['false', 'true'].includes(favorite)) {
+      const listUpdate = {}
+      const postUpdate = {}
 
-    // Objeto com parâmetros para update (Adicionar ou remover curtida)
-    const userUpdate = {}
-    const postUpdate = {}
-
-    userUpdate.push = [postId] // Add ID da Publicação
-    postUpdate.push = Post.usersLikeID[0] // Add ID do Usuário
-
-    userUpdate.set = findUser[0].postsLikedID.filter(id => id !== postId) // Remove ID da Publicação
-    postUpdate.set = findPost[0].usersLikeID.filter(id => id !== Post.usersLikeID[0]) // Remove ID do Usuário
-
-
-
-    // Atualiza no registro do usuário, removendo a curtida
-    await this.userService.update({
-      where: { id: Post.usersLikeID[0] },
-      data: {
-        postsLikedID: {
-          ...userUpdate
-        }
+      if (favorite === 'true') {
+        listUpdate.push = ''
+        postUpdate.push = favoritesList.postsFavoritesId[0] // Add ID do Usuário
       }
-    })
-
-    // Atualiza a postagem com a nova quantidade de curtidas
-    return await super.update({
-      where: { id: postId },
-      data: {
-        usersLikeID: {
-          ...postUpdate // Adicione aqui o ID do usuário a ser adicionado à matriz
+      if (favorite === 'false') {
+        // Encontra a Publicação a ser Atualizada
+        const findPost = await super.findUnique(next, { where: { id: favoritesList.postsFavoritesId[0] } })
+        if (!findPost) {
+          const error = new Error('Postagem não encontrada')
+          error.statusCode = 404
+          return next(error)
         }
+        listUpdate
+        postUpdate.set = findPost[0].favoritesListId.filter(id => id !== favoritesList.favoritesListId[0]) // Remove ID da Lista de Favoritos
       }
-    })
+
+      await this.postService.update({
+        where: { id: favoritesList.postsFavoritesId[0] },
+        data: {
+          postsLikedID: {
+            ...userUpdate
+          }
+        }
+      })
+
+      return await super.update({
+        where: { id: listId },
+        data: {
+          postsFavoritesId: {
+            ...postUpdate // Adicione aqui o ID do usuário a ser adicionado à matriz
+          }
+        }
+      })
+    }
 
     return await super.update(favoritesList, req, next)
 
