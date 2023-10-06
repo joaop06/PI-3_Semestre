@@ -12,7 +12,21 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/client/Home.vue'),
+      },
+    ],
+  },
+  {
+    path: '/homeadmin',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'HomeAdmin',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/admin/HomeAdmin.vue'),
       },
     ],
   },
@@ -26,7 +40,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/NovaPostagem.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/admin/NovaPostagem.vue'),
       },
     ],
   },
@@ -40,7 +54,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Postagem.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/admin/Postagem.vue'),
       },
     ],
   },
@@ -54,7 +68,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Conta.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/admin/Conta.vue'),
       },
     ],
   },
@@ -68,7 +82,21 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/Post.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/admin/Post.vue'),
+      },
+    ],
+  },
+  {
+    path: '/enter',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Post',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/client/LoginCad.vue'),
       },
     ],
   },
