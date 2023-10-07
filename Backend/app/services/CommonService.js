@@ -74,7 +74,7 @@ class CommonService {
   // (Route Default) Atualiza um único documento
   async update(object, req, next, options = {
     where: req?.query?.id ? { id: req.query.id } : // Caso tenha ID na query
-      req?.body?.id ? { id: req.body?.id } : undefined // Senão verifica no body
+      object?.id ? { id: object.id } : undefined // Senão verifica no body
   }
   ) {
     try {
@@ -90,6 +90,17 @@ class CommonService {
       error.statusCode = 400
       const errorLines = error.message.split('\n')
       error.message = errorLines[errorLines.length - 1].trim()
+      return next(error)
+    }
+  }
+
+  async directUpdate(object, next) {
+    try {
+      return await prisma[this.modelName].update(object)
+
+    } catch (error) {
+      error = new Error(`Erro ao Atualizar diretamente em ${this.modelName}`)
+      error.statusCode = 400
       return next(error)
     }
   }

@@ -1,3 +1,4 @@
+const prisma = require("../config/prisma")
 
 class CommonController {
   constructor(ServiceClass, modelName) {

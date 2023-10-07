@@ -1,19 +1,16 @@
-const prisma = require('prisma')
 const CommonService = require('./CommonService')
 const FavoritesListService = require('./FavoritesListService')
+let error // For error handling
 
 class UserService extends CommonService {
   constructor(modelName) {
     super(modelName)
     this.modelName = modelName
-
-    const favoritesListService = new FavoritesListService('FavoritesList')
-    this.favoritesListService = favoritesListService
   }
 
   async findMany(req) {
     // Mapeia as opções de busca incluindo o relacionamento
-    let options = {
+    const options = {
       where: {},
       include: {
         posts: {
@@ -28,44 +25,60 @@ class UserService extends CommonService {
     }
 
     // Busca Parcial para o campo `name`
-    if (Object.keys(req.query).length !== 0 && req.query?.name) {
-      options.where = { name: { contains: req.query.name } }
+    if (req.query.name) {
+      options.where = { name: { contains: req.query.name } };
     }
 
-    // Caso seja passado full=false, será desconsiderado as informações do relacionamento
+    // Verifica se a opção `full` é igual a 'false' para excluir informações de relacionamento
     if (req.query.full === 'false') {
       options.include = {}
     }
 
-    return await super.findMany(req, options)
+
+    const result = await super.findMany(req, options)
+    // Remove o campo 'password' do resultado
+    result.rows.forEach(user => {
+      delete user.password
+      return user
+    })
+
+    return result
   }
 
   async create(User, req, next) {
-    const verifyRegister = await super.findMany(req, next, { where: { email: User.email } })
+    try {
+      const verifyRegister = await super.findMany(req, next, { where: { email: User.email } })
 
-    // Retorno caso e-mail informado já esteja cadastrado
-    if (verifyRegister.count > 0) return { statusCode: 409, message: "E-mail já cadastro" }
+      // Retorno caso e-mail informado já esteja cadastrado
+      if (verifyRegister.count > 0) return { statusCode: 409, message: "E-mail já cadastro" }
 
-    const result = await super.create(User, req, next)
+      const result = await super.create(User, req, next)
 
-    if (!result) {
-      const error = new Error('Erro ao registrar usuário!')
+
+      // Nova instância FavoritesList
+      this.favoritesListService = new FavoritesListService('FavoritesList')
+
+      // Cria uma Lista de Favoritos para o novo Usuário
+      await this.favoritesListService.create({ userId: result.document.id }, req, next)
+
+      return result
+
+    } catch (e) {
+      console.error(e)
+      error = new Error('Erro ao registrar usuário!')
       error.statusCode = 400
       return next(error)
     }
-
-    // Cria uma lista de favoritos para o usuário assim que é registrado
-    await this.favoritesListService.create({ user_id: result.document.id }, req, next)
-
-    return result
   }
 
   async delete(id, req, next) {
 
     // Deleta a Lista de Favoritos do usuário
     try {
-      const favoriteList = await this.favoritesListService.findMany({}, next, { where: { user_id: id } })
-      await this.favoritesListService.delete({}, req, next, { where: { id: favoriteList.rows[0].id } })
+      // Nova instância FavoritesList
+      this.favoritesListService = new FavoritesListService('FavoritesList')
+      await this.favoritesListService.delete({}, req, next, { where: { userId: id } })
+
     } catch (error) {
       return next(new Error('Erro ao deletar Lista de Favoritos'))
     }

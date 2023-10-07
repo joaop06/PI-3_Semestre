@@ -1,15 +1,11 @@
 const CommonService = require('./CommonService')
 const UserService = require('./UserService')
 const moment = require('moment')
-const prisma = require('../config/prisma')
 
 class PostService extends CommonService {
     constructor(modelName) {
         super(modelName)
         this.modelName = modelName
-
-        const userService = new UserService('User')
-        this.userService = userService
     }
 
     async findMany(req) {
@@ -53,9 +49,11 @@ class PostService extends CommonService {
             return next(error)
         }
 
-
         // Atualização de Curtidas da Publicação
         if (liked) {
+            // Nova Instância UserService
+            this.userService = new UserService('User')
+
             // Encontra a Publicação a ser Atualizada
             const findUser = await this.userService.findUnique(next, { where: { id: post.usersLikeID[0] } })
             const findPost = await super.findUnique(next, { where: { id: postId } })
@@ -76,19 +74,20 @@ class PostService extends CommonService {
                 /* Adiciona os IDs correspondentes as listagens de like, tanto da Publicação
                     quanto do Usuário, adicionando uma nova curtida */
                 userUpdate.push = [postId] // Add ID da Publicação
-                postUpdate.push = Post.usersLikeID[0] // Add ID do Usuário
+                postUpdate.push = post.usersLikeID[0] // Add ID do Usuário
             }
 
             if (liked === 'false') {
                 /* O filter serve para deixar na lista de like somente os IDs que são diferentes do ID informado,
                     ou seja, remove o ID informado, tanto da publicação, quanto do usuário, removendo a curtida. */
+
                 userUpdate.set = findUser[0].postsLikedID.filter(id => id !== postId) // Remove ID da Publicação
-                postUpdate.set = findPost[0].usersLikeID.filter(id => id !== Post.usersLikeID[0]) // Remove ID do Usuário
+                postUpdate.set = findPost[0].usersLikeID.filter(id => id !== post.usersLikeID[0]) // Remove ID do Usuário
             }
 
             // Atualiza no registro do usuário, removendo a curtida
-            await this.userService.update({
-                where: { id: Post.usersLikeID[0] },
+            await this.userService.directUpdate({
+                where: { id: post.usersLikeID[0] },
                 data: {
                     postsLikedID: {
                         ...userUpdate
