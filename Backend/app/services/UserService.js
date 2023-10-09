@@ -8,6 +8,20 @@ class UserService extends CommonService {
     this.modelName = modelName
   }
 
+  async login(user, req, next) {
+    const userLogin = await super.findUnique({ where: { email: user.email, password: user.password } })
+
+    if (!userLogin) {
+      const error = new Error('Credenciais não encontradas ou inexistentes.')
+      error.statusCode = 401 // Não autorizado
+      return next(error)
+    }
+
+    delete userLogin.password
+    return { message: "Login realizado!", userLogin }
+
+  }
+
   async findMany(req) {
     // Mapeia as opções de busca incluindo o relacionamento
     const options = {

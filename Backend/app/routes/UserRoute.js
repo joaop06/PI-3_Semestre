@@ -4,6 +4,12 @@ const UserController = require("../controllers/UserController")
 class UserRoute extends CommonRoute {
   constructor(app) {
     super(UserController, app, "user")
+    this.controller = new UserController()
+  }
+
+  setupRoutes() {
+    super.setupRoutes()
+    this.app.post(`/${this.route}/login`, this.controller.login.bind(this.controller))
   }
 }
 

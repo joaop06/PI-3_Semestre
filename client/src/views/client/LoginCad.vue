@@ -365,7 +365,7 @@ export default {
 }
 
 #effectGlass {
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
   border-radius: 10px;
   padding: 20px;
 }
