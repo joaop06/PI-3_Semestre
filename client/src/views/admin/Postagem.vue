@@ -91,7 +91,7 @@ export default {
         converterTexto(delta) {
             let text = '';
             delta.ops.forEach(op => {
-                if (op.insert) {
+                if (op.insert && !op.insert.image) {
                     text += op.insert;
                 }
             });
@@ -100,17 +100,17 @@ export default {
         conteudo(texto) {
             this.conteudoPost.push(texto);
         },
-        verDetalhes(idPost){
-            console.log('id aqui: ',idPost);
+        verDetalhes(idPost) {
+            console.log('id aqui: ', idPost);
             sergio.id = idPost;
-            console.log('id aqui na global: ',sergio);
+            console.log('id aqui na global: ', sergio);
 
-            router.push({path: '/post'})
+            router.push({ path: '/post' })
         },
-        Like(){
+        Like() {
             // método para mandar as informações do usuario e adicionar um like
         },
-        Fav(){
+        Fav() {
             // método para mandar as informações do usuario e adicionar aos favs
         }
     }
