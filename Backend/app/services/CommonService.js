@@ -48,7 +48,7 @@ class CommonService {
 
   async findUnique(next, options) {
     try {
-      return await prisma[this.modelName].findMany(options)
+      return await prisma[this.modelName].findFirst(options)
     } catch (error) {
       const errorLines = error.message.split('\n')
       error.message = errorLines[errorLines.length - 1].trim()

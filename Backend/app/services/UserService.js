@@ -9,7 +9,7 @@ class UserService extends CommonService {
   }
 
   async login(user, req, next) {
-    const userLogin = await super.findUnique({ where: { email: user.email, password: user.password } })
+    const userLogin = await super.findUnique(next, { where: { email: user.email, password: user.password } })
 
     if (!userLogin) {
       const error = new Error('Credenciais não encontradas ou inexistentes.')
