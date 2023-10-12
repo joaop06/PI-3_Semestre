@@ -20,8 +20,8 @@
                     <v-list-item>
                         <template v-slot:append>
                             <div class="justify-self-end">
-                                <v-btn icon="mdi-heart" variant="plain"></v-btn>
-                                <v-btn icon="mdi-star" variant="plain"></v-btn>
+                                <v-btn icon="mdi-heart" variant="plain" alt="like"></v-btn>
+                                <v-btn icon="mdi-star" variant="plain" alt="favorite"></v-btn>
                                 <span class="subheading me-2">{{ post.likes }}</span>
                             </div>
                         </template>
