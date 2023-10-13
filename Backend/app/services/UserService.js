@@ -1,11 +1,16 @@
 const CommonService = require('./CommonService')
-const FavoritesListService = require('./FavoritesListService')
+// const FavoritesListService = require('./FavoritesListService')
+const { FavoritesList } = require('@prisma/client')
+const prisma = require('../config/prisma')
 let error // For error handling
 
 class UserService extends CommonService {
   constructor(modelName) {
     super(modelName)
     this.modelName = modelName
+
+    // const favoritesListService = new FavoritesListService('FavoritesList')
+    // this.favoritesListService = favoritesListService
   }
 
   async login(user, req, next) {
@@ -64,16 +69,19 @@ class UserService extends CommonService {
       const verifyRegister = await super.findMany(req, next, { where: { email: User.email } })
 
       // Retorno caso e-mail informado já esteja cadastrado
-      if (verifyRegister.count > 0) return { statusCode: 409, message: "E-mail já cadastro" }
+      if (verifyRegister.count > 0) {
+        error = new Error("E-mail já cadastro")
+        error.statusCode = 409
+        return next(error)
+      }
 
       const result = await super.create(User, req, next)
 
 
-      // Nova instância FavoritesList
-      this.favoritesListService = new FavoritesListService('FavoritesList')
+      await prisma.FavoritesList.create({ data: { userId: result.document.id } })
 
       // Cria uma Lista de Favoritos para o novo Usuário
-      await this.favoritesListService.create({ userId: result.document.id }, req, next)
+      // await this.favoritesListService.create({ userId: result.document.id }, req, next)
 
       return result
 

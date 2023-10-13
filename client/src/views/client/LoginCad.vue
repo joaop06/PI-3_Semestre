@@ -34,14 +34,17 @@
             >
               <v-row class="mt-12">
                 <v-text-field
+                  v-model="email"
                   color="pink-darken-4"
                   placeholder="Ex: maria_silva@gmail.com"
                   label="E-mail"
                   :style="{ color: 'rgb(245, 0, 87)' }"
+                  :rules="[required, validEmail]"
                 ></v-text-field>
               </v-row>
               <v-row>
                 <v-text-field
+                  v-model="password"
                   color="pink-darken-4"
                   placeholder="Ex: maria123"
                   label="Senha"
@@ -51,10 +54,12 @@
                   "
                   @click:append-inner="showPasswordLogin = !showPasswordLogin"
                   :type="showPasswordLogin ? 'text' : 'password'"
+                  :rules="[required]"
                 ></v-text-field>
               </v-row>
               <v-row>
                 <v-btn
+                  @click="login"
                   class="ma-auto text-brown"
                   width="12vw"
                   color="yellow-lighten-2"
@@ -93,6 +98,7 @@
             >
               <v-row class="mt-12">
                 <v-text-field
+                  v-model="name"
                   color="pink-darken-4"
                   placeholder="Maria Silva"
                   label="Nome"
@@ -102,16 +108,19 @@
               <v-row>
                 <v-col cols="12">
                   <v-text-field
+                    v-model="emailRegister"
                     color="pink-darken-4"
                     placeholder="Ex: maria_silva@gmail.com"
                     label="E-mail"
                     :style="{ color: 'rgb(245, 0, 87)' }"
+                    :rules="[required, validEmail]"
                   ></v-text-field>
                 </v-col>
               </v-row>
               <v-row class="ma-auto justify-center">
                 <v-col cols="6">
                   <v-text-field
+                    v-model="passwordRegister"
                     color="pink-darken-4"
                     placeholder="Ex: maria123"
                     label="Senha"
@@ -121,10 +130,12 @@
                     "
                     @click:append-inner="showPassword = !showPassword"
                     :type="showPassword ? 'text' : 'password'"
+                    :rules="[required]"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field
+                    v-model="confirmePassword"
                     color="pink-darken-4"
                     placeholder="Ex: maria123"
                     label="Confirme sua Senha"
@@ -141,6 +152,7 @@
               </v-row>
               <v-row>
                 <v-btn
+                  @click="register"
                   class="ma-auto text-brown"
                   width="12vw"
                   color="yellow-lighten-2"
@@ -152,81 +164,24 @@
         </v-col>
       </v-row>
     </v-sheet>
+
+    <v-dialog v-model="showDialog" max-width="30vw">
+      <v-card>
+        <v-card-text
+          class="text-center text-h6 text-pink-darken-4 font-weight-bold"
+        >
+          {{ textDialog }}
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-container>
-
-  <!-- <div>
-        <v-card class="bg-blue mt-5 mx-auto px-6 py-8" max-width="344" v-if="!temlogin" variant="outlined">
-            <v-form v-model="form" @submit.prevent="onlogin">
-                <v-text-field v-model="email" :readonly="loading" :rules="[required]" class="mb-2" clearable
-                    label="E-mail"></v-text-field>
-
-                <v-text-field v-model="password" :readonly="loading" :rules="[required]" clearable label="Senha"
-                    placeholder="Digite sua senha"></v-text-field>
-
-                <br>
-
-                <v-btn :loading="loading" block color="success" size="large" type="submit" variant="elevated">
-                    Login
-                </v-btn>
-                <br>
-                <v-btn @click="cad()" :loading="loading" block color="success" size="large" type="submit"
-                    variant="elevated">
-                    Cadastro
-                </v-btn>
-            </v-form>
-
-            <v-dialog v-model="showAlertLogin" persistent max-width="300">
-                <v-card>
-                    <v-card-text>
-                        Logo ô arrombado!
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn color="success" text @click="roteamento()">OK</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-dialog>
-        </v-card>
-
-
-        <v-card class="bg-blue mt-5 mx-auto px-6 py-8" max-width="344" v-else variant="outlined">
-            <v-form v-model="form" @submit.prevent="oncadastro">
-
-                <v-text-field v-model="nome" :readonly="loading" :rules="[required]" class="mb-2" clearable
-                    label="Nome"></v-text-field>
-
-                <v-text-field v-model="email" :readonly="loading" :rules="[required]" class="mb-2" clearable label="E-mail"
-                    type="email"></v-text-field>
-
-                <v-text-field v-model="password" :readonly="loading" :rules="[required]" clearable label="Senha"
-                    placeholder="Digite sua senha" type="password"></v-text-field>
-
-                <br>
-
-                <v-btn :loading="loading" block color="success" size="large" type="submit" variant="elevated">
-                    Cadastrar Joso
-                </v-btn>
-                <br>
-                <v-btn @click="login()" :loading="loading" block color="success" size="large" type="submit"
-                    variant="elevated">
-                    Login
-                </v-btn>
-            </v-form>
-        </v-card>
-
-        <v-dialog v-model="showAlert" persistent max-width="300">
-            <v-card>
-                <v-card-text>
-                    Cadastrado com sucesso, faça o login
-                </v-card-text>
-                <v-card-actions>
-                    <v-btn color="success" text @click="showAlert = false; temlogin = false">OK</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
-    </div> -->
 </template>
 
 <script>
+import http from "@/http";
+import router from "@/router/index";
+import gb from "@/controller/globalVariables";
+
 export default {
   data() {
     return {
@@ -235,125 +190,160 @@ export default {
       password: "",
       showPasswordLogin: false,
 
-      // Register
+      // Cadastro
       name: "",
-      email: "",
+      emailRegister: "",
       passwordRegister: "",
       confirmePassword: "",
       showPassword: false,
       showConfirmedPassword: false,
+
+      // Caixa de Diálogo
+      showDialog: false,
+      textDialog: "",
     };
   },
+  methods: {
+    // Verifica Senha válida
+    required(value) {
+      if (value !== undefined && value.length < 5 && value.length > 0)
+        return "Mínimo 5 caracteres";
+
+      return !!value || "Este campo é obrigatório";
+    },
+
+    // Verifica E-mail válido
+    validEmail(value) {
+      const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return pattern.test(value) || "Endereço de e-mail inválido";
+    },
+
+    // Função de Login
+    async login() {
+      // Verifica valores dos campos
+      const verifyEmail = this.required(this.email) == true ? true : false;
+      const verifyPass = this.required(this.password) == true ? true : false;
+      if (!verifyEmail || !verifyPass) {
+        this.showDialog = true;
+        this.textDialog = "Campos de Login não preenchidos corretamente!";
+        setTimeout(() => {
+          this.showDialog = false;
+        }, 2500);
+        return;
+      }
+
+      try {
+        const resultLogin = await http.post("/user/login", {
+          email: this.email,
+          password: this.password,
+        });
+
+        // Dados do Usuário na variável global
+        gb.userData = resultLogin.data.userLogin;
+        gb.userId = resultLogin.data.userLogin.id;
+        console.log(gb);
+
+        // Exibe caixa de diálogo
+        this.showDialog = true;
+        this.textDialog = "Login realizado!";
+
+        // Redireciona para Home
+        setTimeout(() => {
+          router.push({ name: "Home" });
+        }, 2000);
+
+        return;
+      } catch (error) {
+        console.error(error);
+
+        // Mensagem que será exibida
+        this.showDialog = true;
+        if (error.response.status === 401) {
+          this.textDialog = error.response.data.error;
+        } else {
+          this.textDialog = "Erro ao realizar login";
+        }
+
+        // Desativa Caixa de Diálogo
+        setTimeout(() => {
+          this.showDialog = false;
+        }, 3000);
+        return;
+      }
+    },
+
+    // Função de Cadastro
+    async register() {
+      // Verifica valores dos campos
+      const verifyName = this.name ? true : false;
+      const verifyEmail =
+        this.required(this.emailRegister) == true ? true : false;
+      const verifyPass =
+        this.required(this.passwordRegister) == true ? true : false;
+      if (!verifyName || !verifyEmail || !verifyPass) {
+        this.showDialog = true;
+        this.textDialog = "Campos de Cadastro não preenchidos corretamente!";
+
+        // Desativa Caixa de Diálogo depois de 2 segundos
+        setTimeout(() => {
+          this.showDialog = false;
+        }, 2500);
+        return;
+      }
+
+      // Valida Confirmação de Senha
+      if (this.passwordRegister != this.confirmePassword) {
+        this.showDialog = true;
+        this.textDialog = "As senhas não conferem!";
+        setTimeout(() => {
+          this.showDialog = false;
+        }, 2500);
+        return;
+      }
+
+      // Requisição de cadastro de Usuário
+      try {
+        const resultRegister = await http.post("/user", {
+          name: this.name,
+          email: this.emailRegister,
+          password: this.passwordRegister,
+          isAdmin: false,
+        });
+
+        if (resultRegister.status == 201) {
+          // Exibe Caixa de Diálogo
+          this.showDialog = true;
+          this.textDialog = "Cadastro realizado com sucesso!";
+
+          // Desativa Caixa de Diálogo
+          setTimeout(() => {
+            this.showDialog = false;
+
+            // Preenche o campo de E-mail para Login
+            this.email = this.emailRegister;
+
+            // Limpa os campos de cadastro
+            this.name = "";
+            this.emailRegister = "";
+            this.passwordRegister = "";
+            this.confirmePassword = "";
+          }, 2500);
+        }
+      } catch (error) {
+        console.error(error);
+        this.showDialog = true;
+
+        // Mensagem que será exibida na Caixa de Diálogo
+        this.textDialog = error.response.data.error;
+
+        // Desativa Caixa de Diálogo
+        setTimeout(() => {
+          this.showDialog = false;
+        }, 2500);
+      }
+    },
+  },
 };
-
-// import http from "@/http";
-// import router from "@/router/index";
-// import gb from "@/controller/globalVariables";
-
-// export default {
-//   data: () => ({
-//     form: false,
-//     email: null,
-//     password: null,
-//     loading: false,
-//     temlogin: false,
-//     showAlert: false,
-//     showAlertLogin: false,
-//     selecionado: false,
-//     showMenu: false,
-//   }),
-
-//   computed: {
-//     showMenu() {
-//       return this.temlogin;
-//     },
-//   },
-
-//   methods: {
-//     //REDIRECIONAMENTO APÓS LOGIN BEM SUCEDIDO
-//     roteamento() {
-//       this.showAlertLogin = false;
-//     },
-//     //LOGIN
-//     //////////////////////////
-//     // onlogin() {
-
-//     //     this.loading = true;
-
-//     //     setTimeout(() => (this.loading = false), 5000);
-//     //     console.log(this.email, this.password);
-
-//     //     let data = {
-//     //         email: this.email,
-//     //         password: this.password
-//     //     }
-//     //     console.log(data);
-//     //     http.post('/verificalogin', data)
-//     //         .then(response => {
-//     //             gb.token = response.data.token;
-//     //             gb.usuarioLogado = true;
-
-//     //             console.log('token na variavel global: ', gb.token);
-
-//     //             this.showAlertLogin = true;
-//     //             setTimeout(() => {
-//     //                 router.push({ name: 'Dashboard' })
-//     //             }, 5000);
-
-//     //         })
-//     //         .catch(error => {
-//     //             console.error(error);
-
-//     //             this.loading = false;
-//     //         });
-//     // },
-//     //CADASTRO
-//     /////////////////////
-//     oncadastro() {
-//       this.loading = true;
-
-//       // Objeto contendo os dados do cadastro
-//       const data = {
-//         name: this.nome,
-//         email: this.email,
-//         password: this.password,
-//       };
-
-//       // Executar o post diretamente para 'Cliente'
-
-//       http
-//         .post("/user", data)
-//         .then((response) => {
-//           this.showAlert = true;
-
-//           // Limpar os campos do formulário
-//           this.nome = null;
-//           this.email = null;
-//           this.password = null;
-
-//           console.log("resposta: ", response);
-//         })
-//         .catch((error) => {
-//           console.error(error);
-
-//           this.loading = false;
-//         });
-//     },
-//     //REQUIREMENTO DOS CAMPOS
-//     required(v) {
-//       return !!v || "Campo é obrigatório";
-//     },
-//     //REDIRECIONAMENTO PARA AS PÁGINAS
-//     //CADASTRO
-//     cad() {
-//       this.temlogin = true;
-//     },
-//     //LOGIN
-//     login() {
-//       this.temlogin = false;
-//     },
-//   },
-// };
 </script>
 
 

@@ -1,6 +1,7 @@
-let globalVariables = {
+const globalVariables = {
     id: null,
-    userId: '6514c455e3c7485e973afaf2',
+    userId: '',
+    userData: {}
 }
 
 export default globalVariables
