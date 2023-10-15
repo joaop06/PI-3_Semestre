@@ -71,7 +71,7 @@
         </v-col>
 
         <!-- ************************ CADASTRO ************************ -->
-        <v-col cols="5" class="ma-auto">
+        <v-col cols="8" class="ma-auto">
           <v-sheet
             id="cadastro"
             class="ma-auto pa-5"
@@ -79,7 +79,7 @@
             rounded="lg"
             :elevation="4"
           >
-            <v-list-item-title class="pt-12 mb-n10 text-center">
+            <v-list-item-title class="pt-5 text-center">
               <span
                 class="text-h4 text-brown-lighten-1 font-weight-bold"
                 color="rgb(183, 28, 28)"
@@ -89,14 +89,14 @@
             </v-list-item-title>
 
             <v-card
-              class="ma-5 pa-5 justify-center align-center"
+              class="ma-3 justify-center align-center"
               color="rgb(0,0,0,0)"
               :elevation="0"
               height="50vh"
               align="center"
               justify="center"
             >
-              <v-row class="mt-12">
+              <v-row class="pa-1">
                 <v-text-field
                   v-model="name"
                   color="pink-darken-4"

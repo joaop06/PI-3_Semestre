@@ -12,7 +12,7 @@ import { ref } from 'vue';
 import axios from 'axios'
 import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
-import sergio from '@/controller/globalVariables';
+import gb from '@/controller/globalVariables';
 import { initCustomFormatter } from 'vue';
 import { format } from 'date-fns';
 import BlotFormatter from "quill-blot-formatter";
@@ -64,9 +64,9 @@ export default {
         try {
 
             // const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
-            console.log('id dentro do post: ', sergio.id);
+            console.log('id dentro do post: ', gb.id);
 
-            http.get(`/post?id=${sergio.id}`)
+            http.get(`/post?id=${gb.id}`)
                 .then(response => {
                     const jstring = JSON.stringify(...response.data.rows);
                     const jsonado = JSON.parse(jstring)

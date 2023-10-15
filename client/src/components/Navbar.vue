@@ -6,7 +6,7 @@
     <v-spacer></v-spacer>
 
     <v-tabs centered color="grey-darken-2">
-      <v-tab class="items" v-for="menu in menuItems" :key="menu" :text="menu.title" :to="menu.route"></v-tab>
+      <v-tab class="items" v-for="menu in (user === 'admin' ? menuItemsAdmin : menuItems)" :key="menu" :text="menu.title" :to="menu.route"></v-tab>
     </v-tabs>
     <v-spacer></v-spacer>
 
@@ -14,6 +14,8 @@
   </v-app-bar>
 </template>
 <script>
+import gb from '@/controller/globalVariables'
+
 export default {
   components: {
 
@@ -22,13 +24,22 @@ export default {
     return {
       drawerOpen: false,
       content: '',
-      menuItems: [
+      user: '',
+      menuItemsAdmin: [
         { title: 'Home', route: '/' },
         { title: 'Postagens', route: '/posts' },
         { title: 'Conta', route: '/dashboard' },
         { title: 'Nova Postagem', route: '/newpost' }
+      ],
+      menuItems: [
+        { title: 'Home', route: '/' },
+        { title: 'Postagens', route: '/posts' },
+        { title: 'Conta', route: '/dashboard' },
       ]
     };
+  },
+  mounted (){
+    this.user = 'client';
   },
   methods: {
     toggleDrawer() {

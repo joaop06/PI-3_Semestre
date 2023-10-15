@@ -3,7 +3,6 @@
   <!-- onde coloco a primeira tela a de login, pois ai posso separar admin de cliente -->
 
   <!-- também preciso organizar os posts de uma forma mais 'desorganizada', como no figma -->
-  <Navbar />
   <v-app id="inspire">
     <v-main class="bg-primary">
       <v-container fluid class="container">
@@ -75,7 +74,6 @@
 
 <script>
 import bd from "@/tests/banco.json";
-import Navbar from "@/components/NavbarClient.vue";
 
 export default {
   components: {
