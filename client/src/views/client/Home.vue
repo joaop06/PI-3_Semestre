@@ -77,7 +77,6 @@ import bd from "@/tests/banco.json";
 
 export default {
   components: {
-    Navbar,
   },
   data() {
     return {

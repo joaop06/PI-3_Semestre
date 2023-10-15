@@ -17,20 +17,6 @@ const routes = [
     ],
   },
   {
-    path: '/homeadmin',
-    component: () => import('@/layouts/default/Default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'HomeAdmin',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "home" */ '@/views/admin/HomeAdmin.vue'),
-      },
-    ],
-  },
-  {
     path: '/newpost',
     component: () => import('@/layouts/default/Default.vue'),
     children: [

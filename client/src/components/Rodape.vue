@@ -17,9 +17,10 @@
                 <v-icon class="mx-10" icon="mdi-instagram"></v-icon>
             </a>
 
-            <v-btn class="mx-4" to="/quemsou" variant="outlined">
+            <v-btn class="mx-4" variant="outlined">
                 Quem sou eu?
             </v-btn>
+            <!-- to="/quemsou" -->
         </div>
 
     </v-footer>

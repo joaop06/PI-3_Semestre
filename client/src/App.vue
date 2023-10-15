@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <Navbar/>
+      <Navbar :user-type="userType"/>
       <router-view />
       <Footer/>
     </v-main>
@@ -12,6 +12,7 @@
 // Importe os componentes que você deseja usar
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Rodape.vue'
+import gb from '@/controller/globalVariables'
 
 export default {
   components: {
@@ -20,7 +21,7 @@ export default {
   },
   data() {
     return {
-
+      userType: gb.typeUser,
     }
   },
   // created() {
@@ -30,6 +31,11 @@ export default {
   // },
   mounted() {
     window.scrollTo(0, 0);
+  },
+  //preciso atualizar o componente Navbar de alguma forma para que ele receba as informações do usuario
+  computed(){
+    this.user = gb.typeUser;
+    console.log(gb.typeUser);
   }
 }
 </script>

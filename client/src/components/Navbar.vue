@@ -6,7 +6,7 @@
     <v-spacer></v-spacer>
 
     <v-tabs centered color="grey-darken-2">
-      <v-tab class="items" v-for="menu in (user === 'admin' ? menuItemsAdmin : menuItems)" :key="menu" :text="menu.title" :to="menu.route"></v-tab>
+      <v-tab class="items" v-for="menu in (userType === 'admin' ? menuItemsAdmin : menuItems)" :key="menu" :text="menu.title" :to="menu.route"></v-tab>
     </v-tabs>
     <v-spacer></v-spacer>
 
@@ -17,14 +17,13 @@
 import gb from '@/controller/globalVariables'
 
 export default {
-  components: {
-
-  },
+  props: ['userType'],
   data() {
     return {
       drawerOpen: false,
       content: '',
       user: '',
+      userMenu: [],
       menuItemsAdmin: [
         { title: 'Home', route: '/' },
         { title: 'Postagens', route: '/posts' },
@@ -38,12 +37,33 @@ export default {
       ]
     };
   },
-  mounted (){
-    this.user = 'client';
+  created() {
+    this.updateUserMenu(); // Atualize o menu quando o componente for criado
+  },
+  watch: {
+    userType: 'updateUserMenu' // Monitora userType e chama updateUserMenu quando ele mudar
   },
   methods: {
     toggleDrawer() {
       this.drawerOpen = !this.drawerOpen;
+    },
+    updateUserMenu() {
+      // Verifique o tipo de usuário e atualize o menu com base nisso
+      console.log('chegou aqui', this.userType)
+      if (this.userType === 'admin') {
+        this.userMenu = [
+          { title: 'Home', route: '/' },
+          { title: 'Postagens', route: '/posts' },
+          { title: 'Conta', route: '/dashboard' },
+          { title: 'Nova Postagem', route: '/newpost' }
+        ];
+      } else {
+        this.userMenu = [
+          { title: 'Home', route: '/' },
+          { title: 'Postagens', route: '/posts' },
+          { title: 'Conta', route: '/dashboard' },
+        ];
+      }
     }
   }
 };

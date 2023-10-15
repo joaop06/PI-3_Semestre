@@ -1,7 +1,8 @@
 const globalVariables = {
     id: null,
     userId: '',
-    userData: {}
+    userData: {},
+    typeUser: 'client'
 }
 
 export default globalVariables

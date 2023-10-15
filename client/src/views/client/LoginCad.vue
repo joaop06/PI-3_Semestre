@@ -241,7 +241,13 @@ export default {
         // Dados do Usuário na variável global
         gb.userData = resultLogin.data.userLogin;
         gb.userId = resultLogin.data.userLogin.id;
-        console.log(gb);
+
+        console.log(resultLogin.data.userLogin.isAdmin);
+
+        if(resultLogin.data.userLogin.isAdmin){
+          gb.typeUser = 'admin';
+        }
+        console.log(gb.typeUser);
 
         // Exibe caixa de diálogo
         this.showDialog = true;
@@ -307,13 +313,14 @@ export default {
           name: this.name,
           email: this.emailRegister,
           password: this.passwordRegister,
-          isAdmin: false,
+          isAdmin: true,
         });
 
         if (resultRegister.status == 201) {
           // Exibe Caixa de Diálogo
           this.showDialog = true;
           this.textDialog = "Cadastro realizado com sucesso!";
+
 
           // Desativa Caixa de Diálogo
           setTimeout(() => {
