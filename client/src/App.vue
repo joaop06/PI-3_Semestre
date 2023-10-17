@@ -13,6 +13,7 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Rodape.vue'
 import gb from '@/controller/globalVariables'
+import { nextTick } from 'vue'
 
 export default {
   components: {
@@ -24,11 +25,9 @@ export default {
       userType: gb.typeUser,
     }
   },
-  // created() {
-  //   // Importa o objeto $route do Vue Router
-  //   const { $route } = this.$route
-  //   console.log($route.path) // Verifica o caminho da rota atual
-  // },
+  created() {
+    
+  },
   mounted() {
     window.scrollTo(0, 0);
   },

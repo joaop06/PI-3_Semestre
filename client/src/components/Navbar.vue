@@ -15,6 +15,7 @@
 </template>
 <script>
 import gb from '@/controller/globalVariables'
+import store from '@/store'
 
 export default {
   props: ['userType'],
@@ -37,8 +38,9 @@ export default {
       ]
     };
   },
-  created() {
-    this.updateUserMenu(); // Atualize o menu quando o componente for criado
+  mounted() {
+    this.userType = store.getters.getUser
+    this.updateUserMenu();  // Atualize o menu quando o componente for criado
   },
   watch: {
     userType: 'updateUserMenu' // Monitora userType e chama updateUserMenu quando ele mudar

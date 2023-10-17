@@ -54,7 +54,6 @@ export default {
         };
     },
     mounted() {
-        // Use axios.get para buscar as postagens
         http.get("/post")
             .then(response => {
 
@@ -72,7 +71,6 @@ export default {
                         const other = new Delta(JSON.parse(jsonespecifico));
 
                         this.conteudo(this.converterTexto(other));
-                        //preciso fazer com que a descrição mostre apenas o texto, não [Object Object]
 
                     }
 
