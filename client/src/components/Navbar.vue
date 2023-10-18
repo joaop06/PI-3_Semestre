@@ -15,7 +15,7 @@
 </template>
 <script>
 import gb from '@/controller/globalVariables'
-import store from '@/store'
+// import store from '@/store'
 
 export default {
   props: ['userType'],
@@ -25,6 +25,7 @@ export default {
       content: '',
       user: '',
       userMenu: [],
+      teste: null,
       menuItemsAdmin: [
         { title: 'Home', route: '/' },
         { title: 'Postagens', route: '/posts' },
@@ -39,11 +40,11 @@ export default {
     };
   },
   mounted() {
-    this.userType = store.getters.getUser
+    console.log('mounted navbar', this.userType);
     this.updateUserMenu();  // Atualize o menu quando o componente for criado
   },
   watch: {
-    userType: 'updateUserMenu' // Monitora userType e chama updateUserMenu quando ele mudar
+    userType: 'updateUserMenu', // Monitora userType e chama updateUserMenu quando ele mudar
   },
   methods: {
     toggleDrawer() {

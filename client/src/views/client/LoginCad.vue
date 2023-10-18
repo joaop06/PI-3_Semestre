@@ -181,7 +181,7 @@
 import http from "@/http";
 import router from "@/router/index";
 import gb from "@/controller/globalVariables";
-import store from '@/store';
+// import store from '@/store';
 
 export default {
   data() {
@@ -254,14 +254,13 @@ export default {
         this.showDialog = true;
         this.textDialog = "Login realizado!";
 
-        store.commit('setUser', gb.typeUser)
 
         // Redireciona para Home
         setTimeout(() => {
           router.push({ name: "Home" });
         }, 2000);
 
-        return;
+        // return this.$forceUpdate;
       } catch (error) {
         console.error(error);
 
