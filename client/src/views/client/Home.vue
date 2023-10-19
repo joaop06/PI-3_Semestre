@@ -1,4 +1,5 @@
 <template>
+  <navbar/>
   <!-- depois preciso fazer um navbar para os dois, clientes e admins, penso em fazer uma verificação -->
   <!-- onde coloco a primeira tela a de login, pois ai posso separar admin de cliente -->
 
@@ -74,9 +75,11 @@
 
 <script>
 import bd from "@/tests/banco.json";
+import Navbar from '@/components/Navbar.vue'
 
 export default {
   components: {
+    Navbar,
   },
   data() {
     return {

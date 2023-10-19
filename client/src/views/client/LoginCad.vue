@@ -1,4 +1,5 @@
 <template>
+  <Navbar/>
   <v-container class="pa-12 ma-12">
     <v-sheet id="effectGlass" color="rgb(0, 0, 0, 0)">
       <v-row
@@ -181,9 +182,13 @@
 import http from "@/http";
 import router from "@/router/index";
 import gb from "@/controller/globalVariables";
+import Navbar from '@/components/Navbar.vue';
 // import store from '@/store';
 
 export default {
+  components: {
+    Navbar,
+  },
   data() {
     return {
       // Login
@@ -248,12 +253,14 @@ export default {
         if(resultLogin.data.userLogin.isAdmin){
           gb.typeUser = 'admin';
         }
-        console.log(gb.typeUser);
+        else{
+          gb.typeUser = 'client'
+        }
+        console.log('loginCad',gb.typeUser);
 
         // Exibe caixa de diálogo
         this.showDialog = true;
         this.textDialog = "Login realizado!";
-
 
         // Redireciona para Home
         setTimeout(() => {
@@ -315,7 +322,7 @@ export default {
           name: this.name,
           email: this.emailRegister,
           password: this.passwordRegister,
-          isAdmin: true,
+          isAdmin: false,
         });
 
         if (resultRegister.status == 201) {

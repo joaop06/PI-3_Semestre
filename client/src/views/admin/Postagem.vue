@@ -1,4 +1,5 @@
 <template>
+    <Navbar/>
     <div class="body">
         <br>
         <div v-if="posts.length > 0" class="bg-warning mx-10 h-100">
@@ -42,8 +43,12 @@ import Quill from 'quill';
 import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
 import router from '@/router';
+import Navbar from '@/components/Navbar.vue'
 
 export default {
+    components: {
+    Navbar,
+  },
     data() {
         return {
             titulo: '',

@@ -6,7 +6,8 @@
     <v-spacer></v-spacer>
 
     <v-tabs centered color="grey-darken-2">
-      <v-tab class="items" v-for="menu in (userType === 'admin' ? menuItemsAdmin : menuItems)" :key="menu" :text="menu.title" :to="menu.route"></v-tab>
+      <v-tab class="items" v-for="menu in (user === 'admin' ? menuItemsAdmin : menuItems)" :key="menu"
+        :text="menu.title" :to="menu.route"></v-tab>
     </v-tabs>
     <v-spacer></v-spacer>
 
@@ -15,10 +16,13 @@
 </template>
 <script>
 import gb from '@/controller/globalVariables'
+import { ref, watch } from 'vue'
 // import store from '@/store'
 
+//optei por importar o componente em cada view, assim posso fazer com que ele rendenize corretamente
+//o problema é a reutilização dos códigos, entretanto, declarando em App.vue ele não estava sendo reativo
+
 export default {
-  props: ['userType'],
   data() {
     return {
       drawerOpen: false,
@@ -40,32 +44,18 @@ export default {
     };
   },
   mounted() {
-    console.log('mounted navbar', this.userType);
-    this.updateUserMenu();  // Atualize o menu quando o componente for criado
-  },
-  watch: {
-    userType: 'updateUserMenu', // Monitora userType e chama updateUserMenu quando ele mudar
+    console.log('mounted navbar', gb.typeUser);
+    this.updateUserMenu();
   },
   methods: {
     toggleDrawer() {
       this.drawerOpen = !this.drawerOpen;
     },
     updateUserMenu() {
-      // Verifique o tipo de usuário e atualize o menu com base nisso
-      console.log('chegou aqui', this.userType)
-      if (this.userType === 'admin') {
-        this.userMenu = [
-          { title: 'Home', route: '/' },
-          { title: 'Postagens', route: '/posts' },
-          { title: 'Conta', route: '/dashboard' },
-          { title: 'Nova Postagem', route: '/newpost' }
-        ];
+      if (gb.typeUser === 'admin') {
+        this.user = gb.typeUser;
       } else {
-        this.userMenu = [
-          { title: 'Home', route: '/' },
-          { title: 'Postagens', route: '/posts' },
-          { title: 'Conta', route: '/dashboard' },
-        ];
+        this.user = gb.typeUser;
       }
     }
   }
@@ -73,7 +63,7 @@ export default {
 </script>
 
 <style>
-.items{
+.items {
   font-family: 'Rockwell';
 }
 </style>

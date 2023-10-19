@@ -1,9 +1,8 @@
 <template>
   <v-app>
     <v-main>
-      <Navbar :user-type="userType"/>
       <router-view />
-      <Footer/>
+      <Footer />
     </v-main>
   </v-app>
 </template>
@@ -13,7 +12,7 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Rodape.vue'
 import gb from '@/controller/globalVariables'
-import { nextTick } from 'vue'
+import { nextTick, watch } from 'vue';
 
 export default {
   components: {
@@ -25,16 +24,17 @@ export default {
       userType: gb.typeUser,
     }
   },
+  methods: {
+  },
   created() {
-    
+    console.log('app vue', gb.typeUser);
   },
   mounted() {
     window.scrollTo(0, 0);
   },
   //preciso atualizar o componente Navbar de alguma forma para que ele receba as informações do usuario
-  computed(){
+  computed() {
     this.user = gb.typeUser;
-    console.log(gb.typeUser);
   }
 }
 </script>
