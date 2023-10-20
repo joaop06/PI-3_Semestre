@@ -1,4 +1,5 @@
 <template>
+    <Navbar/>
     <div class=" h-100"><br>
         <div class="mx-15 h-100">
             <QuillEditor></QuillEditor>
@@ -8,12 +9,14 @@
     </div>
 </template>
 <script>
+import Navbar from '@/components/Navbar.vue'
 import QuillEditor from '@/components/QuillPost.vue'
 
 
 export default {
     components: {
-        QuillEditor
+        QuillEditor,
+        Navbar
     },
 }
 </script>

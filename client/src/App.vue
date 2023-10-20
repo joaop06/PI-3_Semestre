@@ -21,20 +21,13 @@ export default {
   },
   data() {
     return {
-      userType: gb.typeUser,
     }
   },
   methods: {
-  },
-  created() {
-    console.log('app vue', gb.typeUser);
   },
   mounted() {
     window.scrollTo(0, 0);
   },
   //preciso atualizar o componente Navbar de alguma forma para que ele receba as informações do usuario
-  computed() {
-    this.user = gb.typeUser;
-  }
 }
 </script>

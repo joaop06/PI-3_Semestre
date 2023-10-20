@@ -1,4 +1,5 @@
 <template>
+  <Navbar />
   <v-layout class="layout rounded rounded-md h-100">
     <v-main>
       <v-layout class="editor align-center justify-center h1--" row wrap>
@@ -11,6 +12,16 @@
     </v-main>
   </v-layout>
 </template>
+
+<script>
+import Navbar from '@/components/Navbar.vue'
+
+export default {
+  components: {
+    Navbar
+  }
+}
+</script>
 
 <script setup>
 import { ref } from 'vue'
@@ -32,9 +43,10 @@ const toggleDrawer = () => {
 </script>
 
 <style>
-.layout{
+.layout {
   background-color: blue;
 }
+
 .editor {
   height: 39rem;
   width: 100%;

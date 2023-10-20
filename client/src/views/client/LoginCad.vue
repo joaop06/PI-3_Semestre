@@ -1,5 +1,4 @@
 <template>
-  <Navbar/>
   <v-container class="pa-12 ma-12">
     <v-sheet id="effectGlass" color="rgb(0, 0, 0, 0)">
       <v-row
@@ -207,6 +206,7 @@ export default {
       // Caixa de Diálogo
       showDialog: false,
       textDialog: "",
+      typeUser: '',
     };
   },
   methods: {
@@ -226,6 +226,9 @@ export default {
 
     // Função de Login
     async login() {
+      //rotas
+      let route = '';
+
       // Verifica valores dos campos
       const verifyEmail = this.required(this.email) == true ? true : false;
       const verifyPass = this.required(this.password) == true ? true : false;
@@ -244,30 +247,38 @@ export default {
           password: this.password,
         });
 
-        // Dados do Usuário na variável global
-        gb.userData = resultLogin.data.userLogin;
-        gb.userId = resultLogin.data.userLogin.id;
+        // Dados do Usuário na variável global e no local storage
+        localStorage.setItem('userData', JSON.stringify(resultLogin.data.userLogin));
+        localStorage.setItem('userId',resultLogin.data.userLogin.id);
 
         console.log(resultLogin.data.userLogin.isAdmin);
 
+        // Verificação Admin
         if(resultLogin.data.userLogin.isAdmin){
-          gb.typeUser = 'admin';
+
+          localStorage.setItem('typeUser', 'admin');
+          console.log('Local Storage typeUser', localStorage.getItem('typeUser'));
+
+          route = 'HomeAdmin';
         }
         else{
-          gb.typeUser = 'client'
+
+          localStorage.setItem('typeUser', 'client');
+          console.log('Local Storage typeUser', localStorage.getItem('typeUser'));
+
+          route = 'Home';
         }
-        console.log('loginCad',gb.typeUser);
 
         // Exibe caixa de diálogo
         this.showDialog = true;
         this.textDialog = "Login realizado!";
 
-        // Redireciona para Home
+
+        // Redireciona para view do tipo do usuário
         setTimeout(() => {
-          router.push({ name: "Home" });
+          router.push({ name: `${route}` });
         }, 2000);
 
-        // return this.$forceUpdate;
       } catch (error) {
         console.error(error);
 

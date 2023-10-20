@@ -1,4 +1,5 @@
 <template>
+    <Navbar />
     <v-container class="bg-primary">
         <v-row>
             <v-col cols="12">
@@ -58,6 +59,9 @@
   
 <script>
 export default {
+    components: {
+        Navbar,
+    },
     data() {
         return {
             user: {
