@@ -1,44 +1,36 @@
 <template>
-  <v-app-bar class="px-3" flat density="compact" scroll-behavior="hide">
-
-    <v-spacer></v-spacer>
-
+  <v-app-bar class="d-flex h-50" flat scroll-behavior="hide">
+    <v-container fluid class="contei">
+      <!-- <v-img :width="200" :height="200" class="imagem" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img> -->
+      <v-row class="bg-primary">
+        <v-col cols="12">
+          <div>
+            <p>oi</p>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row class="bg-green">
+        <v-col cols="12">
+          <div>
+            <p>oi</p>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row class="bg-yellow">
+        <v-col cols="12">
+          <div>
+            <p>oi</p>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- <v-spacer></v-spacer>
+      
     <v-tabs centered color="grey-darken-2">
       <v-tab class="items" v-for="menu in (user === 'admin' ? menuItemsAdmin : menuItems)" :key="menu" :text="menu.title"
         :to="menu.route"></v-tab>
     </v-tabs>
-    <v-spacer></v-spacer>
-
-    <v-menu width="200px" rounded>
-      <template v-slot:activator="{ props }">
-        <v-btn icon v-bind="props">
-          <v-avatar color="brown" size="2.5rem">
-            <span class="text-h5">{{ user.initials }}</span>
-          </v-avatar>
-        </v-btn>
-      </template>
-      <v-card>
-        <v-card-text>
-          <div class="mx-auto text-center">
-            <v-avatar color="brown">
-              <span class="text-h5">{{ user.initials }}</span>
-            </v-avatar>
-            <h3>{{ user.fullName }}</h3>
-            <p class="text-caption mt-1">
-              {{ user.email }}
-            </p>
-            <v-divider class="my-3"></v-divider>
-            <v-btn rounded variant="text">
-              Edit Account
-            </v-btn>
-            <v-divider class="my-3"></v-divider>
-            <v-btn rounded variant="text">
-              Disconnect
-            </v-btn>
-          </div>
-        </v-card-text>
-      </v-card>
-    </v-menu>
+    <v-spacer></v-spacer> -->
   </v-app-bar>
 </template>
 <script>
@@ -97,5 +89,17 @@ export default {
 <style>
 .items {
   font-family: 'Rockwell';
+}
+
+.contei {
+  margin: auto;
+  position: fixed;
+}
+
+.imagem {
+  position: fixed;
+  z-index: 1000;
+  background-color: red;
+  bottom: -150px;
 }
 </style>
