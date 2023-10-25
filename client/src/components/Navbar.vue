@@ -1,29 +1,17 @@
 <template>
-  <v-app-bar class="d-flex h-50" flat scroll-behavior="hide">
-    <v-container fluid class="contei">
-      <!-- <v-img :width="200" :height="200" class="imagem" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img> -->
-      <v-row class="bg-primary">
-        <v-col cols="12">
-          <div>
-            <p>oi</p>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row class="bg-green">
-        <v-col cols="12">
-          <div>
-            <p>oi</p>
-          </div>
-        </v-col>
-      </v-row>
-      <v-row class="bg-yellow">
-        <v-col cols="12">
-          <div>
-            <p>oi</p>
-          </div>
-        </v-col>
-      </v-row>
-    </v-container>
+  <v-app-bar class="" flat scroll-behavior="hide">
+    <v-img class="imagem" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+    <div class="bg-yellow">
+      <div class="line">
+        <p>oi</p>
+      </div>
+      <div class="line">
+        <p>oi</p>
+      </div>
+      <div class="line">
+        <p>oi</p>
+      </div>
+    </div>
     <!-- <v-spacer></v-spacer>
       
     <v-tabs centered color="grey-darken-2">
@@ -91,15 +79,16 @@ export default {
   font-family: 'Rockwell';
 }
 
-.contei {
-  margin: auto;
-  position: fixed;
+.line {
+  display: flex;
+  background-color: blue;
+  border: 1px solid black;
+  width: 100vw;
+  z-index: 900;
 }
 
 .imagem {
-  position: fixed;
-  z-index: 1000;
-  background-color: red;
-  bottom: -150px;
+  width: 30px;
+  z-index: 1000; 
 }
 </style>
