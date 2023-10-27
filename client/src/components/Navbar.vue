@@ -1,24 +1,12 @@
 <template>
-  <v-app-bar class="" flat scroll-behavior="hide">
-    <v-img class="imagem" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-    <div class="bg-yellow">
-      <div class="line">
-        <p>oi</p>
-      </div>
-      <div class="line">
-        <p>oi</p>
-      </div>
-      <div class="line">
-        <p>oi</p>
-      </div>
+  <v-app-bar class="d-flex h-50" flat scroll-behavior="hide">
+    <div class="">
+      <v-img class="imagem" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+      <v-tabs centered color="grey-darken-2">
+        <v-tab class="items" v-for="menu in (user === 'admin' ? menuItemsAdmin : menuItems)" :key="menu"
+          :text="menu.title" :to="menu.route"></v-tab>
+      </v-tabs>
     </div>
-    <!-- <v-spacer></v-spacer>
-      
-    <v-tabs centered color="grey-darken-2">
-      <v-tab class="items" v-for="menu in (user === 'admin' ? menuItemsAdmin : menuItems)" :key="menu" :text="menu.title"
-        :to="menu.route"></v-tab>
-    </v-tabs>
-    <v-spacer></v-spacer> -->
   </v-app-bar>
 </template>
 <script>
@@ -81,14 +69,12 @@ export default {
 
 .line {
   display: flex;
-  background-color: blue;
   border: 1px solid black;
-  width: 100vw;
-  z-index: 900;
+  background-color: blue;
 }
 
-.imagem {
-  width: 30px;
-  z-index: 1000; 
+.imagem{
+  width: 100vw;
+  height: 80vh;
 }
 </style>
