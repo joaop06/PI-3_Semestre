@@ -1,13 +1,21 @@
 <template>
-  <v-app-bar class="d-flex h-50" flat scroll-behavior="hide">
-    <div class="">
-      <v-img class="imagem" src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-      <v-tabs centered color="grey-darken-2">
-        <v-tab class="items" v-for="menu in (user === 'admin' ? menuItemsAdmin : menuItems)" :key="menu"
-          :text="menu.title" :to="menu.route"></v-tab>
-      </v-tabs>
+  <div class="tudo">
+    <div class="imagem" app>
+      <v-spacer></v-spacer>
+      <v-img src="../assets/lilica.png" width="300" height="300"></v-img>
     </div>
-  </v-app-bar>
+    <div class="content">
+      <v-toolbar-items class="mx-auto">
+        <v-tabs centered color=#835D3D>
+          <v-tab class="items" v-for="menu in (user === 'admin' ? menuItemsAdmin : menuItems)" :key="menu"
+            :text="menu.title" :to="menu.route"></v-tab>
+        </v-tabs>
+      </v-toolbar-items>
+      <v-avatar class="avatar">
+        <v-icon icon="mdi-login" color=#835D3D></v-icon>
+      </v-avatar>
+    </div>
+  </div>
 </template>
 <script>
 import gb from '@/controller/globalVariables'
@@ -33,8 +41,11 @@ export default {
       ],
       menuItems: [
         { title: 'Home', route: '/' },
-        { title: 'Postagens', route: '/posts' },
-        { title: 'Conta', route: '/dashboard' },
+        { title: 'Aleatoriedades', route: '/' },
+        { title: 'Livros', route: '/' },
+        { title: 'Filmes & Séries', route: '/' },
+        { title: 'Música', route: '/' },
+        { title: 'Comidinhas', route: '/' }
       ]
     };
   },
@@ -63,18 +74,26 @@ export default {
 </script>
 
 <style>
+.tudo{
+  background-color: #F7CFCD;
+}
+.avatar{
+  border: 1px solid black;  
+  margin: 2px;
+}
 .items {
   font-family: 'Rockwell';
 }
 
-.line {
+.imagem {
   display: flex;
-  border: 1px solid black;
-  background-color: blue;
+  margin: auto;
+  height: 100px;
+  width: 400px;
 }
 
-.imagem{
-  width: 100vw;
-  height: 80vh;
+.content {
+  display: flex;
+  justify-content: center;
 }
 </style>

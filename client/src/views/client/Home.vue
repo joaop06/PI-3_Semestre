@@ -1,11 +1,7 @@
 <template>
   <navbar/>
-  <!-- depois preciso fazer um navbar para os dois, clientes e admins, penso em fazer uma verificação -->
-  <!-- onde coloco a primeira tela a de login, pois ai posso separar admin de cliente -->
-
-  <!-- também preciso organizar os posts de uma forma mais 'desorganizada', como no figma -->
-  <v-app id="inspire">
-    <v-main class="bg-primary">
+    <v-app id="inspire">
+    <v-main class="">
       <v-container fluid class="container">
         <v-row class="linha" wrap>
           <v-col
@@ -17,26 +13,11 @@
             lg="3"
             class="conteudoColuna"
           >
-            <v-card class="cards">
-              <v-img
-                class="align-end text-white"
-                height="200"
-                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                cover
-              >
-                <v-card-title>{{ post.titulo }}</v-card-title>
-              </v-img>
-
-              <v-card-text class="content">
-                {{ textoLimitado }}
-              </v-card-text>
-
-              <v-card-actions>
-                <v-btn class="bg-primary" color="orange">
-                  CONTINUAR LENDO
-                </v-btn>
-              </v-card-actions>
-            </v-card>
+          <v-card class="cards" title="Card title" text="..." variant="tonal">
+            <v-card-actions>
+              <v-btn>Click me</v-btn>
+            </v-card-actions>
+          </v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -46,13 +27,12 @@
 
 <style>
 .container {
-  background-color: yellow;
+  background-color: white;
   height: 100%;
 }
 
 .linha {
   display: flex;
-  background-color: pink;
   margin: auto;
   border-radius: 10px;
   justify-content: baseline;
