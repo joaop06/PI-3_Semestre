@@ -31,3 +31,9 @@ export default {
   //preciso atualizar o componente Navbar de alguma forma para que ele receba as informações do usuario
 }
 </script>
+<style>
+@font-face {
+  font-family: 'Balsamiq Sans';
+  src: url('./fonts/BalsamiqSans-Regular.ttf') format('ttf');
+}
+</style>

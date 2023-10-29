@@ -1,6 +1,7 @@
 <template>
   <navbar />
   <v-app id="inspire">
+    <!-- agora preciso que toda vez que essa view for aberta, busque as postagens, randomize e mostre apenas 7 -->
     <div class="grid-container">
       <!-- <v-container fluid class="container">
         <v-row class="linha" wrap>

@@ -1,36 +1,36 @@
 <template>
     <Navbar />
-    <v-container class="bg-primary">
+    <v-container class="">
         <v-row>
-            <v-col cols="12">
-                <h1 class="d-flex align-center justify-center">Administração de Conta</h1>
+            <v-col cols="12" class="coluna">
+                <h1 class="titulo">Seja bem vindo à sua conta!!</h1>
             </v-col>
         </v-row>
 
         <v-row>
-            <v-col class="bg-warning d-flex justify-center" cols="12">
+            <v-col class="d-flex justify-center" cols="12">
                 <v-card class="card">
                     <div class="mt-10 d-flex justify-center">
-                        <v-avatar size="100">
-                            <v-img :src="user.avatar" />
+                        <v-avatar class="avatar" size="120">
+                            <v-img :height="100" :src="user.avatar" />
                         </v-avatar>
                     </div>
                     <br>
-                    <h2 class="d-flex justify-center">{{ user.name }}</h2>
+                    <h2 class="text d-flex justify-center">{{ user.name }}</h2>
                     <v-divider></v-divider>
-                    <p class="d-flex justify-center">Email: {{ user.email }}</p>
+                    <p class="text d-flex justify-center">Email: {{ user.email }}</p>
                     <v-divider></v-divider><br>
                     <div class="d-flex justify-center">
-                        <v-btn class="mx-3" color="primary" @click="showPasswordDialog = true" icon>
+                        <v-btn class="mx-3 button"  @click="showPasswordDialog = true" title="trocar senha" icon>
                             <v-icon>mdi-lock</v-icon>
                         </v-btn>
-                        <v-btn class="mx-3" color="error" @click="deleteAccount" icon>
+                        <v-btn class="mx-3 button" @click="showDeleteDialog = true" title="apagar conta" icon>
                             <v-icon>mdi-delete</v-icon>
                         </v-btn>
-                        <v-btn class="mx-3" color="primary" @click="editProfile" icon>
+                        <v-btn class="mx-3 button" @click="editProfile" title="editar" icon>
                             <v-icon>mdi-pencil</v-icon>
                         </v-btn>
-                        <v-btn class="mx-3" color="primary" @click="logout" icon>
+                        <v-btn class="mx-3 button" @click="logout" title="sair da conta" icon>
                             <v-icon>mdi-logout</v-icon>
                         </v-btn>
                     </div>
@@ -38,6 +38,7 @@
             </v-col>
         </v-row>
 
+        <!-- confirmação para alteração de senha -->
         <v-dialog v-model="showPasswordDialog" max-width="400">
             <v-card>
                 <v-card-title>Alterar Senha</v-card-title>
@@ -54,25 +55,50 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
+
+        <!-- confirmação para deleção de usuario -->
+        <v-dialog v-model="showDeleteDialog" max-width="400">
+            <v-card>
+                <v-card-title>Tem certeza que deseja apagar?</v-card-title>
+                <v-card-text>
+                    <label>Você perderá todos os seus dados, sem possibilidade de reave-los</label>
+                </v-card-text>
+                <v-card-actions class="buttons">
+                    <v-btn id='buttonDialogE' color="error" @click="showDeleteDialog = false">Cancelar</v-btn>
+                    <v-btn id='buttonDialogD' color="primary" @click="deleteAccount()">Deletar mesmo assim</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </v-container>
 </template>
   
 <script>
+import Navbar from '@/components/Navbar.vue';
+import router from "@/router/index";
+import http from '@/http'
+
 export default {
     components: {
         Navbar,
     },
     data() {
         return {
+            usuario: '',
             user: {
-                name: "Nome do Usuário",
-                email: "usuario@example.com",
-                avatar: "https://upload.wikimedia.org/wikipedia/commons/e/e9/Manoel_Gomes_em_2022_%28cortado%29.jpg",
+                name: " ",
+                email: " ",
+                avatar: "/src/assets/icon.png",
             },
+            showDeleteDialog: false,
             showPasswordDialog: false,
             password: "",
             confirmPassword: "",
         };
+    },
+    created(){
+        this.usuario = JSON.parse(sessionStorage.getItem('userData'));
+        this.user.name = this.usuario.name;
+        this.user.email = this.usuario.email;
     },
     methods: {
         changePassword() {
@@ -86,20 +112,60 @@ export default {
         },
         deleteAccount() {
             // Lógica para deletar a conta aqui
+            
+            // console.log('oi')
+            // console.log('userData ', this.usuario.id);
+
+            // http.delete(`user?id=${this.usuario.id}`)
+
         },
         editProfile() {
             // Lógica para editar o perfil aqui
         },
         logout() {
             // Lógica para fazer logout aqui
+            let route = '';
+
+            sessionStorage.removeItem('userData');
+            sessionStorage.setItem('typeUser', 'client');
+            sessionStorage.removeItem('userId');
+
+            route = 'Home'
+
+            router.push({ name: `${route}` });
         },
     },
 };
 </script>
   
 <style scoped>
+
+.coluna{
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+}
 .card {
     width: 40vw;
     height: 60vh;
+}
+
+.titulo{
+    font-weight: bold;
+    font-family: 'Balsamiq Sans', 'Comic Sans';
+}
+
+.button{
+    background-color: #835D3D;
+    color: white;
+}
+
+.avatar{
+    background-color: white !important;
+}
+
+.text{
+    font-size: 20px;
+    font-family: 'Balsamiq Sans', sans-serif;
 }
 </style>

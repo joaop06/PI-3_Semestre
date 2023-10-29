@@ -2,6 +2,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
+
+  //rotas admin
+  
   {
     path: '/',
     component: () => import('@/layouts/default/Default.vue'),
@@ -86,8 +89,11 @@ const routes = [
       },
     ],
   },
+
+  //rotas pra ambos, admin e client
+
   {
-    path: '/enter',
+    path: '/login',
     component: () => import('@/layouts/default/Default.vue'),
     children: [
       {
@@ -100,6 +106,94 @@ const routes = [
       },
     ],
   },
+
+  //rotas client
+
+  //aleatoriedades
+
+  {
+    path: '/aleatoriedades',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Aleatoriedades',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/client/AleatoriedadePost.vue'),
+      },
+    ],
+  },
+  
+  // comidas
+
+  {
+    path: '/comidas',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Comidas',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/client/ComidasPost.vue'),
+      },
+    ],
+  },
+  
+  //Filmes & Séries
+
+  {
+    path: '/filmeserie',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'FilmeSerie',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/client/FilmeSeriePost.vue'),
+      },
+    ],
+  },  
+
+  // Livros
+
+  {
+    path: '/livros',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Livros',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/client/LivrosPost.vue'),
+      },
+    ],
+  },  
+  
+  // Musica
+
+  {
+    path: '/musica',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'Musica',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/client/MusicaPost.vue'),
+      },
+    ],
+  },
+
 ]
 
 const router = createRouter({

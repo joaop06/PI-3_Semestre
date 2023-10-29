@@ -1,5 +1,5 @@
 <template>
-    <v-footer border class="bg-indigo-lighten-1 text-center d-flex flex-column">
+    <v-footer border class="rodape text-center d-flex flex-column">
         <div>
             <a class="link" href="mailto:lilicaindica@gmail.com" target="_blank">
                 <v-icon class="mx-10" icon="mdi-email"></v-icon>
@@ -36,5 +36,8 @@ export default {
 .link{
     text-decoration: none;
     color: black;
+}
+.rodape{
+    background-color: #F7CFCD !important;
 }
 </style>

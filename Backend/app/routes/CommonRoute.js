@@ -25,7 +25,7 @@ class CommonRoute {
   async pi_3(req, res) {
     res.status(200).send({
       curso: "DSM",
-      periodo: "Notrno",
+      periodo: "Noturno",
       integrantes: [
         {
           nome: "João Pedro Borges Araújo",

@@ -1,4 +1,7 @@
 <template>
+  <v-app-bar flat class="nav">
+    <v-btn class="button" icon="mdi-home" to="/"></v-btn>
+  </v-app-bar>
   <v-container class="pa-12 ma-12">
     <v-sheet id="effectGlass" color="rgb(0, 0, 0, 0)">
       <v-row
@@ -247,24 +250,25 @@ export default {
           password: this.password,
         });
 
-        // Dados do Usuário na variável global e no local storage
-        localStorage.setItem('userData', JSON.stringify(resultLogin.data.userLogin));
-        localStorage.setItem('userId',resultLogin.data.userLogin.id);
+        // Aqui os dados são salvos dentro de uma sessionStorage, assim os dados não
+        //ficaram permanentemente salvos, quando fechar a guia, os dados são apagados
+        sessionStorage.setItem('userData', JSON.stringify(resultLogin.data.userLogin));
+        sessionStorage.setItem('userId',resultLogin.data.userLogin.id);
 
         console.log(resultLogin.data.userLogin.isAdmin);
 
         // Verificação Admin
         if(resultLogin.data.userLogin.isAdmin){
 
-          localStorage.setItem('typeUser', 'admin');
-          console.log('Local Storage typeUser', localStorage.getItem('typeUser'));
+          sessionStorage.setItem('typeUser', 'admin');
+          console.log('Session Storage typeUser', sessionStorage.getItem('typeUser'));
 
           route = 'HomeAdmin';
         }
         else{
 
-          localStorage.setItem('typeUser', 'client');
-          console.log('Local Storage typeUser', localStorage.getItem('typeUser'));
+          sessionStorage.setItem('typeUser', 'client');
+          console.log('Session Storage typeUser', sessionStorage.getItem('typeUser'));
 
           route = 'Home';
         }
@@ -375,6 +379,12 @@ export default {
 
 
 <style>
+.nav{
+  background-color: #F7CFCD !important;
+}
+.button{
+  border: 1px solid black;
+}
 .v-main {
   background-color: rgb(248, 196, 194);
   background-image: url("../../../public/logo-LilicaIndica-removebg.png");

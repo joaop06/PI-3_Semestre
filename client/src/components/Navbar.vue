@@ -11,14 +11,13 @@
             :text="menu.title" :to="menu.route"></v-tab>
         </v-tabs>
       </v-toolbar-items>
-      <v-avatar class="avatar">
-        <v-icon icon="mdi-login" color=#835D3D></v-icon>
-      </v-avatar>
+      <v-btn class="avatar" icon="mdi-account-outline" size="small" @click="temLogin()"></v-btn>
     </div>
   </div>
 </template>
 <script>
 import gb from '@/controller/globalVariables'
+import router from "@/router/index";
 import { ref, watch } from 'vue'
 // import store from '@/store'
 
@@ -41,27 +40,39 @@ export default {
       ],
       menuItems: [
         { title: 'Home', route: '/' },
-        { title: 'Aleatoriedades', route: '/' },
-        { title: 'Livros', route: '/' },
-        { title: 'Filmes & Séries', route: '/' },
-        { title: 'Música', route: '/' },
-        { title: 'Comidinhas', route: '/' }
+        { title: 'Aleatoriedades', route: '/aleatoriedades' },
+        { title: 'Livros', route: '/livros' },
+        { title: 'Filmes & Séries', route: '/filmeserie' },
+        { title: 'Música', route: '/musica' },
+        { title: 'Comidinhas', route: '/comidas' }
       ]
     };
   },
   mounted() {
-    console.log('mounted navbar', localStorage.getItem('typeUser'));
+    console.log('mounted navbar', sessionStorage.getItem('typeUser'));
     this.updateUserMenu();
   },
   methods: {
+    
+    //função para verificar se ele já está logado, caso esteja, redireciona
+    //para dashboard, caso não esteja, vai para login
     temLogin() {
-      //fazer uma função para verificar se está logado, mostrando as opções corretas no avatar
+      let route = '';
+
+      if(!sessionStorage.getItem('userData')){
+        route = 'Login';
+      }
+      else{
+        route = 'Conta';
+      }
+
+      router.push({ name: `${route}` });
     },
     toggleDrawer() {
       this.drawerOpen = !this.drawerOpen;
     },
     updateUserMenu() {
-      let typeUser = localStorage.getItem('typeUser');
+      let typeUser = sessionStorage.getItem('typeUser');
       console.log(typeUser);
       if (typeUser === 'admin') {
         this.user = typeUser;
@@ -78,8 +89,9 @@ export default {
   background-color: #F7CFCD;
 }
 .avatar{
-  border: 1px solid black;  
+  border: 1px solid black !important;  
   margin: 2px;
+  background-color: #F7CFCD !important;
 }
 .items {
   font-family: 'Rockwell';
