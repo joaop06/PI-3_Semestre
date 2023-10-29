@@ -1,8 +1,8 @@
 <template>
-  <navbar/>
-    <v-app id="inspire">
-    <v-main class="">
-      <v-container fluid class="container">
+  <navbar />
+  <v-app id="inspire">
+    <div class="grid-container">
+      <!-- <v-container fluid class="container">
         <v-row class="linha" wrap>
           <v-col
             v-for="post in posts"
@@ -20,36 +20,142 @@
           </v-card>
           </v-col>
         </v-row>
-      </v-container>
-    </v-main>
+      </v-container> -->
+      <div class="grid-item" id="item1">
+        <v-card class="cards" variant="tonal">
+          <v-card-title class="title">Card Title</v-card-title>
+          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
+          <v-card-actions>
+            <v-btn class="buttonB">Continuar lendo</v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <div class="grid-item" id="item2">
+        <v-card class="cards" variant="tonal">
+          <v-card-title class="title">Card Title</v-card-title>
+          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
+          <v-card-actions>
+            <v-btn class="buttonB">Continuar lendo</v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <div class="grid-item" id="item3">
+        <v-card class="cards" variant="tonal">
+          <v-card-title class="title">Card Title</v-card-title>
+          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
+          <v-card-actions>
+            <v-btn class="buttonB">Continuar lendo</v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <div class="grid-item" id="item4">
+        <v-card class="cards" variant="tonal">
+          <v-card-title class="title">Card Title</v-card-title>
+          <v-card-text class="text">{{textoCompleto}}</v-card-text>
+          <v-card-actions id="buttonP">
+            <v-btn class="buttonB">Continuar lendo</v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <div class="grid-item" id="item5">
+        <v-card class="cards" variant="tonal">
+          <v-card-title class="title">Card Title</v-card-title>
+          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
+          <v-card-actions>
+            <v-btn class="buttonB">Continuar lendo</v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <div class="grid-item" id="item6">
+        <v-card class="cards" variant="tonal">
+          <v-card-title class="title">Card Title</v-card-title>
+          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
+          <v-card-actions>
+            <v-btn class="buttonB">Continuar lendo</v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+      <div class="grid-item" id="item7">
+        <v-card class="cards" variant="tonal">
+          <v-card-title class="title">Card Title</v-card-title>
+          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
+          <v-card-actions>
+            <v-btn class="buttonB">Continuar lendo</v-btn>
+          </v-card-actions>
+        </v-card>
+      </div>
+    </div>
   </v-app>
 </template>
 
 <style>
-.container {
-  background-color: white;
-  height: 100%;
+.grid-container {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  background-color: #ffffff;
+  padding: 30px;
 }
 
-.linha {
-  display: flex;
-  margin: auto;
+.grid-item {
+  background-color: #f7cfcdb6;
+  border: 1px solid rgba(0, 0, 0, 0.8);
   border-radius: 10px;
-  justify-content: baseline;
-}
-
-.coluna {
-  width: 100vw;
-  background-color: green;
+  padding: 10px;
+  font-size: 30px;
+  text-align: center;
 }
 
 .cards {
-  max-width: 100%;
-  max-height: 400px;
+  width: 100%;
+  height: 100%;
 }
 
-.content {
-  font-family: "Open Sans";
+#buttonP {
+  margin-top: 100%;
+}
+
+.buttonB{
+  border: 1px solid white;
+  background-color: #835D3D;
+  color: white;
+  font-family: 'Balsamiq Sans', sans-serif;
+  font-weight: bold;
+}
+
+#item1 {
+  grid-row: span 2;
+  grid-column: span 2;
+}
+
+#item2 {
+  grid-row: span 3;
+  grid-column: span 1;
+}
+
+#item3 {
+  grid-row: span 3;
+  grid-column: span 1;
+}
+
+#item4 {
+  grid-row: span 10;
+  grid-column: span 2;
+}
+
+#item5 {
+  grid-row: span 8;
+  grid-column: span 1;
+}
+
+#item6 {
+  grid-row: span 8;
+  grid-column: span 1;
+}
+
+#item7 {
+  grid-row: span 6;
+  grid-column: span 2;
 }
 </style>
 
@@ -63,7 +169,7 @@ export default {
   },
   data() {
     return {
-      textocompleto:
+      textoCompleto:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur recusandae maxime repellat quas quaerat necessitatibus ea commodi. Minus totam nobis repellendus laboriosam ullam autem debitis, pariatur perspiciatis, atque ipsam quo.", //variavel para pegar o texto futuramente
       limiteCaracteres: 150, //limitador dos caracteres
       posts: bd,
