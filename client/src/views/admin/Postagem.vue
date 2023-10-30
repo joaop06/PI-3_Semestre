@@ -59,6 +59,9 @@ export default {
         };
     },
     mounted() {
+        // const id = sessionStorage.getItem('userId');
+        // console.log(id)
+        //tentar fazer um filtro pelo id também
         http.get("/post")
             .then(response => {
 

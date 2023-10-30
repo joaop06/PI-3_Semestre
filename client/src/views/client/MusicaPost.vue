@@ -59,7 +59,7 @@ export default {
         };
     },
     mounted() {
-        http.get("/post")
+        http.get("/post?typePost=musicas")
             .then(response => {
 
                 if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
