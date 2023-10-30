@@ -1,7 +1,6 @@
 const CommonService = require("./CommonService")
 const PostService = require('./PostService')
 
-
 class FavoritesListService extends CommonService {
   constructor(modelName) {
     super(modelName)

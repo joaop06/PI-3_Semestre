@@ -1,6 +1,5 @@
 const CommonService = require('./CommonService')
 const UserService = require('./UserService')
-const moment = require('moment')
 
 class PostService extends CommonService {
     constructor(modelName) {

@@ -1,6 +1,4 @@
 const CommonService = require('./CommonService')
-// const FavoritesListService = require('./FavoritesListService')
-const { FavoritesList } = require('@prisma/client')
 const prisma = require('../config/prisma')
 let error // For error handling
 
@@ -97,13 +95,13 @@ class UserService extends CommonService {
 
     // Deleta a Lista de Favoritos do usuário
     try {
-      // Nova instância FavoritesList
-      this.favoritesListService = new FavoritesListService('FavoritesList')
-      await this.favoritesListService.delete({}, req, next, { where: { userId: id } })
+      const favoriteListId = await prisma.FavoritesList.findFirst({ where: { userId: id } })
+      await prisma.FavoritesList.delete({ where: { id: favoriteListId.id } })
 
     } catch (error) {
       return next(new Error('Erro ao deletar Lista de Favoritos'))
     }
+
 
     return await super.delete(id, req, next)
   }
