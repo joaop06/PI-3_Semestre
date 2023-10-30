@@ -32,8 +32,9 @@ export default {
 }
 </script>
 <style>
+
 @font-face {
   font-family: 'Balsamiq Sans';
-  src: url('./fonts/BalsamiqSans-Regular.ttf') format('ttf');
+  src: url('./fonts/BalsamiqSans-Regular.ttf')format('ttf');
 }
 </style>

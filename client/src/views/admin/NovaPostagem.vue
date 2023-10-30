@@ -29,13 +29,6 @@ import QuillEditor from '@/components/Editor.vue'
 
 const drawerOpen = ref(false);
 
-const menuItems = [
-  { title: 'Nova postagem', route: '/newpost' },
-  { title: 'Postagens', route: '/postagens' },
-  { title: 'Conta', route: '/dashboard' },
-  { title: 'Home', route: '/inicio' }
-];
-
 const toggleDrawer = () => {
   drawerOpen.value = !drawerOpen.value;
 };
@@ -44,7 +37,7 @@ const toggleDrawer = () => {
 
 <style>
 .layout {
-  background-color: blue;
+  background-color:  rgb(248, 196, 194);
 }
 
 .editor {
@@ -63,6 +56,5 @@ const toggleDrawer = () => {
   background-color: white;
   height: 90%;
   width: 100%;
-  border-radius: 10px;
 }
 </style>

@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="quilleditor_text" ref="editor" />
+        <br>
         <div>{{caracter}}/{{tamanho}}</div><br>
         <v-btn class="buttonPost" @click.prevent="getDialog" append-icon="mdi-post" variant="tonal" rounded="10px">
             POST
@@ -65,10 +66,13 @@ export default {
             titulo: '',
             caracter: 0,
             tamanho: 400,
-            assunto: ''
+            assunto: '',
+            usuario: ''
         }
     },
     mounted() {
+        this.usuario = sessionStorage.getItem('userId');
+        console.log('user Id', this.usuario);
 
         Quill.register('modules/blotFormatter', BlotFormatter);
         Quill.register('modules/imageCompress', ImageCompress);
@@ -152,19 +156,12 @@ export default {
                 this.successDialog = true;
 
                 const form = {
-                    user_id: gb.userId,
+                    user_id: this.usuario,
                     title: this.titulo,
                     contentPost: jsonado,
                     typePost: this.assunto.toLowerCase(),
                 }
 
-                //criar o usuario por meio do get, olha a rota user
-
-                // const formjson = JSON.stringify(form);
-
-                // const tamanhoEmBytes = new Blob([formjson]).size;
-
-                // console.log('tamanho',tamanhoEmBytes / (1024 * 1024), 'mb');
 
                 console.log(form);
 
@@ -207,13 +204,10 @@ export default {
 <style>
 .quilleditor_text {
     background-color: white;
-    height: 90%;
-    width: 100%;
-    border-radius: 10px;
 }
 
 .buttonPost {
-    background-color: rgb(0, 241, 221);
+    background-color:#835D3D;
     width: 150px;
     height: 30px;
 }

@@ -17,9 +17,9 @@
                     </div>
                     <br>
                     <h2 class="text d-flex justify-center">{{ user.name }}</h2>
-                    <v-divider></v-divider>
+                    <br>
                     <p class="text d-flex justify-center">Email: {{ user.email }}</p>
-                    <v-divider></v-divider><br>
+                    <br>
                     <div class="d-flex justify-center">
                         <v-btn class="mx-3 button"  @click="showPasswordDialog = true" title="trocar senha" icon>
                             <v-icon>mdi-lock</v-icon>
@@ -116,7 +116,7 @@ export default {
             // console.log('oi')
             // console.log('userData ', this.usuario.id);
 
-            // http.delete(`user?id=${this.usuario.id}`)
+            http.delete(`/user?id=${this.usuario.id}`)
 
         },
         editProfile() {
@@ -148,6 +148,7 @@ export default {
 .card {
     width: 40vw;
     height: 60vh;
+    border: 2px solid black;
 }
 
 .titulo{
