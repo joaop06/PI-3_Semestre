@@ -2,6 +2,7 @@
     <Navbar/>
     <div class="body">
         <br>
+        <h1 class="d-flex justify-center">FAVORITOS</h1>
         <div v-if="posts.length > 0" class="mx-10 h-100">
             <br>
             <v-card v-for="(post, index) in posts" :key="post.id" class="post ma-6" variant="outlined">
@@ -21,7 +22,7 @@
                     <v-list-item>
                         <template v-slot:append>
                             <div class="justify-self-end">
-                                <v-btn icon="mdi-heart" @click="liked(post.id)" variant="plain" alt="like"></v-btn>
+                                <v-btn icon="mdi-heart" variant="plain" alt="like"></v-btn>
                                 <v-btn icon="mdi-star" variant="plain" alt="favorite"></v-btn>
                                 <span class="subheading me-2">{{ post.likes }}</span>
                             </div>
@@ -54,14 +55,13 @@ export default {
             titulo: '',
             description: '',
             posts: [],
-            userId: '',
             conteudoPost: [],
             limiteCaracteres: 50,
         };
     },
     mounted() {
-        this.userId = sessionStorage.getItem('userId');
-        console.log(this.userId)
+        // const id = sessionStorage.getItem('userId');
+        // console.log(id)
         //tentar fazer um filtro pelo id também
         http.get("/post")
             .then(response => {
@@ -69,7 +69,7 @@ export default {
                 if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
                     this.posts = response.data.rows;
 
-                    console.log('posts aqui: ',this.posts);
+                    console.log(this.posts);
 
                     const stringado = JSON.stringify(this.posts);
                     const jsonado = JSON.parse(stringado);
@@ -109,22 +109,13 @@ export default {
         },
         verDetalhes(idPost) {
             console.log('id aqui: ', idPost);
-            sessionStorage.setItem('idPost', idPost);
-            console.log('id aqui na session: ', sessionStorage.getItem('idPost'));
+            gb.id = idPost;
+            console.log('id aqui na global: ', gb);
 
             router.push({ path: '/post' })
         },
-        async liked(idPost) {
+        Like() {
             // método para mandar as informações do usuario e adicionar um like
-            console.log('id do post que veio', idPost);
-
-           await http.get(`/post?id=${idPost}&liked=true`, {
-                usersLikeID: [this.userId],
-            })
-            .then(response => {
-                console.log(response);
-            })
-            
         },
         Fav() {
             // método para mandar as informações do usuario e adicionar aos favs

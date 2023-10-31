@@ -64,9 +64,10 @@ export default {
         try {
 
             // const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
-            console.log('id dentro do post: ', gb.id);
+            console.log('id dentro do post: ', sessionStorage.getItem('idPost'));
+            const idPost = sessionStorage.getItem('idPost'); 
 
-            http.get(`/post?id=${gb.id}`)
+            http.get(`/post?id=${idPost}`)
                 .then(response => {
                     const jstring = JSON.stringify(...response.data.rows);
                     const jsonado = JSON.parse(jstring)

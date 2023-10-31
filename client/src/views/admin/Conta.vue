@@ -30,6 +30,12 @@
                         <v-btn class="mx-3 button" @click="editProfile" title="editar" icon>
                             <v-icon>mdi-pencil</v-icon>
                         </v-btn>
+                        <v-btn class="mx-3 button" @click="likesview" title="curtidas" icon>
+                            <v-icon>mdi-heart</v-icon>
+                        </v-btn>
+                        <v-btn class="mx-3 button" @click="favsview" title="favoritos" icon>
+                            <v-icon>mdi-star</v-icon>
+                        </v-btn>
                         <v-btn class="mx-3 button" @click="logout" title="sair da conta" icon>
                             <v-icon>mdi-logout</v-icon>
                         </v-btn>
@@ -133,6 +139,12 @@ export default {
             route = 'Home'
 
             router.push({ name: `${route}` });
+        },
+        likesview(){
+            router.push({name: 'LikeView'});
+        },
+        favsview(){
+            router.push({name: 'FavsView'});
         },
     },
 };

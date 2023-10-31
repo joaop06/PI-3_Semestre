@@ -194,6 +194,40 @@ const routes = [
     ],
   },
 
+  // Favoritos
+
+  {
+    path: '/favoritos',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'FavsView',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/client/FavsView.vue'),
+      },
+    ],
+  },
+
+  // Likes
+
+  {
+    path: '/curtidas',
+    component: () => import('@/layouts/default/Default.vue'),
+    children: [
+      {
+        path: '',
+        name: 'LikeView',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "home" */ '@/views/client/LikesView.vue'),
+      },
+    ],
+  },
+
 ]
 
 const router = createRouter({
