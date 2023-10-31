@@ -79,9 +79,8 @@ class PostService extends CommonService {
             if (liked === 'false') {
                 /* O filter serve para deixar na lista de like somente os IDs que são diferentes do ID informado,
                     ou seja, remove o ID informado, tanto da publicação, quanto do usuário, removendo a curtida. */
-
-                userUpdate.set = findUser[0].postsLikedID.filter(id => id !== postId) // Remove ID da Publicação
-                postUpdate.set = findPost[0].usersLikeID.filter(id => id !== post.usersLikeID[0]) // Remove ID do Usuário
+                userUpdate.set = findUser.postsLikedID.filter(id => id !== postId) // Remove ID da Publicação
+                postUpdate.set = findPost.usersLikeID.filter(id => id !== post.usersLikeID[0]) // Remove ID do Usuário
             }
 
             // Atualiza no registro do usuário, removendo a curtida
