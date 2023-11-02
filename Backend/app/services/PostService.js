@@ -49,7 +49,7 @@ class PostService extends CommonService {
         }
 
         // Atualização de Curtidas da Publicação
-        if (liked) {
+        if (![null, undefined].includes(liked) && post.usersLikeID) {
             // Nova Instância UserService
             this.userService = new UserService('User')
 
@@ -72,6 +72,16 @@ class PostService extends CommonService {
             if (liked === 'true') {
                 /* Adiciona os IDs correspondentes as listagens de like, tanto da Publicação
                     quanto do Usuário, adicionando uma nova curtida */
+
+                let verifyLiked = await super.findUnique({ where: { id: postId } })
+                verifyLiked = verifyLiked.usersLikeID.find(like => like === post.usersLikeID[0])
+
+                if (verifyLiked) {
+                    const error = new Error('Usuário já curtiu essa postagem')
+                    error.statusCode = 400
+                    return next(error)
+                }
+
                 userUpdate.push = [postId] // Add ID da Publicação
                 postUpdate.push = post.usersLikeID[0] // Add ID do Usuário
             }
@@ -103,6 +113,9 @@ class PostService extends CommonService {
                 }
             })
         }
+
+        // Caso não entre na alteração de curtidas
+        if (post.usersLikeID) delete post.usersLikeID
 
         return await super.update(post, req, next)
     }
