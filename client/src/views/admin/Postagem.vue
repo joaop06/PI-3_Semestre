@@ -21,7 +21,10 @@
                     <v-list-item>
                         <template v-slot:append>
                             <div class="justify-self-end">
-                                <v-btn icon="mdi-heart" @click="liked(post.id)" variant="plain" alt="like"></v-btn>
+                                <v-btn @click="toggleLikeDislike(post.id)" v-model="post.liked">
+                                    <v-icon>{{ post.likedIcon }}</v-icon>
+                                </v-btn>
+                                <!-- <v-btn icon="mdi-heart" @click="liked(post.id)" variant="plain" alt="like"></v-btn> -->
                                 <v-btn icon="mdi-star" @click="Fav(post.id)" variant="plain" alt="favorite"></v-btn>
                                 <span class="subheading me-2">{{ post.likes }}</span>
                             </div>
@@ -57,14 +60,20 @@ export default {
             userId: '',
             conteudoPost: [],
             liked: false,
+            likedIcon: false,
             limiteCaracteres: 50,
         };
     },
-    mounted() {
+    async mounted() {
         this.userId = sessionStorage.getItem('userId');
-        console.log(this.userId)
+        const userData = JSON.parse(sessionStorage.getItem('userData'));
+
+        console.log('userID: ', this.userId);
+        console.log('userData: ', userData);
+        console.log('userData PostsLiked: ', userData.postsLikedID);
+
         //tentar fazer um filtro pelo id também
-        http.get("/post")
+        await http.get("/post")
             .then(response => {
 
                 if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
@@ -82,7 +91,13 @@ export default {
 
                         this.conteudo(this.converterTexto(other));
 
+                        this.posts[i].liked = userData.postsLikedID.includes(this.posts[i].id);
+                        console.log('este post é: ',this.posts[i].liked, this.posts[i].id);
+                        this.posts[i].likedIcon = this.posts[i].liked ? 'mdi-heart-off' : 'mdi-heart';
+                        console.log(this.posts[i].likedIcon)
+
                     }
+
 
                 } else {
                     console.warn('Nenhuma postagem encontrada na resposta da API.');
@@ -96,6 +111,18 @@ export default {
         //necessito fazer uma verificação para saber quando um post já foi curtido ou não, para poder dar deslike e desfav
     },
     methods: {
+        toggleLikeDislike(postId) {
+            
+            if (!this.liked) {
+                this.liked = true;
+                this.likedIcon = true;
+                console.log('like')
+            } else {
+                this.liked = false;
+                this.likedIcon = false;
+                console.log('deslike')
+            }
+        },
         converterTexto(delta) {
             let text = '';
             delta.ops.forEach(op => {
