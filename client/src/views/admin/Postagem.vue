@@ -21,8 +21,9 @@
                     <v-list-item>
                         <template v-slot:append>
                             <div class="justify-self-end">
-                                <v-btn @click="toggleLikeDislike(post.id)" v-model="post.liked">
-                                    <v-icon>{{ post.likedIcon }}</v-icon>
+                                <v-btn @click="toggleLikeDislike(post.id, post.liked)" v-model="post.liked">
+                                    <v-icon v-if="post.liked" id="like">mdi-heart-off</v-icon>
+                                    <v-icon v-else id="deslike">mdi-heart</v-icon>
                                 </v-btn>
                                 <!-- <v-btn icon="mdi-heart" @click="liked(post.id)" variant="plain" alt="like"></v-btn> -->
                                 <v-btn icon="mdi-star" @click="Fav(post.id)" variant="plain" alt="favorite"></v-btn>
@@ -59,7 +60,7 @@ export default {
             posts: [],
             userId: '',
             conteudoPost: [],
-            liked: false,
+            liked: [],
             likedIcon: false,
             limiteCaracteres: 50,
         };
@@ -92,9 +93,10 @@ export default {
                         this.conteudo(this.converterTexto(other));
 
                         this.posts[i].liked = userData.postsLikedID.includes(this.posts[i].id);
+                        // console.log('likado: ', this.liked[i])
                         console.log('este post é: ',this.posts[i].liked, this.posts[i].id);
                         this.posts[i].likedIcon = this.posts[i].liked ? 'mdi-heart-off' : 'mdi-heart';
-                        console.log(this.posts[i].likedIcon)
+                        // console.log(this.posts[i].likedIcon)
 
                     }
 
@@ -111,16 +113,11 @@ export default {
         //necessito fazer uma verificação para saber quando um post já foi curtido ou não, para poder dar deslike e desfav
     },
     methods: {
-        toggleLikeDislike(postId) {
-            
-            if (!this.liked) {
-                this.liked = true;
-                this.likedIcon = true;
-                console.log('like')
+        toggleLikeDislike(postId, like) {
+            if (like) {
+                console.log('dar deslike');
             } else {
-                this.liked = false;
-                this.likedIcon = false;
-                console.log('deslike')
+                this.likeds(postId);
             }
         },
         converterTexto(delta) {
@@ -142,7 +139,7 @@ export default {
 
             router.push({ path: '/post' })
         },
-        async liked(idPost) {
+        async likeds(idPost) {
             // Pega o valor da sessionStorage
             const userId = sessionStorage.getItem('userId');
 
