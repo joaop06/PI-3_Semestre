@@ -49,6 +49,8 @@ import gb from '@/controller/globalVariables';
 import router from '@/router';
 import Navbar from '@/components/Navbar.vue'
 
+const userData = JSON.parse(sessionStorage.getItem('userData'));
+
 export default {
     components: {
         Navbar,
@@ -67,7 +69,6 @@ export default {
     },
     async mounted() {
         this.userId = sessionStorage.getItem('userId');
-        const userData = JSON.parse(sessionStorage.getItem('userData'));
 
         console.log('userID: ', this.userId);
         console.log('userData: ', userData);
@@ -94,8 +95,8 @@ export default {
 
                         this.posts[i].liked = userData.postsLikedID.includes(this.posts[i].id);
                         // console.log('likado: ', this.liked[i])
-                        console.log('este post é: ',this.posts[i].liked, this.posts[i].id);
-                        this.posts[i].likedIcon = this.posts[i].liked ? 'mdi-heart-off' : 'mdi-heart';
+                        console.log('este post é: ', this.posts[i].liked, this.posts[i].id);
+                        // this.posts[i].likedIcon = this.posts[i].liked ? 'mdi-heart-off' : 'mdi-heart';
                         // console.log(this.posts[i].likedIcon)
 
                     }
@@ -117,6 +118,7 @@ export default {
             if (like) {
                 console.log('dar deslike');
             } else {
+                console.log('chegou aqui')
                 this.likeds(postId);
             }
         },
@@ -140,24 +142,43 @@ export default {
             router.push({ path: '/post' })
         },
         async likeds(idPost) {
+            let postVerification = false;
+
+            for (let i = 0; i < this.posts.length; i++) {
+                if (idPost == userData.postsLikedID[i]) {
+                    console.log('igual');
+                    console.log('idPost: ', idPost);
+                    console.log('PostsLikedID: ', userData.postsLikedID[i]);
+                    i = this.posts.length - i;
+                }
+                else {
+                    console.log('post não curtido');
+                    console.log('idPost: ', idPost);
+                    console.log('PostsLikedID: ', userData.postsLikedID[i]);
+                    postVerification = true;
+                    i = this.posts.length - i;
+                }
+            }
             // Pega o valor da sessionStorage
             const userId = sessionStorage.getItem('userId');
+            if (postVerification) {
 
-            // Faz a requisição HTTP
-            const response = await http.put(`/post?id=${idPost}&liked=true`, {
-                usersLikeID: [userId],
-            });
+                //Faz a requisição HTTP
+                const response = await http.put(`/post?id=${idPost}&liked=true`, {
+                    usersLikeID: [userId],
+                });
 
-            // Verifica se a requisição foi bem sucedida
-            if (response.status === 200) {
-                // Obtem os dados da resposta
-                const data = response.data;
+                // Verifica se a requisição foi bem sucedida
+                if (response.status === 200) {
+                    // Obtem os dados da resposta
+                    const data = response.data;
 
-                // Faz alguma coisa com os dados da resposta
-                // ...
-            } else {
-                // A requisição falhou
-                console.error('Erro ao mandar like:', response.statusText);
+                    // Faz alguma coisa com os dados da resposta
+                    // ...
+                } else {
+                    // A requisição falhou
+                    console.error('Erro ao mandar like:', response.statusText);
+                }
             }
         },
         async Fav(idPost) {

@@ -337,7 +337,7 @@ export default {
           name: this.name,
           email: this.emailRegister,
           password: this.passwordRegister,
-          isAdmin: false,
+          isAdmin: true,
         });
 
         if (resultRegister.status == 201) {
