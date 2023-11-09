@@ -21,9 +21,8 @@
                     <v-list-item>
                         <template v-slot:append>
                             <div class="justify-self-end">
-                                <v-btn @click="toggleLikeDislike(post.id, post.liked)" v-model="post.liked">
-                                    <v-icon v-if="post.liked" id="like">mdi-heart-off</v-icon>
-                                    <v-icon v-else id="deslike">mdi-heart</v-icon>
+                                <v-btn @click="toggleLikeDislike(post.id, post.liked)">
+                                    <v-icon>{{ post.liked ? 'mdi-heart-off' : 'mdi-heart' }}</v-icon>
                                 </v-btn>
                                 <!-- <v-btn icon="mdi-heart" @click="liked(post.id)" variant="plain" alt="like"></v-btn> -->
                                 <v-btn icon="mdi-star" @click="Fav(post.id)" variant="plain" alt="favorite"></v-btn>
@@ -67,48 +66,18 @@ export default {
             limiteCaracteres: 50,
         };
     },
-    async mounted() {
+    async created() {
         this.userId = sessionStorage.getItem('userId');
 
         console.log('userID: ', this.userId);
         console.log('userData: ', userData);
         console.log('userData PostsLiked: ', userData.postsLikedID);
 
-        //tentar fazer um filtro pelo id também
-        await http.get("/post")
-            .then(response => {
+        this.buscarPosts();
 
-                if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
-                    this.posts = response.data.rows;
-
-                    console.log('posts aqui: ', this.posts);
-
-                    const stringado = JSON.stringify(this.posts);
-                    const jsonado = JSON.parse(stringado);
-
-                    for (let i = 0; i < this.posts.length; i++) {
-
-                        const jsonespecifico = jsonado[i]?.contentPost;
-                        const other = new Delta(JSON.parse(jsonespecifico));
-
-                        this.conteudo(this.converterTexto(other));
-
-                        this.posts[i].liked = userData.postsLikedID.includes(this.posts[i].id);
-                        // console.log('likado: ', this.liked[i])
-                        console.log('este post é: ', this.posts[i].liked, this.posts[i].id);
-                        // this.posts[i].likedIcon = this.posts[i].liked ? 'mdi-heart-off' : 'mdi-heart';
-                        // console.log(this.posts[i].likedIcon)
-
-                    }
-
-
-                } else {
-                    console.warn('Nenhuma postagem encontrada na resposta da API.');
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao buscar as postagens:', error);
-            });
+    },
+    async mounted() {
+        
     },
     computed: {
         //necessito fazer uma verificação para saber quando um post já foi curtido ou não, para poder dar deslike e desfav
@@ -121,6 +90,42 @@ export default {
                 console.log('chegou aqui')
                 this.likeds(postId);
             }
+        },
+        async buscarPosts() {
+            await http.get("/post")
+                .then(response => {
+
+                    if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
+                        this.posts = response.data.rows;
+
+                        console.log('posts aqui: ', this.posts);
+
+                        const stringado = JSON.stringify(this.posts);
+                        const jsonado = JSON.parse(stringado);
+
+                        for (let i = 0; i < this.posts.length; i++) {
+
+                            const jsonespecifico = jsonado[i]?.contentPost;
+                            const other = new Delta(JSON.parse(jsonespecifico));
+
+                            this.conteudo(this.converterTexto(other));
+
+                            this.posts[i].liked = userData.postsLikedID.includes(this.posts[i].id);
+                            // console.log('likado: ', this.liked[i])
+                            console.log('este post é: ', this.posts[i].liked, this.posts[i].id);
+                            // this.posts[i].likedIcon = this.posts[i].liked ? 'mdi-heart-off' : 'mdi-heart';
+                            // console.log(this.posts[i].likedIcon)
+
+                        }
+
+
+                    } else {
+                        console.warn('Nenhuma postagem encontrada na resposta da API.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar as postagens:', error);
+                });
         },
         converterTexto(delta) {
             let text = '';
@@ -173,8 +178,9 @@ export default {
                     // Obtem os dados da resposta
                     const data = response.data;
 
-                    // Faz alguma coisa com os dados da resposta
-                    // ...
+                    const userData = JSON.parse(sessionStorage.getItem('userData'));
+                    userData.postsLikedID.push(idPost);
+                    sessionStorage.setItem('userData', JSON.stringify(userData));
                 } else {
                     // A requisição falhou
                     console.error('Erro ao mandar like:', response.statusText);
