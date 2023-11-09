@@ -73,7 +73,7 @@ class PostService extends CommonService {
                 /* Adiciona os IDs correspondentes as listagens de like, tanto da Publicação
                     quanto do Usuário, adicionando uma nova curtida */
 
-                let verifyLiked = await super.findUnique({ where: { id: postId } })
+                let verifyLiked = await super.findUnique(next, { where: { id: postId } })
                 verifyLiked = verifyLiked.usersLikeID.find(like => like === post.usersLikeID[0])
 
                 if (verifyLiked) {
