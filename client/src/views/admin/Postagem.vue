@@ -24,8 +24,9 @@
                                 <v-btn @click="toggleLikeDislike(post.id, post.liked)">
                                     <v-icon>{{ post.liked ? 'mdi-heart-off' : 'mdi-heart' }}</v-icon>
                                 </v-btn>
-                                <!-- <v-btn icon="mdi-heart" @click="liked(post.id)" variant="plain" alt="like"></v-btn> -->
-                                <v-btn icon="mdi-star" @click="Fav(post.id)" variant="plain" alt="favorite"></v-btn>
+                                <v-btn @click="toggleFavoriteUnFavorite(post.id, post.favorited)">
+                                    <v-icon>{{ post.favorited ? 'mdi-star-off' : 'mdi-star' }}</v-icon>
+                                </v-btn>
                                 <span class="subheading me-2">{{ post.likes }}</span>
                             </div>
                         </template>
@@ -92,6 +93,16 @@ export default {
                 this.likeds(postId);
             }
         },
+        toggleFavoriteUnFavorite(postId, favorite) {
+            console.log(favorite)
+            if (favorite) {
+                console.log('dar unfav');
+                this.Unfav(postId);
+            } else {
+                console.log('dar fav');
+                this.Fav(postId);
+            }
+        },
         async buscarPosts() {
             await http.get("/post")
                 .then(response => {
@@ -112,7 +123,8 @@ export default {
                             this.conteudo(this.converterTexto(other));
 
                             this.posts[i].liked = !!this.posts[i].usersLikeID.find((likeUser) => likeUser === userData.id);
-                            // console.log('likado: ', this.posts[i]);
+                            this.posts[i].favorited = !!this.posts[i].favoritesListId.find((favoriteUser) => favoriteUser === userData.id);
+                            console.log('\nfavoritado : ', this.posts[i].favorited);
                             // this.posts[i].likedIcon = this.posts[i].liked ? 'mdi-heart-off' : 'mdi-heart';
                             // console.log(this.posts[i].likedIcon)
 
@@ -145,23 +157,7 @@ export default {
             router.push({ path: '/post' })
         },
         async likeds(idPost) {
-            let postVerification = false;
 
-            for (let i = 0; i < this.posts.length; i++) {
-                if (idPost == userData.postsLikedID[i]) {
-                    console.log('igual');
-                    console.log('idPost: ', idPost);
-                    console.log('PostsLikedID: ', userData.postsLikedID[i]);
-                    i = this.posts.length - i;
-                }
-                else {
-                    console.log('post não curtido');
-                    console.log('idPost: ', idPost);
-                    console.log('PostsLikedID: ', userData.postsLikedID[i]);
-                    postVerification = true;
-                    i = this.posts.length - i;
-                }
-            }
             // Pega o valor da sessionStorage
             const userId = sessionStorage.getItem('userId');
 
@@ -194,42 +190,41 @@ export default {
         },
         async deslike(idPost) {
 
-                // Pega o valor da sessionStorage
-                const userId = sessionStorage.getItem('userId');
-
-                //Faz a requisição HTTP
-                const response = await http.put(`/post?id=${idPost}&liked=false`, {
-                    usersLikeID: [userId],
-                });
-
-                // Verifica se a requisição foi bem sucedida
-                if (response.status === 200) {
-                    // Obtem os dados da resposta
-                    const data = response.data;
-
-                    const indexPostUpdate = this.posts.findIndex((post) => post.id === idPost);
-
-                    if (this.posts[indexPostUpdate] && this.posts[indexPostUpdate].hasOwnProperty('liked')) {
-                        this.posts[indexPostUpdate].liked = false;
-                    } else {
-                        console.error('Objeto ou propriedade não encontrada para atribuição.');
-                    }
-
-                    const userData = JSON.parse(sessionStorage.getItem('userData'));
-                    userData.postsLikedID.push(idPost);
-                    sessionStorage.setItem('userData', JSON.stringify(userData));
-
-                } else {
-                    // A requisição falhou
-                    console.error('Erro ao dar deslike:', response.statusText);
-                }
-        },
-        async Fav(idPost) {
-            // método para mandar as informações do usuario e adicionar aos favs
             // Pega o valor da sessionStorage
             const userId = sessionStorage.getItem('userId');
 
-            // Faz a requisição HTTP
+            //Faz a requisição HTTP
+            const response = await http.put(`/post?id=${idPost}&liked=false`, {
+                usersLikeID: [userId],
+            });
+
+            // Verifica se a requisição foi bem sucedida
+            if (response.status === 200) {
+                // Obtem os dados da resposta
+                const data = response.data;
+
+                const indexPostUpdate = this.posts.findIndex((post) => post.id === idPost);
+
+                if (this.posts[indexPostUpdate] && this.posts[indexPostUpdate].hasOwnProperty('liked')) {
+                    this.posts[indexPostUpdate].liked = false;
+                } else {
+                    console.error('Objeto ou propriedade não encontrada para atribuição.');
+                }
+
+                const userData = JSON.parse(sessionStorage.getItem('userData'));
+                userData.postsLikedID.pop(idPost);
+                sessionStorage.setItem('userData', JSON.stringify(userData));
+
+            } else {
+                // A requisição falhou
+                console.error('Erro ao dar deslike:', response.statusText);
+            }
+        },
+        async Fav(idPost) {
+            // Pega o valor da sessionStorage
+            const userId = sessionStorage.getItem('userId');
+
+            //Faz a requisição HTTP
             const response = await http.put(`/post?id=${idPost}&favorite=true`, {
                 favoritesListId: [userId],
             });
@@ -239,11 +234,55 @@ export default {
                 // Obtem os dados da resposta
                 const data = response.data;
 
-                // Faz alguma coisa com os dados da resposta
-                // ...
+                const indexPostUpdate = this.posts.findIndex((post) => post.id === idPost);
+
+                if (this.posts[indexPostUpdate] && this.posts[indexPostUpdate].hasOwnProperty('favorited')) {
+                    this.posts[indexPostUpdate].favorited = true;
+                } else {
+                    console.error('Objeto ou propriedade não encontrada para atribuição.');
+                }
+
+                const userData = JSON.parse(sessionStorage.getItem('userData'));
+                for(let i = 0; i < this.posts.length; i++){
+                    if(this.posts[i].id == idPost){
+                        this.posts[i].favoritesListId.pop(userId);
+                    }
+                }
+                sessionStorage.setItem('userData', JSON.stringify(userData));
+
             } else {
                 // A requisição falhou
-                console.error('Erro ao mandar favorito:', response.statusText);
+                console.error('Erro ao mandar like:', response.statusText);
+            }
+        },
+        async Unfav(idPost) {
+            // Pega o valor da sessionStorage
+            const userId = sessionStorage.getItem('userId');
+
+            //Faz a requisição HTTP
+            const response = await http.put(`/post?id=${idPost}&favorite=false`, {
+                favoritesListId: [userId],
+            });
+
+            // Verifica se a requisição foi bem sucedida
+            if (response.status === 200) {
+                // Obtem os dados da resposta
+                const data = response.data;
+
+                const indexPostUpdate = this.posts.findIndex((post) => post.id === idPost);
+
+                if (this.posts[indexPostUpdate] && this.posts[indexPostUpdate].hasOwnProperty('favorited')) {
+                    this.posts[indexPostUpdate].favorited = false;
+                } else {
+                    console.error('Objeto ou propriedade não encontrada para atribuição.');
+                }
+
+                const userData = JSON.parse(sessionStorage.getItem('userData'));
+                sessionStorage.setItem('userData', JSON.stringify(userData));
+
+            } else {
+                // A requisição falhou
+                console.error('Erro ao mandar like:', response.statusText);
             }
         }
     }

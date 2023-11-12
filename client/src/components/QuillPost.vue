@@ -15,7 +15,6 @@ import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
 import { initCustomFormatter } from 'vue';
 import { format } from 'date-fns';
-import BlotFormatter from "quill-blot-formatter";
 
 
 export default {
@@ -29,6 +28,12 @@ export default {
         }
     },
     mounted() {
+
+        class CustomImageSpec extends ImageSpec {
+            getActions() {
+                return [AlignAction, DeleteAction];
+            }
+        }
 
 
         const quillOptions = {
@@ -65,7 +70,7 @@ export default {
 
             // const other = new Delta(JSON.parse(jsonado)); //pra transformar de volta em delta
             console.log('id dentro do post: ', sessionStorage.getItem('idPost'));
-            const idPost = sessionStorage.getItem('idPost'); 
+            const idPost = sessionStorage.getItem('idPost');
 
             http.get(`/post?id=${idPost}`)
                 .then(response => {

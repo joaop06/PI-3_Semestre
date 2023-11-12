@@ -2,7 +2,7 @@
     <div>
         <div class="quilleditor_text" ref="editor" />
         <br>
-        <div>{{caracter}}/{{tamanho}}</div><br>
+        <div>{{ caracter }}/{{ tamanho }}</div><br>
         <v-btn class="buttonPost" @click.prevent="getDialog" append-icon="mdi-post" variant="tonal" rounded="10px">
             POST
         </v-btn><br>
@@ -53,7 +53,6 @@ import { Delta } from '@vueup/vue-quill';
 import gb from '@/controller/globalVariables';
 import { initCustomFormatter } from 'vue';
 
-import BlotFormatter from "quill-blot-formatter";
 import ImageCompress from 'quill-image-compress';
 
 
@@ -71,10 +70,10 @@ export default {
         }
     },
     mounted() {
+
         this.usuario = sessionStorage.getItem('userId');
         console.log('user Id', this.usuario);
 
-        Quill.register('modules/blotFormatter', BlotFormatter);
         Quill.register('modules/imageCompress', ImageCompress);
 
         const quillOptions = {
@@ -92,7 +91,6 @@ export default {
                     [{ 'indent': '-1' }, { 'indent': '+1' }],
                     ['image', 'link']
                 ],
-                blotFormatter: {},
                 imageCompress: {
                     quality: 0.9,
                     maxWidth: 300,
@@ -136,7 +134,7 @@ export default {
             const maxLength = this.tamanho;
             const text = this.quill.getText();
             this.caracter = text.length;
-            
+
             if (text.length > maxLength) {
                 this.quill.deleteText(maxLength - 1, text.length);
             }
@@ -207,7 +205,7 @@ export default {
 }
 
 .buttonPost {
-    background-color:#835D3D;
+    background-color: #835D3D;
     width: 150px;
     height: 30px;
 }
