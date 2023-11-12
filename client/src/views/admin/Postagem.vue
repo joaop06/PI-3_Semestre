@@ -77,7 +77,7 @@ export default {
 
     },
     async mounted() {
-        
+
     },
     computed: {
         //necessito fazer uma verificação para saber quando um post já foi curtido ou não, para poder dar deslike e desfav
@@ -86,8 +86,9 @@ export default {
         toggleLikeDislike(postId, like) {
             if (like) {
                 console.log('dar deslike');
+                this.deslike(postId);
             } else {
-                console.log('chegou aqui')
+                console.log('dar like');
                 this.likeds(postId);
             }
         },
@@ -110,9 +111,8 @@ export default {
 
                             this.conteudo(this.converterTexto(other));
 
-                            this.posts[i].liked = userData.postsLikedID.includes(this.posts[i].id);
-                            // console.log('likado: ', this.liked[i])
-                            console.log('este post é: ', this.posts[i].liked, this.posts[i].id);
+                            this.posts[i].liked = !!this.posts[i].usersLikeID.find((likeUser) => likeUser === userData.id);
+                            // console.log('likado: ', this.posts[i]);
                             // this.posts[i].likedIcon = this.posts[i].liked ? 'mdi-heart-off' : 'mdi-heart';
                             // console.log(this.posts[i].likedIcon)
 
@@ -140,9 +140,7 @@ export default {
             this.conteudoPost.push(texto);
         },
         verDetalhes(idPost) {
-            console.log('id aqui: ', idPost);
             sessionStorage.setItem('idPost', idPost);
-            console.log('id aqui na session: ', sessionStorage.getItem('idPost'));
 
             router.push({ path: '/post' })
         },
@@ -166,10 +164,41 @@ export default {
             }
             // Pega o valor da sessionStorage
             const userId = sessionStorage.getItem('userId');
-            if (postVerification) {
+
+            //Faz a requisição HTTP
+            const response = await http.put(`/post?id=${idPost}&liked=true`, {
+                usersLikeID: [userId],
+            });
+
+            // Verifica se a requisição foi bem sucedida
+            if (response.status === 200) {
+                // Obtem os dados da resposta
+                const data = response.data;
+
+                const indexPostUpdate = this.posts.findIndex((post) => post.id === idPost);
+
+                if (this.posts[indexPostUpdate] && this.posts[indexPostUpdate].hasOwnProperty('liked')) {
+                    this.posts[indexPostUpdate].liked = true;
+                } else {
+                    console.error('Objeto ou propriedade não encontrada para atribuição.');
+                }
+
+                const userData = JSON.parse(sessionStorage.getItem('userData'));
+                userData.postsLikedID.push(idPost);
+                sessionStorage.setItem('userData', JSON.stringify(userData));
+
+            } else {
+                // A requisição falhou
+                console.error('Erro ao mandar like:', response.statusText);
+            }
+        },
+        async deslike(idPost) {
+
+                // Pega o valor da sessionStorage
+                const userId = sessionStorage.getItem('userId');
 
                 //Faz a requisição HTTP
-                const response = await http.put(`/post?id=${idPost}&liked=true`, {
+                const response = await http.put(`/post?id=${idPost}&liked=false`, {
                     usersLikeID: [userId],
                 });
 
@@ -178,14 +207,22 @@ export default {
                     // Obtem os dados da resposta
                     const data = response.data;
 
+                    const indexPostUpdate = this.posts.findIndex((post) => post.id === idPost);
+
+                    if (this.posts[indexPostUpdate] && this.posts[indexPostUpdate].hasOwnProperty('liked')) {
+                        this.posts[indexPostUpdate].liked = false;
+                    } else {
+                        console.error('Objeto ou propriedade não encontrada para atribuição.');
+                    }
+
                     const userData = JSON.parse(sessionStorage.getItem('userData'));
                     userData.postsLikedID.push(idPost);
                     sessionStorage.setItem('userData', JSON.stringify(userData));
+
                 } else {
                     // A requisição falhou
-                    console.error('Erro ao mandar like:', response.statusText);
+                    console.error('Erro ao dar deslike:', response.statusText);
                 }
-            }
         },
         async Fav(idPost) {
             // método para mandar as informações do usuario e adicionar aos favs
