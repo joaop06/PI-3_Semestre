@@ -123,10 +123,7 @@ export default {
                             this.conteudo(this.converterTexto(other));
 
                             this.posts[i].liked = !!this.posts[i].usersLikeID.find((likeUser) => likeUser === userData.id);
-                            this.posts[i].favorited = !!this.posts[i].favoritesListId.find((favoriteUser) => favoriteUser === userData.id);
-                            console.log('\nfavoritado : ', this.posts[i].favorited);
-                            // this.posts[i].likedIcon = this.posts[i].liked ? 'mdi-heart-off' : 'mdi-heart';
-                            // console.log(this.posts[i].likedIcon)
+                            // this.posts[i].favorited = !!this.posts[i].favoritesListId.find((favoriteUser) => favoriteUser === userData.id);
 
                         }
 
