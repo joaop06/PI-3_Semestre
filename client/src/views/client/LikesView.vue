@@ -80,9 +80,6 @@ export default {
     async mounted() {
 
     },
-    computed: {
-        //necessito fazer uma verificação para saber quando um post já foi curtido ou não, para poder dar deslike e desfav
-    },
     methods: {
         toggleLikeDislike(postId, like) {
             if (like) {
@@ -128,7 +125,6 @@ export default {
                             // this.posts[i].favorited = !!this.posts[i].favoritesListId.find((favoriteUser) => favoriteUser === userData.id);
 
                         }
-
 
                     } else {
                         console.warn('Nenhuma postagem encontrada na resposta da API.');
