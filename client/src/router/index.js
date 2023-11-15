@@ -230,9 +230,20 @@ const routes = [
 
 ]
 
+
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+})
+
+let redirected = false
+router.beforeEach((to, from, next) => {
+  if (to.name === 'Home' && !redirected) {
+    redirected = true
+    next({ name: 'Login' }) // Redireciona apenas na primeira vez que "/" é acessado
+  } else {
+    next()
+  }
 })
 
 export default router

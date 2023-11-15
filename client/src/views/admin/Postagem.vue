@@ -96,8 +96,8 @@ export default {
         toggleFavoriteUnFavorite(postId, favorite) {
             console.log(favorite)
             if (favorite) {
-                console.log('dar unfav');
-                this.Unfav(postId);
+                // console.log('dar unfav');
+                // this.Unfav(postId);
             } else {
                 console.log('dar fav');
                 this.Fav(postId);
@@ -123,7 +123,8 @@ export default {
                             this.conteudo(this.converterTexto(other));
 
                             this.posts[i].liked = !!this.posts[i].usersLikeID.find((likeUser) => likeUser === userData.id);
-                            // this.posts[i].favorited = !!this.posts[i].favoritesListId.find((favoriteUser) => favoriteUser === userData.id);
+                            this.posts[i].favorited = !!this.posts[i].favoritesListId.find((favoriteUser) => favoriteUser === userData.id);
+                            console.log('favoritado: ',this.posts[i].favorited);
 
                         }
 
@@ -220,18 +221,21 @@ export default {
         async Fav(idPost) {
             // Pega o valor da sessionStorage
             const userId = sessionStorage.getItem('userId');
-
+            
+            console.log(userId);
+            console.log(idPost)
             //Faz a requisição HTTP
-            const response = await http.put(`/post?id=${idPost}&favorite=true`, {
-                favoritesListId: [userId],
+            const response = await http.put(`/favorites-list?id=${userId}&favorite=true`, {
+                postsFavoritesId: [idPost],
             });
-
+            
             // Verifica se a requisição foi bem sucedida
             if (response.status === 200) {
                 // Obtem os dados da resposta
                 const data = response.data;
 
                 const indexPostUpdate = this.posts.findIndex((post) => post.id === idPost);
+                console.log('indexPost: ',indexPostUpdate)
 
                 if (this.posts[indexPostUpdate] && this.posts[indexPostUpdate].hasOwnProperty('favorited')) {
                     this.posts[indexPostUpdate].favorited = true;
@@ -249,7 +253,7 @@ export default {
 
             } else {
                 // A requisição falhou
-                console.error('Erro ao mandar like:', response.statusText);
+                console.error('Erro ao mandar fav:', response.statusText);
             }
         },
         async Unfav(idPost) {
