@@ -45,66 +45,67 @@ class FavoritesListService extends CommonService {
     return result
   }
 
-  async update(favoritesList, req, next) {
-    const { id: listId, favorite } = req.query
+  async update(object, req, next) {
+    try {
+      const { id: userId, favorite } = req.query
 
-    if (!listId) {
-      const error = new Error('ID de Lista de Favoritos não informado')
-      error.statusCode = 400
-      return next(error)
-    }
-
-    if (favorite) {
-      // Nova Instância PostService
-      this.postService = new PostService('Post')
-
-      // Encontra a Publicação a ser Atualizada
-      const findPost = await this.postService.findUnique(next, { where: { id: favoritesList.postsFavoritesId[0] } })
-      const findFavoritesList = await super.findUnique(next, { where: { id: listId } })
-      if (!findFavoritesList) {
-        const error = new Error('Lista de Favoritos não encontrada')
-        error.statusCode = 404
-        return next(error)
-      }
+      // ** \\
+      if (!userId) throw new Error('Usuário não informado')
 
 
-      const listUpdate = {}
-      const postUpdate = {}
+      // Atualizar de Post na Lista de Favoritos (Adicionar ou Remover)
+      if (favorite) {
+        this.postService = new PostService('Post') // Nova Instância PostService
 
-      // Adicionar Postagem a alguma lista de favoritos
-      if (favorite === 'true') {
-        postUpdate.push = [listId]
-        listUpdate.push = favoritesList.postsFavoritesId[0] // Add ID da Postagem
-      }
+        // Encontra a Publicação a ser Atualizada
+        const post = await this.postService.findUnique(next, { where: { id: object.postsFavoritesId[0] } })
+        const favoritesList = await super.findUnique(next, { where: { userId: userId } })
 
-      // Remover Postagem da Lista de Favoritos
-      if (favorite === 'false') {
-        postUpdate.set = findPost[0].favoritesListId.filter(id => id !== listId) // Remove ID da Lista de Favoritos
-        listUpdate.set = findFavoritesList[0].postsFavoritesId.filter(id => id !== favoritesList.postsFavoritesId[0])
-      }
+        // ** \\
+        if (!favoritesList) throw new Error('Lista de Favoritos não encontrada')
 
-      // Atualiza as listas de favoritos da Postagem 
-      await this.postService.directUpdate({
-        where: { id: favoritesList.postsFavoritesId[0] },
-        data: {
-          favoritesListId: {
-            ...postUpdate
-          }
+
+        const listUpdate = {}
+        const postUpdate = {}
+
+        // Adicionar Postagem a Lista de Favoritos (usando `push`, parâmetro do Mongo)
+        if (favorite === 'true') {
+          listUpdate.push = object.postsFavoritesId[0] // Add ID da Postagem
+          postUpdate.push = [favoritesList.id]
         }
-      })
 
-      // Atualiza a Lista de Favoritos com a nova postagem
-      return await super.update({
-        where: { id: listId },
-        data: {
-          postsFavoritesId: {
-            ...listUpdate // Adicione aqui o ID do usuário a ser adicionado à matriz
-          }
+        // Remover Postagem da Lista de Favoritos
+        if (favorite === 'false') {
+          listUpdate.set = favoritesList.postsFavoritesId.filter(id => id !== favoritesList.postsFavoritesId[0])
+          postUpdate.set = post.favoritesListId.filter(id => id !== favoritesList.id) // Remove ID da Lista de Favoritos
         }
-      })
-    }
 
-    return await super.update(favoritesList, req, next)
+        // Atualiza a Postagem 
+        await this.postService.directUpdate({
+          where: { id: object.postsFavoritesId[0] },
+          data: {
+            favoritesListId: {
+              ...postUpdate
+            }
+          }
+        })
+
+        // Atualiza a Lista de Favoritos
+        return await super.update({
+          where: { id: favoritesList.id },
+          data: {
+            postsFavoritesId: {
+              ...listUpdate // Adicione aqui o ID do usuário a ser adicionado à matriz
+            }
+          }
+        })
+      }
+
+      return await super.update(favoritesList, req, next)
+
+    } catch (e) {
+      return next(e)
+    }
   }
 }
 

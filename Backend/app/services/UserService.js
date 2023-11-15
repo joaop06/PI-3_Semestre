@@ -22,7 +22,6 @@ class UserService extends CommonService {
 
     delete userLogin.password
     return { message: "Login realizado!", userLogin }
-
   }
 
   async findMany(req) {
