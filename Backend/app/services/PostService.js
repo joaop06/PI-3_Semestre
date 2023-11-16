@@ -1,5 +1,7 @@
-const CommonService = require('./CommonService')
+const prisma = require('../config/prisma')
 const UserService = require('./UserService')
+const CommonService = require('./CommonService')
+
 
 class PostService extends CommonService {
     constructor(modelName) {
@@ -118,6 +120,26 @@ class PostService extends CommonService {
         if (post.usersLikeID) delete post.usersLikeID
 
         return await super.update(post, req, next)
+    }
+
+    async totalLikes(req, next) {
+        const totalPosts = await prisma[this.modelName].findMany()
+
+        let totalLikes = 0
+        let listPosts = []
+
+        totalPosts.forEach(post => {
+            totalLikes += post?.usersLikeID?.length
+            listPosts.push({
+                id: post.id,
+                likes: post?.usersLikeID?.length
+            })
+        })
+
+        return {
+            totalLikes,
+            listPosts: listPosts
+        }
     }
 }
 
