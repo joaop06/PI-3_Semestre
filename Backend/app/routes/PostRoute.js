@@ -7,7 +7,7 @@ class PostRoute extends CommonRoute {
     }
 
     setupRoutes() {
-        this.app.get(`/${this.route}/total-likes`, this.controller.totalLikes.bind(this.controller))
+        this.app.get(`/${this.route}/post-statistics`, this.controller.postStatistics.bind(this.controller))
         super.setupRoutes()
     }
 }

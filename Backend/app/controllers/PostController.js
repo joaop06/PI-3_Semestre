@@ -6,9 +6,9 @@ class PostController extends CommonController {
         super(PostService, 'Post')
     }
 
-    async totalLikes(req, res, next) {
+    async postStatistics(req, res, next) {
         try {
-            const result = await this.service.totalLikes(req, next)
+            const result = await this.service.postStatistics(req, next)
             res.status(200).send({ ...result })
 
         } catch (e) {

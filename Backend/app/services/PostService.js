@@ -122,17 +122,21 @@ class PostService extends CommonService {
         return await super.update(post, req, next)
     }
 
-    async totalLikes(req, next) {
-        const totalPosts = await prisma[this.modelName].findMany()
+    async postStatistics(req, next) {
+        const posts = await prisma[this.modelName].findMany({
+            include: {
+                favoritesLists: true
+            }
+        })
 
         let totalLikes = 0
         let listPosts = []
-
-        totalPosts.forEach(post => {
+        posts.forEach(post => {
             totalLikes += post?.usersLikeID?.length
             listPosts.push({
                 id: post.id,
-                likes: post?.usersLikeID?.length
+                likes: post?.usersLikeID?.length,
+                favorited: post?.favoritesListId?.length > 0 ? (post?.favoritesListId.filter(favoriteList => favoriteList)).length : 0
             })
         })
 
