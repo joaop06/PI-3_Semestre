@@ -20,10 +20,7 @@ class CommonController {
       })
 
     } catch (error) {
-      res.status(500).send({
-        error: error.meta?.cause ? { errorMeta: error.meta.cause } :
-          error.name ? { errorName: error.name } : { message: "Internal Error when record found" }
-      })
+      return next(error)
     }
   }
 
@@ -37,10 +34,7 @@ class CommonController {
       res.status(201).send("Success when Registering!")
 
     } catch (error) {
-      res.status(500).send({
-        error: error.meta?.cause ? { errorMeta: error.meta.cause } :
-          error.name ? { errorName: error.name } : { message: "Internal Error when registering" }
-      })
+      return next(error)
     }
   }
 
@@ -57,7 +51,7 @@ class CommonController {
       })
 
     } catch (error) {
-      return new Error(error)
+      return next(error)
     }
   }
 

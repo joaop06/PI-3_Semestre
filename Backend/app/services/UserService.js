@@ -12,16 +12,18 @@ class UserService extends CommonService {
   }
 
   async login(user, req, next) {
-    const userLogin = await super.findUnique(next, { where: { email: user.email, password: user.password } })
+    try {
+      const userLogin = await super.findUnique(next, { where: { email: user.email, password: user.password } })
 
-    if (!userLogin) {
-      const error = new Error('Credenciais não encontradas ou inexistentes.')
-      error.statusCode = 401 // Não autorizado
-      return next(error)
+      // Não autorizado
+      if (!userLogin) throw Object.assign(new Error('Credenciais não encontradas ou inexistentes'), { statusCode: 401 })
+
+      delete userLogin.password
+      return { message: "Login realizado!", userLogin }
+
+    } catch (e) {
+      return next(e)
     }
-
-    delete userLogin.password
-    return { message: "Login realizado!", userLogin }
   }
 
   async findMany(req) {
@@ -65,28 +67,20 @@ class UserService extends CommonService {
     try {
       const verifyRegister = await super.findMany(req, next, { where: { email: User.email } })
 
-      // Retorno caso e-mail informado já esteja cadastrado
-      if (verifyRegister.count > 0) {
-        error = new Error("E-mail já cadastro")
-        error.statusCode = 409
-        return next(error)
-      }
+      // ERRO Retorno caso e-mail já cadastrado
+      if (verifyRegister.count > 0) throw Object.assign(new Error("E-mail já cadastro"), { statusCode: 409 })
 
+
+      // Cadastro do Cliente
       const result = await super.create(User, req, next)
 
-
+      // Cria Lista de Favoritos do Usuário
       await prisma.FavoritesList.create({ data: { userId: result.document.id } })
-
-      // Cria uma Lista de Favoritos para o novo Usuário
-      // await this.favoritesListService.create({ userId: result.document.id }, req, next)
 
       return result
 
     } catch (e) {
-      console.error(e)
-      error = new Error('Erro ao registrar usuário!')
-      error.statusCode = 400
-      return next(error)
+      return next(e)
     }
   }
 
@@ -95,10 +89,13 @@ class UserService extends CommonService {
     // Deleta a Lista de Favoritos do usuário
     try {
       const favoriteListId = await prisma.FavoritesList.findFirst({ where: { userId: id } })
+      if (!favoriteListId) throw Object.assign(new Error('Usuário não encontrado'), { statusCode: 404 })
+
+      // Deleta Lista de Fav
       await prisma.FavoritesList.delete({ where: { id: favoriteListId.id } })
 
-    } catch (error) {
-      return next(new Error('Erro ao deletar Lista de Favoritos'))
+    } catch (e) {
+      return next(e)
     }
 
 

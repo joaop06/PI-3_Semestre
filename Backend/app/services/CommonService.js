@@ -11,15 +11,10 @@ class CommonService {
     where: req?.query?.id ? { id: req.query.id } : {}
   }) {
     try {
-
-      // Verifica se a req.query não é vazia
       // Mapeia todos os atributos da req.query como parâmetro de busca
       if (req?.query && Object.keys(req?.query).length !== 0) {
         Object.entries(req.query).map(([key, value]) => {
           // Cria ou Insere o atributo da query no obj options.where
-          // if (this.modelName in prisma && key in prisma[this.modelName].fields) {
-          //   options.where[key] = value
-          // }
           if (!['page', 'perPage', 'liked'].includes(key) && options.where && !options.where[key]) {
             options.where[key] = value
           }
@@ -49,6 +44,7 @@ class CommonService {
   async findUnique(next, options) {
     try {
       return await prisma[this.modelName].findFirst(options)
+
     } catch (error) {
       const errorLines = error.message.split('\n')
       error.message = errorLines[errorLines.length - 1].trim()
@@ -99,8 +95,7 @@ class CommonService {
       return await prisma[this.modelName].update(object)
 
     } catch (error) {
-      error = new Error(`Erro ao Atualizar diretamente em ${this.modelName}`)
-      error.statusCode = 400
+      error.message = `Erro ao Atualizar diretamente em ${this.modelName}`
       return next(error)
     }
   }

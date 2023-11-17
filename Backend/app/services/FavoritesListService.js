@@ -49,20 +49,20 @@ class FavoritesListService extends CommonService {
     try {
       const { id: userId, favorite } = req.query
 
-      // ** \\
-      if (!userId) throw new Error('Usuário não informado')
+      // ERRO Caso ID de Usuário não informado
+      if (!userId) throw Object.assign(new Error('Usuário não informado'), { statusCode: 400 })
 
 
       // Atualizar de Post na Lista de Favoritos (Adicionar ou Remover)
-      if (favorite) {
+      if (![null, undefined].includes(favorite) && object.postsFavoritesId) {
         this.postService = new PostService('Post') // Nova Instância PostService
 
         // Encontra a Publicação a ser Atualizada
         const post = await this.postService.findUnique(next, { where: { id: object.postsFavoritesId[0] } })
         const favoritesList = await super.findUnique(next, { where: { userId: userId } })
 
-        // ** \\
-        if (!favoritesList) throw new Error('Lista de Favoritos não encontrada')
+        // ERRO Lista não encontrada
+        if (!favoritesList) throw Object.assign(new Error('Lista de Favoritos não encontrada'), { statusCode: 404 })
 
 
         const listUpdate = {}
@@ -70,8 +70,16 @@ class FavoritesListService extends CommonService {
 
         // Adicionar Postagem a Lista de Favoritos (usando `push`, parâmetro do Mongo)
         if (favorite === 'true') {
+
+          let verifyFavorite = await super.findUnique(next, { where: { id: favoritesList.id } })
+          verifyFavorite = verifyFavorite.postsFavoritesId.find(favorite => favorite === object.postsFavoritesId[0])
+
+          // ERRO Caso já tenha favoritado
+          if (verifyFavorite) throw Object.assign(new Error('Postagem já favoritada nessa lista'), { statusCode: 409 });
+
+
           listUpdate.push = object.postsFavoritesId[0] // Add ID da Postagem
-          postUpdate.push = [favoritesList.id]
+          postUpdate.push = favoritesList.id
         }
 
         // Remover Postagem da Lista de Favoritos
@@ -88,7 +96,7 @@ class FavoritesListService extends CommonService {
               ...postUpdate
             }
           }
-        })
+        }, next)
 
         // Atualiza a Lista de Favoritos
         return await super.update({
@@ -100,6 +108,10 @@ class FavoritesListService extends CommonService {
           }
         })
       }
+
+      // Caso não entre na alteração de Favoritos
+      if (object.postsFavoritesId) delete object.postsFavoritesId
+
 
       return await super.update(favoritesList, req, next)
 

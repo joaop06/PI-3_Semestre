@@ -10,13 +10,12 @@ class UserController extends CommonController {
     try {
       const result = await this.service.login(req.body, req, next)
 
-      if (!result) return next(new Error())
+      if (!result) throw Object.assign(new Error('Erro ao realizar o login'), { statusCode: 400 })
 
-      res.status(200).send(result)
+      res.status(200).send({ ...result })
 
-    } catch (error) {
-      console.error(error)
-      res.status(500).send('Erro ao realizar o login')
+    } catch (e) {
+      return next(e)
     }
   }
 }

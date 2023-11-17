@@ -10,7 +10,6 @@ class PostService extends CommonService {
     }
 
     async findMany(req) {
-
         // Mapeia as opções de busca incluindo o relacionamento
         let options = {
             where: {},
@@ -43,29 +42,23 @@ class PostService extends CommonService {
     async update(post, req, next) {
         const { id: postId, liked } = req.query
 
-        // Verifica se o ID da postagem é válido (você pode adicionar validações adicionais)
-        if (!postId) {
-            const error = new Error('ID de postagem não informado')
-            error.statusCode = 400
-            return next(error)
-        }
+        // ERRO Caso ID não informado
+        if (!postId) throw Object.assign(new Error('ID de postagem não informado'), { statusCode: 400 })
+
 
         // Atualização de Curtidas da Publicação
         if (![null, undefined].includes(liked) && post.usersLikeID) {
-            // Nova Instância UserService
-            this.userService = new UserService('User')
+
+            this.userService = new UserService('User') // Nova Instância UserService
 
             // Encontra a Publicação a ser Atualizada
             const findUser = await this.userService.findUnique(next, { where: { id: post.usersLikeID[0] } })
             const findPost = await super.findUnique(next, { where: { id: postId } })
 
 
-            // Tratativa caso não encontre
-            if (!findPost) {
-                const error = new Error('Postagem não encontrada')
-                error.statusCode = 404
-                return next(error)
-            }
+            // ERRO Caso não encontre Postagem
+            if (!findPost) throw Object.assign(new Error('Postagem não encontrada'), { statusCode: 404 })
+
 
             // Objeto com parâmetros para update (Adicionar ou remover curtida)
             const userUpdate = {}
@@ -78,21 +71,18 @@ class PostService extends CommonService {
                 let verifyLiked = await super.findUnique(next, { where: { id: postId } })
                 verifyLiked = verifyLiked.usersLikeID.find(like => like === post.usersLikeID[0])
 
-                if (verifyLiked) {
-                    const error = new Error('Usuário já curtiu essa postagem')
-                    error.statusCode = 400
-                    return next(error)
-                }
+                // ERRO Caso já tenha curtido
+                if (verifyLiked) throw Object.assign(new Error('Usuário já curtiu essa postagem'), { statusCode: 409 })
+
 
                 userUpdate.push = [postId] // Add ID da Publicação
                 postUpdate.push = post.usersLikeID[0] // Add ID do Usuário
             }
 
             if (liked === 'false') {
-                /* O filter serve para deixar na lista de like somente os IDs que são diferentes do ID informado,
-                    ou seja, remove o ID informado, tanto da publicação, quanto do usuário, removendo a curtida. */
-                userUpdate.set = findUser.postsLikedID.filter(id => id !== postId) // Remove ID da Publicação
-                postUpdate.set = findPost.usersLikeID.filter(id => id !== post.usersLikeID[0]) // Remove ID do Usuário
+                // Filtra as listas removendo o respectivo ID (Da Postagem e Usuário)
+                userUpdate.set = findUser.postsLikedID.filter(id => id !== postId)
+                postUpdate.set = findPost.usersLikeID.filter(id => id !== post.usersLikeID[0])
             }
 
             // Atualiza no registro do usuário, removendo a curtida

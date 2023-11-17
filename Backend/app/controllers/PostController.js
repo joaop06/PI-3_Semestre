@@ -12,7 +12,7 @@ class PostController extends CommonController {
             res.status(200).send({ ...result })
 
         } catch (e) {
-            next(e)
+            return next(e)
         }
     }
 }
