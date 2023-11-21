@@ -60,6 +60,7 @@ export default {
             titulo: '',
             description: '',
             posts: [],
+            trem: [],
             userId: '',
             conteudoPost: [],
             liked: [],
@@ -73,6 +74,7 @@ export default {
         console.log('userID: ', this.userId);
         console.log('userData: ', userData);
         console.log('userData PostsLiked: ', userData.postsLikedID);
+        this.trem = userData.postsLikedID;
 
         this.buscarPosts();
 
@@ -105,9 +107,10 @@ export default {
                 .then(response => {
                     
                     if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
+                        
                         this.posts = response.data.rows;
 
-                        console.log('posts aqui: ', this.posts);
+                        this.posts = this.posts.filter(post => post.usersLikeID.includes(userData.id));
 
                         const stringado = JSON.stringify(this.posts);
                         const jsonado = JSON.parse(JSON.stringify(this.posts));
@@ -117,7 +120,7 @@ export default {
 
                             console.log('usuarios que curtiram a postagem', i, response.data.rows[i].id);
                             const jsonespecifico = jsonado[i]?.contentPost;
-                            const other = new Delta(JSON.parse(jsonespecifico));
+                            const other = new Delta(JSON.parse(jsonespecifico));                            
 
                             this.conteudo(this.converterTexto(other));
 

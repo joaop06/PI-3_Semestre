@@ -287,7 +287,6 @@ export default {
 </script>
 <style>
 .body {
-    background-color: #ffff;
     width: 100%;
     height: 100%;
 }
@@ -299,5 +298,6 @@ export default {
 
 .post {
     background-color: #f7cfcdb6 !important;
+    border: 2px solid white
 }
 </style>

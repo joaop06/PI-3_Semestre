@@ -1,190 +1,98 @@
 <template>
-  <navbar />
-  <v-app id="inspire">
-    <!-- agora preciso que toda vez que essa view for aberta, busque as postagens, randomize e mostre apenas 7 -->
-    <div class="grid-container">
-      <!-- <v-container fluid class="container">
-        <v-row class="linha" wrap>
-          <v-col
-            v-for="post in posts"
-            :key="post.id"
-            cols="12"
-            sm="6"
-            md="4"
-            lg="3"
-            class="conteudoColuna"
-          >
-          <v-card class="cards" title="Card title" text="..." variant="tonal">
-            <v-card-actions>
-              <v-btn>Click me</v-btn>
-            </v-card-actions>
-          </v-card>
-          </v-col>
-        </v-row>
-      </v-container> -->
-      <div class="grid-item" id="item1">
-        <v-card class="cards" variant="tonal">
-          <v-card-title class="title">Card Title</v-card-title>
-          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
+  <Navbar />
+  <v-container class="mt-2 container">
+    <v-row no-gutters>
+      <v-col v-for="(post, index) in posts" :key="post.id">
+        <v-card class="cards pa-2 ma-2" variant="tonal">
+          <v-card-title class="title">{{ post.title }}</v-card-title>
+          <v-card-text class="text-truncate">{{ conteudoPost[index] }}</v-card-text>
           <v-card-actions>
             <v-btn class="buttonB">Continuar lendo</v-btn>
           </v-card-actions>
         </v-card>
-      </div>
-      <div class="grid-item" id="item2">
-        <v-card class="cards" variant="tonal">
-          <v-card-title class="title">Card Title</v-card-title>
-          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
-          <v-card-actions>
-            <v-btn class="buttonB">Continuar lendo</v-btn>
-          </v-card-actions>
-        </v-card>
-      </div>
-      <div class="grid-item" id="item3">
-        <v-card class="cards" variant="tonal">
-          <v-card-title class="title">Card Title</v-card-title>
-          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
-          <v-card-actions>
-            <v-btn class="buttonB">Continuar lendo</v-btn>
-          </v-card-actions>
-        </v-card>
-      </div>
-      <div class="grid-item" id="item4">
-        <v-card class="cards" variant="tonal">
-          <v-card-title class="title">Card Title</v-card-title>
-          <v-card-text class="text">{{textoCompleto}}</v-card-text>
-          <v-card-actions id="buttonP">
-            <v-btn class="buttonB">Continuar lendo</v-btn>
-          </v-card-actions>
-        </v-card>
-      </div>
-      <div class="grid-item" id="item5">
-        <v-card class="cards" variant="tonal">
-          <v-card-title class="title">Card Title</v-card-title>
-          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
-          <v-card-actions>
-            <v-btn class="buttonB">Continuar lendo</v-btn>
-          </v-card-actions>
-        </v-card>
-      </div>
-      <div class="grid-item" id="item6">
-        <v-card class="cards" variant="tonal">
-          <v-card-title class="title">Card Title</v-card-title>
-          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
-          <v-card-actions>
-            <v-btn class="buttonB">Continuar lendo</v-btn>
-          </v-card-actions>
-        </v-card>
-      </div>
-      <div class="grid-item" id="item7">
-        <v-card class="cards" variant="tonal">
-          <v-card-title class="title">Card Title</v-card-title>
-          <v-card-text class="text">{{ textoCompleto }}</v-card-text>
-          <v-card-actions>
-            <v-btn class="buttonB">Continuar lendo</v-btn>
-          </v-card-actions>
-        </v-card>
-      </div>
-    </div>
-  </v-app>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
+<!-- Restante do código CSS e JavaScript permanecem inalterados -->
+
 <style>
-.grid-container {
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  background-color: #ffffff;
-  padding: 30px;
-}
-
-.grid-item {
-  background-color: #f7cfcdb6;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 30px;
-  text-align: center;
-}
-
 .cards {
-  width: 100%;
-  height: 100%;
+  background-color: #f7cfcdb6;
+  border: 3px solid white
 }
 
 #buttonP {
   margin-top: 100%;
 }
 
-.buttonB{
+.buttonB {
   border: 1px solid white;
   background-color: #835D3D;
   color: white;
   font-family: 'Balsamiq Sans', sans-serif;
   font-weight: bold;
 }
-
-#item1 {
-  grid-row: span 2;
-  grid-column: span 2;
-}
-
-#item2 {
-  grid-row: span 3;
-  grid-column: span 1;
-}
-
-#item3 {
-  grid-row: span 3;
-  grid-column: span 1;
-}
-
-#item4 {
-  grid-row: span 10;
-  grid-column: span 2;
-}
-
-#item5 {
-  grid-row: span 8;
-  grid-column: span 1;
-}
-
-#item6 {
-  grid-row: span 8;
-  grid-column: span 1;
-}
-
-#item7 {
-  grid-row: span 6;
-  grid-column: span 2;
-}
 </style>
 
 <script>
-import bd from "@/tests/banco.json";
 import Navbar from '@/components/Navbar.vue'
+import http from '@/http'
+import { Delta } from '@vueup/vue-quill';
 
 export default {
   components: {
     Navbar,
   },
+
   data() {
     return {
-      textoCompleto:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur recusandae maxime repellat quas quaerat necessitatibus ea commodi. Minus totam nobis repellendus laboriosam ullam autem debitis, pariatur perspiciatis, atque ipsam quo.", //variavel para pegar o texto futuramente
-      limiteCaracteres: 150, //limitador dos caracteres
-      posts: bd,
-    };
+      posts: [],
+      conteudoPost: [],
+    }
   },
-  computed: {
-    //com esta função, posso resumir o texto apresentado no v-card
-    textoLimitado() {
-      if (this.textocompleto.length > this.limiteCaracteres) {
-        return this.textocompleto.slice(0, this.limiteCaracteres) + "...";
-      } else {
-        return this.textocompleto;
-      }
+  created() {
+    this.buscarPosts();
+  },
+  methods: {
+    async buscarPosts() {
+      await http.get("/post")
+        .then(response => {
+
+          if (Array.isArray(response.data.rows) && response.data.rows.length > 0) {
+            this.posts = response.data.rows;
+
+            const stringado = JSON.stringify(this.posts);
+            const jsonado = JSON.parse(JSON.stringify(this.posts));
+
+            for (let i = 0; i < this.posts.length; i++) {
+              const jsonespecifico = jsonado[i]?.contentPost;
+              const other = new Delta(JSON.parse(jsonespecifico));
+
+              this.conteudo(this.converterTexto(other));
+            }
+
+          } else {
+            console.warn('Nenhuma postagem encontrada na resposta da API.');
+          }
+        })
+        .catch(error => {
+          console.error('Erro ao buscar as postagens:', error);
+        });
     },
-  },
-};
+    converterTexto(delta) {
+      let text = '';
+      delta.ops.forEach(op => {
+        if (op.insert && !op.insert.image) {
+          text += op.insert;
+        }
+      });
+      return text;
+    },
+    conteudo(texto) {
+      this.conteudoPost.push(texto);
+    },
+  }
+}
 </script>

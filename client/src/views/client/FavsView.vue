@@ -70,6 +70,7 @@ export default {
                     this.posts = response.data.rows;
 
                     console.log(this.posts);
+                    
 
                     const stringado = JSON.stringify(this.posts);
                     const jsonado = JSON.parse(stringado);
