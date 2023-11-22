@@ -5,7 +5,7 @@
     <v-main class="">
       <v-container fluid class="container">
         <v-row class="linha" wrap>
-          <v-col cols="6">
+          <v-col>
             <v-div>
               <v-card class="" max-width="368">
                 <v-card-item title="Postagens">
@@ -22,7 +22,7 @@
               </v-card>
             </v-div>
           </v-col>
-          <v-col cols="6">
+          <v-col>
             <v-card class="" max-width="368">
               <v-card-item title="Usuários cadastrados">
               </v-card-item>
@@ -37,6 +37,36 @@
               </v-card-text>
             </v-card>
           </v-col>
+          <v-col>
+            <v-card class="" max-width="368">
+              <v-card-item title="Total de curtidas">
+              </v-card-item>
+
+              <v-card-text class="py-0">
+                <v-row align="center" no-gutters>
+                  <v-col class="text-h2" cols="6">
+                    {{ this.curtidas }}
+                  </v-col>
+
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card class="" max-width="368">
+              <v-card-item title="Total favoritos">
+              </v-card-item>
+
+              <v-card-text class="py-0">
+                <v-row align="center" no-gutters>
+                  <v-col class="text-h2" cols="6">
+                    {{ this.favoritos }}
+                  </v-col>
+
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
         </v-row>
       </v-container>
     </v-main>
@@ -45,7 +75,6 @@
 
 <style>
 .container {
-  background-color: yellow;
   height: 100%;
 }
 
@@ -87,12 +116,16 @@ export default {
       limiteCaracteres: 150, //limitador dos caracteres
       posts: [],
       postagens: 0,
-      users: 0
+      users: 0,
+      curtidas: 0,
+      Postfavoritos: 0,
+      favoritos: 0,
     };
   },
-  created(){
+  created() {
     this.buscarPosts();
     this.buscarUsers();
+    this.buscaLikes();
   },
   computed: {
     //com esta função, posso resumir o texto apresentado no v-card
@@ -124,13 +157,25 @@ export default {
           console.error('Erro ao buscar as postagens:', error);
         });
     },
-    async buscarUsers(){
+    async buscarUsers() {
       await http.get("/user")
-      .then(response => {
-        this.users = response.data.count;
-      });
+        .then(response => {
+          this.users = response.data.count;
+        });
 
-      }
+    },
+    async buscaLikes() {
+      await http.get('/post/post-statistics')
+        .then(response => {
+          this.curtidas = response.data.totalLikes
+
+          this.Postfavoritos = response.data.listPosts;
+
+          for (let i = 0; i < this.Postfavoritos.length; i++) {
+            this.favoritos += this.Postfavoritos[i].favorited;
+          }
+        })
+    }
   }
 }
 </script>

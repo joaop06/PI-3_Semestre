@@ -2,7 +2,7 @@
   <v-app-bar flat class="nav">
     <v-btn class="button" icon="mdi-home" to="/"></v-btn>
   </v-app-bar>
-  <v-container class="pa-12 ma-12">
+  <v-container class="pa-1 mx-auto">
     <v-sheet id="effectGlass" color="rgb(0, 0, 0, 0)">
       <v-row
         class="ma-auto d-flex"
@@ -120,7 +120,7 @@
                   ></v-text-field>
                 </v-col>
               </v-row>
-              <v-row class="ma-auto justify-center">
+              <v-row class="ma-auto senhas">
                 <v-col cols="6">
                   <v-text-field
                     v-model="passwordRegister"
@@ -395,5 +395,9 @@ export default {
   backdrop-filter: blur(4px);
   border-radius: 10px;
   padding: 20px;
+}
+
+.senhas{
+  height: 80px;
 }
 </style>

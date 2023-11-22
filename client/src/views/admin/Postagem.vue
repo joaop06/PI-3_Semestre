@@ -81,7 +81,7 @@ export default {
 
     },
     computed: {
-        //necessito fazer uma verificação para saber quando um post já foi curtido ou não, para poder dar deslike e desfav
+        //os fav ainda não estão funcionando, adiciona um ID aleatorio algumas vezes
     },
     methods: {
         toggleLikeDislike(postId, like) {
@@ -96,8 +96,7 @@ export default {
         toggleFavoriteUnFavorite(postId, favorite) {
             console.log(favorite)
             if (favorite) {
-                // console.log('dar unfav');
-                // this.Unfav(postId);
+                this.Unfav(postId);
             } else {
                 console.log('dar fav');
                 this.Fav(postId);
@@ -124,7 +123,7 @@ export default {
 
                             this.posts[i].liked = !!this.posts[i].usersLikeID.find((likeUser) => likeUser === userData.id);
                             this.posts[i].favorited = !!this.posts[i].favoritesListId.find((favoriteUser) => favoriteUser === userData.id);
-                            console.log('favoritado: ',this.posts[i].favorited);
+                            console.log('favoritado: ', this.posts[i].favorited);
 
                         }
 
@@ -221,21 +220,21 @@ export default {
         async Fav(idPost) {
             // Pega o valor da sessionStorage
             const userId = sessionStorage.getItem('userId');
-            
+
             console.log(userId);
             console.log(idPost)
             //Faz a requisição HTTP
             const response = await http.put(`/favorites-list?id=${userId}&favorite=true`, {
                 postsFavoritesId: [idPost],
             });
-            
+
             // Verifica se a requisição foi bem sucedida
             if (response.status === 200) {
                 // Obtem os dados da resposta
                 const data = response.data;
 
                 const indexPostUpdate = this.posts.findIndex((post) => post.id === idPost);
-                console.log('indexPost: ',indexPostUpdate)
+                console.log('indexPost: ', indexPostUpdate)
 
                 if (this.posts[indexPostUpdate] && this.posts[indexPostUpdate].hasOwnProperty('favorited')) {
                     this.posts[indexPostUpdate].favorited = true;
@@ -244,8 +243,8 @@ export default {
                 }
 
                 const userData = JSON.parse(sessionStorage.getItem('userData'));
-                for(let i = 0; i < this.posts.length; i++){
-                    if(this.posts[i].id == idPost){
+                for (let i = 0; i < this.posts.length; i++) {
+                    if (this.posts[i].id == idPost) {
                         this.posts[i].favoritesListId.pop(userId);
                     }
                 }
