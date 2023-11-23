@@ -7,7 +7,7 @@
           <v-card-title class="title">{{ post.title }}</v-card-title>
           <v-card-text class="text-truncate">{{ conteudoPost[index] }}</v-card-text>
           <v-card-actions>
-            <v-btn class="buttonB">Continuar lendo</v-btn>
+            <v-btn class="buttonB" @click="verDetalhes(post.id)">Continuar lendo</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -37,6 +37,7 @@
 </style>
 
 <script>
+import router from '@/router';
 import Navbar from '@/components/Navbar.vue'
 import http from '@/http'
 import { Delta } from '@vueup/vue-quill';
@@ -92,6 +93,11 @@ export default {
     },
     conteudo(texto) {
       this.conteudoPost.push(texto);
+    },
+    verDetalhes(idPost) {
+      sessionStorage.setItem('idPost', idPost);
+
+      router.push({ path: '/post' })
     },
   }
 }

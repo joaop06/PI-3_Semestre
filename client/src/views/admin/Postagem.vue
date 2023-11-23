@@ -98,7 +98,6 @@ export default {
             if (favorite) {
                 this.Unfav(postId);
             } else {
-                console.log('dar fav');
                 this.Fav(postId);
             }
         },
@@ -221,8 +220,6 @@ export default {
             // Pega o valor da sessionStorage
             const userId = sessionStorage.getItem('userId');
 
-            console.log(userId);
-            console.log(idPost)
             //Faz a requisição HTTP
             const response = await http.put(`/favorites-list?id=${userId}&favorite=true`, {
                 postsFavoritesId: [idPost],
@@ -236,6 +233,7 @@ export default {
                 const indexPostUpdate = this.posts.findIndex((post) => post.id === idPost);
                 console.log('indexPost: ', indexPostUpdate)
 
+                
                 if (this.posts[indexPostUpdate] && this.posts[indexPostUpdate].hasOwnProperty('favorited')) {
                     this.posts[indexPostUpdate].favorited = true;
                 } else {

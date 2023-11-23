@@ -29,13 +29,6 @@ export default {
     },
     mounted() {
 
-        class CustomImageSpec extends ImageSpec {
-            getActions() {
-                return [AlignAction, DeleteAction];
-            }
-        }
-
-
         const quillOptions = {
             theme: 'bubble',
             modules: {
