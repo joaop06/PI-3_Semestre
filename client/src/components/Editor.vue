@@ -64,7 +64,7 @@ export default {
             inputDialog: false,
             titulo: '',
             caracter: 0,
-            tamanho: 400,
+            tamanho: 900,
             assunto: '',
             usuario: ''
         }

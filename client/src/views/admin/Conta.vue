@@ -27,9 +27,6 @@
                         <v-btn class="mx-3 button" @click="showDeleteDialog = true" title="apagar conta" icon>
                             <v-icon>mdi-delete</v-icon>
                         </v-btn>
-                        <v-btn class="mx-3 button" @click="editProfile" title="editar" icon>
-                            <v-icon>mdi-pencil</v-icon>
-                        </v-btn>
                         <v-btn class="mx-3 button" @click="likesview" title="curtidas" icon>
                             <v-icon>mdi-heart</v-icon>
                         </v-btn>
