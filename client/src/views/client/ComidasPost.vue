@@ -76,15 +76,15 @@ export default {
       liked: [],
       likedIcon: false,
       limiteCaracteres: 50,
+
+      favoritesListId: "",
     };
   },
   async created() {
     this.userId = sessionStorage.getItem("userId");
-
-    console.log("userID: ", this.userId);
-    console.log("userData: ", userData);
-    console.log("userData PostsLiked: ", userData.postsLikedID);
-
+    this.favoritesListId = await http
+      .get(`/favorites-list?userId=${this.userId}`)
+      .then((res) => res.data.rows[0].id);
     this.buscarPosts();
   },
   async mounted() {},
@@ -111,6 +111,7 @@ export default {
         this.Fav(postId);
       }
     },
+
     async buscarPosts() {
       await http
         .get("/post?typePost=comidas")
@@ -120,8 +121,6 @@ export default {
             response.data.rows.length > 0
           ) {
             this.posts = response.data.rows;
-
-            console.log("posts aqui: ", this.posts);
 
             const stringado = JSON.stringify(this.posts);
             const jsonado = JSON.parse(stringado);
@@ -135,7 +134,9 @@ export default {
               this.posts[i].liked = !!this.posts[i].usersLikeID.find(
                 (likeUser) => likeUser === userData.id
               );
-              // this.posts[i].favorited = !!this.posts[i].favoritesListId.find((favoriteUser) => favoriteUser === userData.id);
+              this.posts[i].favorited = !!this.posts[i].favoritesListId.find(
+                (favoriteId) => favoriteId === this.favoritesListId
+              );
             }
           } else {
             console.warn("Nenhuma postagem encontrada na resposta da API.");
@@ -241,9 +242,12 @@ export default {
       const userId = sessionStorage.getItem("userId");
 
       //Faz a requisição HTTP
-      const response = await http.put(`/post?id=${idPost}&favorite=true`, {
-        favoritesListId: [userId],
-      });
+      const response = await http.put(
+        `/favorites-list?id=${userId}&favorite=true`,
+        {
+          postsFavoritesId: [idPost],
+        }
+      );
 
       // Verifica se a requisição foi bem sucedida
       if (response.status === 200) {
@@ -274,7 +278,7 @@ export default {
         sessionStorage.setItem("userData", JSON.stringify(userData));
       } else {
         // A requisição falhou
-        console.error("Erro ao mandar like:", response.statusText);
+        console.error("Erro ao mandar fav:", response.statusText);
       }
     },
     async Unfav(idPost) {
@@ -282,9 +286,12 @@ export default {
       const userId = sessionStorage.getItem("userId");
 
       //Faz a requisição HTTP
-      const response = await http.put(`/post?id=${idPost}&favorite=false`, {
-        favoritesListId: [userId],
-      });
+      const response = await http.put(
+        `/favorites-list?id=${userId}&favorite=false`,
+        {
+          postsFavoritesId: [idPost],
+        }
+      );
 
       // Verifica se a requisição foi bem sucedida
       if (response.status === 200) {

@@ -118,8 +118,6 @@ export default {
           ) {
             this.posts = response.data.rows;
 
-            console.log("posts aqui: ", this.posts);
-
             const stringado = JSON.stringify(this.posts);
             const jsonado = JSON.parse(stringado);
 
@@ -135,7 +133,6 @@ export default {
               this.posts[i].favorited = !!this.posts[i].favoritesListId.find(
                 (favoriteUser) => favoriteUser === userData.id
               );
-              console.log("favoritado: ", this.posts[i].favorited);
             }
           } else {
             console.warn("Nenhuma postagem encontrada na resposta da API.");
