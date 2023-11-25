@@ -102,7 +102,6 @@ export default {
       }
     },
     toggleFavoriteUnFavorite(postId, favorite) {
-      console.log(favorite);
       if (favorite) {
         this.Unfav(postId);
       } else {
