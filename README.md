@@ -29,7 +29,8 @@ O projeto pode ser acessado [aqui](https://lnsjcf-3000.csb.app/). Para fins de t
 
 - Backend: Node.js / Prisma
 - Banco de Dados: MongoDB
-- Identidade Visual: Figma
+- Identidade Visual: [Figma](https://www.figma.com/proto/AJMeWLppkQyGSAVUHf4PIC/Lilica-Indica?page-id=0%3A1&type=design&node-id=14-1645&viewport=1774%2C426%2C0.5&t=rwPnqel6Qv4yOTzN-1&scaling=min-zoom&starting-point-node-id=14%3A1622&classId=4f7dbb19-4dfd-4431-87c0-cc36577553d5&assignmentId=0922f004-c5f9-43be-b8d4-3bbd9d02d9dd&submissionId=76924fb9-5d67-de84-f832-cb56957c1956)
+- Gestão do Projeto: [Jira](https://brunarodrigues.atlassian.net/jira/software/projects/LI/boards/4/backlog)
 
 ## Cronograma
 
