@@ -37,3 +37,6 @@ O projeto pode ser acessado [aqui](https://lnsjcf-3000.csb.app/). Para fins de t
 - Definição de Estratégia e Conteúdo: 15 dias
 - Desenvolvimento do Blog: 2-3 meses
 - Conclusão: novembro/2023
+
+## Video Demonstrativo
+  [Lilica Indica](https://www.youtube.com/watch?v=b1f3gPkglUc)
